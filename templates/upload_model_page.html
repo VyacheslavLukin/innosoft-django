@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Upload model</title>
+</head>
+<body>
+<h1>Upload model</h1>
+<form action="{% url 'upload_model' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if message %}
+        <script>
+        alert('{{ message }}')
+        </script>
+    {% endif %}
+
+    Model File:<br>
+    <input type="file" name="file" id="file"><br>
+    Filename:<br>
+    <input type="text" name="filename"><br>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

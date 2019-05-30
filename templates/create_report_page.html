@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create report</title>
+</head>
+<body>
+<form action="{% url 'create_report' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if message %}
+        <script>
+        alert('{{ message }}')
+        </script>
+    {% endif %}
+    Work Assigned:<br>
+    <input type="text" name="work"><br>
+    Progress:<br>
+    <textarea rows="3" cols="30" name="progress"></textarea><br>
+    Document upload:
+    <input type="file" name="file" id="file">
+    <input type="hidden" name="url" id="url">
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

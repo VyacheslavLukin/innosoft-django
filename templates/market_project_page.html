@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create market project</title>
+</head>
+<body>
+<h1>Create market project</h1>
+<form action="{% url 'market_project' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if message %}
+        <script>
+        alert('{{ message }}')
+        </script>
+    {% endif %}
+
+    Main title:<br>
+    <input type="text" name="title"><br>
+    Description:<br>
+    <textarea rows="3" cols="30" name="description"></textarea><br>
+    Json File:<br>
+    <input type="file" name="file" id="file"><br>
+    Percentage:<br>
+    <input type="number" min="0" max="100" name="percentage"><br>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

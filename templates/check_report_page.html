@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Check report</title>
+</head>
+<body>
+<form action="{% url 'create_report' %}" method="post">
+    {% csrf_token %}
+    {% if message %}
+        <script>
+        alert('{{ message }}')
+        </script>
+    {% endif %}
+    {% if reports %}
+        {% for report in reports %}
+            Work: {{ report.work }}<br>
+            Progress: {{ report.progress }}<br>
+        {% endfor %}
+    {% endif %}
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

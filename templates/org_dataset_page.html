@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create report</title>
+</head>
+<body>
+<form action="{% url 'org_dataset' %}" method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if message %}
+        <script>
+        alert('{{ message }}')
+        </script>
+    {% endif %}
+    File:<br>
+    <input type="file" name="file" id="file"><br>
+    Filename:<br>
+    <input type="text" name="filename"><br>
+    Percentage:<br>
+    <input type="number" min="0" max="100" name="percentage"><br>
+
+    <input type="submit" value="Submit">
+</form>
+</body>
+</html>

@@ -1,0 +1,25 @@
+*.class
+.idea
+*.xml
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+
+*.jpg
+*.jpeg
+*.png
+
+*.mp3
+*.wav
+*.ogg
+*.sav
+*.json
+
+*.sqlite3
+
+Innosoft_plan.txt
