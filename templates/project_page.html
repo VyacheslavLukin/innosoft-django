@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Project {{ project.title }}</title>
+</head>
+<body>
+<h1>Project {{ project.title }}</h1>
+<div>
+    <p>{{ project.description }}</p>
+    <a href="{{ project.train_data }}">JSON</a>
+    <form action="{% url 'project_page' project.id %}" method="post">
+        {% csrf_token %}
+
+        <label> Model:
+            <select name="mid">
+                <option value="None">(select model)</option>
+                {% for model in models %}
+                    <option value="{{ model.mid }}">{{ model.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+    <input type="submit" value="Use model">
+    </form>
+
+</div>
+</body>
+</html>

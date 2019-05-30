@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Models</title>
+</head>
+<body>
+<h1>Projects</h1>
+{% for model in models %}
+<div>
+    <h2>{{ model.name }}</h2>
+    <p>{{ model.mid }}</p>
+</div>
+{% endfor %}
+</body>
+</html>

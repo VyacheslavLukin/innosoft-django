@@ -23,6 +23,7 @@ def split_json(file, percentage):
     json_data = json.load(file)
     json_keys = list(json_data.keys())
 
+
     flag = int(len(json_data)/100*percentage)
 
     train_data = {}

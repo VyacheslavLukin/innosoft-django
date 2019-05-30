@@ -4,6 +4,12 @@ from django.contrib import auth
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
 import traceback
+from collections import namedtuple
+import pandas as pd
+import json
+from sklearn.model_selection import train_test_split
+import pickle
+
 
 from Algoritma.utils import *
 
@@ -188,7 +194,9 @@ def market_project(request):
 
         json_blob, train_blob, test_blob = split_json(file, perc)
 
-        firename = "%s.%s" % (generate_rand_name(13), file.name.split(".")[-1])
+        basename = generate_rand_name(13)
+
+        firename = "%s.%s" % (basename, file.name.split(".")[-1])
 
         train_path = upload_file_string(train_blob, firename, "train")
         test_path = upload_file_string(test_blob, firename, "test")
@@ -196,9 +204,9 @@ def market_project(request):
 
         test_json = json.loads(test_blob)
 
-        testpic_x, testpic_y = split_xy(test_json, ["air_temperature", "cloudiness"])
+        testpic_x, testpic_y = split_xy(test_json, ['dew_point_temperature', 'underground_temperature', 'underground_temperature'])
 
-        picklename = "%s.sav" % (generate_rand_name(13))
+        picklename = "%s.sav" % (basename)
 
         testpic_x_path = upload_file_string(testpic_x, picklename, "pickle_x")
         testpic_y_path = upload_file_string(testpic_y, picklename, "pickle_y")
@@ -212,7 +220,8 @@ def market_project(request):
             "train_data": train_path,
             "test_data": test_path,
             "pickle_x": testpic_x_path,
-            "pickle_y": testpic_y_path
+            "pickle_y": testpic_y_path,
+            "firename": firename.split(".")[0]
         }
 
         firedb.child('projects').child(prj_id).set(data)
@@ -240,17 +249,84 @@ def upload_model(request):
 
         data = {
             "user": account,
-            "filename": filename,
+            "name": filename,
             "data": sav_path,
+            "firename": firename.split(".")[0]
         }
 
         firedb.child('models').child(mid).set(data)
-        firedb.child('users').child(account).child('models').push({"mid": mid})
+        firedb.child('users').child(account).child('models').push({"mid": mid, "name": filename})
 
         return redirect('upload_model')
 
 def project_index(request):
     if request.method == 'GET':
-        pass
+        prj_keys = firedb.child('projects').shallow().get().val()
 
-# def project_page(request):
+        projects = []
+        for key in prj_keys:
+            prj = firedb.child('projects').child(key).get().val()
+            prj["id"] = key
+            projects.append(dict(prj))
+
+        return render(request, "project_index.html", {"projects": projects})
+
+
+def project_page(request, prj_id):
+    if request.method == 'GET':
+        idtoken = request.session['uid']
+        account = fireauth.get_account_info(idtoken)
+        account = account['users'][0]['localId']
+
+        project = firedb.child('projects').child(prj_id).get().val()
+        project["id"] = prj_id
+        project = dict(project)
+
+        model_keys = firedb.child('users').child(account).child("models").shallow().get().val()
+
+        models = []
+        for key in model_keys:
+            model = firedb.child('users').child(account).child("models").child(key).get().val()
+            models.append(dict(model))
+
+        return render(request, "project_page.html", {"project": project, "models": models})
+    if request.method == 'POST':
+        mid = request.POST.get("mid")
+        model = firedb.child('models').child(mid).get().val()
+        project = firedb.child('projects').child(prj_id).get().val()
+
+        model_path = "%s.sav" % (model["firename"])
+        xpickle_path = "%s_pickle_x.sav" % (project["firename"])
+        ypickle_path = "%s_pickle_y.sav" % (project["firename"])
+
+        model_blob = bucket.get_blob(model_path)
+        model_pickle = model_blob.download_as_string()
+        model = pickle.loads(model_pickle)
+
+        xpickle_blob = bucket.get_blob(xpickle_path)
+        xpickle = xpickle_blob.download_as_string()
+        X = pickle.loads(xpickle)
+
+        ypicle_blob = bucket.get_blob(ypickle_path)
+        ypickle = ypicle_blob.download_as_string()
+        y = pickle.loads(ypickle)
+
+        y_pred = model.predict(X)
+
+        return redirect('project_page', prj_id)
+
+def model_index(request):
+    if request.method == 'GET':
+        idtoken = request.session['uid']
+        account = fireauth.get_account_info(idtoken)
+        account = account['users'][0]['localId']
+
+        model_keys = firedb.child('users').child(account).child("models").shallow().get().val()
+
+        models = []
+        for key in model_keys:
+            model = firedb.child('users').child(account).child("models").child(key).get().val()
+            model["id"] = key
+            models.append(dict(model))
+
+        return render(request, "model_index.html", {"models": models})
