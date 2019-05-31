@@ -1,24 +1,93 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign Up</title>
-</head>
-<body>
-<form action="{% url 'signup' %}" method="post">
-    {% csrf_token %}
-    {% if message %}
-        <script>
-        alert('{{ message }}')
-        </script>
-    {% endif %}
-    Name:<br>
-    <input type="text" name="name"><br>
-    Email:<br>
-    <input type="email" name="email"><br>
-    Password:<br>
-    <input type="password" name="password"><br>
-    <input type="submit" value="SignUp">
-</form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block signup %}
+    <div class="app flex-row align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-7">
+                    <div class="card mx-4">
+                        <div class="card-body p-4">
+                            <h1>Register</h1>
+                            <p class="text-muted">Create your account</p>
+                            <form style="" action="{% url 'signup' %}" method="post">
+                                {% csrf_token %}
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="glyphicon glyphicon-user"></i></span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Username" name="name">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">@</span>
+                                    </div>
+                                    <input type="text" class="form-control" placeholder="Email" name="email">
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="glyphicon glyphicon-lock"></i></span>
+                                    </div>
+                                    <input type="password" class="form-control" placeholder="Password"
+                                           name==password>
+                                </div>
+
+                                <div class="input-group mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"><i class="glyphicon glyphicon-briefcase"></i> </span>
+                                    </div>
+                                    <select class="form-control" id="Model112" name="">
+                                        <option value="None">Account type</option>
+                                        <option value="ds">Data Scientist</option>
+                                        <option value="org">Organization</option>
+
+{#                                        <option ng-value="x.id" ng-repeat="x in ModelArray">{{ x.Role }}</option>#}
+
+
+                                    </select>
+                                </div>
+
+
+                                <input type="file" id="upload" accept="image/*" name="image"/>
+
+                                <!-- Croppie needs a container -> using 'boundary' option -->
+                                <div style="width:100%" class="row">
+
+
+                                    <div class="col-md-6">
+                                        <croppie ng-if="cropped.source" src="cropped.source" ng-model="cropped.image"
+                                                 options="{boundary:{width:250,height:250}}"></croppie>
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <center>
+
+                                            <img ng-src="{{ cropped.image }}" id="imag"/>
+                                        </center>
+                                    </div>
+                                </div>
+
+                                <button type="submit" class="btn btn-block btn-success">Create Account</button>
+                            </form>
+                        </div>
+{#                        <div class="card-footer p-4">#}
+{#                            <div class="row">#}
+{#                                <div class="col-6">#}
+{#                                    <button class="btn btn-block btn-facebook" type="button">#}
+{#                                        <span>facebook</span>#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                                <div class="col-6">#}
+{#                                    <button class="btn btn-block btn-twitter" type="button">#}
+{#                                        <span>twitter</span>#}
+{#                                    </button>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

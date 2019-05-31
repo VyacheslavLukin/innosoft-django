@@ -1,24 +1,60 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Sign In</title>
-</head>
-<body>
-<form action="{% url 'login' %}" method="post">
-    {% csrf_token %}
-    {% if message %}
-        <script>
-            alert('{{ message }}')
-        </script>
-    {% endif %}
-    Email:<br>
-    <input type="email" name="email"><br>
-    Password:<br>
-    <input type="password" name="password"><br>
-    <input type="submit" value="SignIn">
-    <button type="button" onclick="location.href='{% url 'signup' %}'">SignUp</button>
-    {#<button type="button" onclick="location.href='{% url 'signUp' %}'>SignUp</button>#}
-</form>
-</body>
-</html>
+{% extends 'base.html' %}
+{% load static %}
+{% block login %}
+    <div class="app flex-row align-items-center">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card-group">
+                        <div class="card p-4">
+                            <div class="card-body">
+                                <h1>Login </h1>
+                                <p class="text-muted">Sign In to Algorithma</p>
+                                <form style="" action="{% url 'login' %}" method="post">
+                                    {% csrf_token %}
+                                    <div class="input-group mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i
+                                                    class="glyphicon glyphicon-user"></i></span>
+                                        </div>
+                                        <input type="text" class="form-control" placeholder="User email" name="email">
+                                    </div>
+                                    <div class="input-group mb-4">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text"><i
+                                                    class="glyphicon glyphicon-lock"></i></span>
+                                        </div>
+                                        <input type="password" class="form-control" placeholder="Password"
+                                               name="password">
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-6">
+                                            <button type="submit" class="btn btn-primary px-4">Login</button>
+                                        </div>
+                                        <div class="col-6 text-right">
+                                            <!-- <button type="button" class="btn btn-link px-0"  >Forgot password?</button> -->
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
+                            <div class="card-body text-center">
+                                <div>
+                                    <center>
+                                        <img src="{% static 'img/logo.jpg' %}" width="300px"/></center>
+                                    <h2>Sign up as </h2>
+                                    <h2>Data Scientist</h2>
+                                    <p></p>
+                                    <a href="{% url 'signup' %}">
+                                        <button type="button" class="btn btn-primary active mt-3">Register Now!</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

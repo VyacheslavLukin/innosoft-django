@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+{% load staticfiles %}
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="CoreUI - Open Source Bootstrap Admin Template">
+    <meta name="author" content="Łukasz Holeczek">
+    <meta name="keyword"
+          content="Bootstrap,Admin,Template,Open,Source,AngularJS,Angular,Angular2,Angular 2,Angular4,Angular 4,jQuery,CSS,HTML,RWD,Dashboard,React,React.js,Vue,Vue.js">
+    <link rel="shortcut icon" href="{% static 'img/favicon.png' %}">
+    <link rel="stylesheet" href="https://rawgit.com/Foliotek/Croppie/master/croppie.css"/>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.13/daterangepicker.min.css" />
+
+    <title>Algorithma</title>
+
+    <!-- Main styles for this application -->
+    <link href="{% static 'css/bootstrap-slider.css' %}" rel="stylesheet">
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    <!-- Bootstrap and necessary plugins -->
+    <script src="{% static 'js/jquery.min.js' %}"></script>
+    <script src="{% static 'js/popper.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/bootstrap-slider.js' %}"></script>
+
+    <link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
+    <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
+
+{#    <script type="text/javascript" src="https://rawgit.com/Foliotek/Croppie/master/croppie.js"></script>#}
+</head>
+
+<!-- BODY options, add following classes to body to change options
+
+  // Header options
+  1. '.header-fixed'					- Fixed Header
+
+  // Sidebar options
+  1. '.sidebar-fixed'					- Fixed Sidebar
+  2. '.sidebar-hidden'				- Hidden Sidebar
+  3. '.sidebar-off-canvas'		- Off Canvas Sidebar
+  4. '.sidebar-minimized'			- Minimized Sidebar (Only icons)
+  5. '.sidebar-compact'			  - Compact Sidebar
+
+  // Aside options
+  1. '.aside-menu-fixed'			- Fixed Aside Menu
+  2. '.aside-menu-hidden'			- Hidden Aside Menu
+  3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
+
+  // Breadcrumb options
+  1. '.breadcrumb-fixed'			- Fixed Breadcrumb
+
+  // Footer options
+  1. 'footer-fixed'						- Fixed footer
+
+-->
+
+<body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
+
+{% block login %}
+{% endblock %}
+
+{% block signup %}
+{% endblock %}
+<!-- Navbar -->
+<!-- <div ng-include="'views/common/navbar.html'" include-replace></div> -->
+<header class="app-header navbar">
+    <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <a class="navbar-brand"><h2>Algorithma</h2></a>
+    <ul class="nav navbar-nav d-md-down-none">
+        <li class="nav-item">
+            <a class="nav-link navbar-toggler sidebar-toggler" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+        </li>
+
+        <li class="nav-item px-3">
+            <a class="nav-link" href="#">Dashboard</a>
+        </li>
+        <!-- <li class="nav-item px-3"> -->
+        <!-- <a class="nav-link" href="#">Users</a> -->
+        <!-- </li> -->
+        <!-- <li class="nav-item px-3"> -->
+        <!-- <a class="nav-link" href="#">Settings</a> -->
+        <!-- </li> -->
+    </ul>
+    <ul class="nav navbar-nav ml-auto d-md-down-none">
+        <!-- <li class="nav-item"> -->
+        <!-- <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a> -->
+        <!-- </li> -->
+        <!-- <li class="nav-item"> -->
+        <!-- <a class="nav-link" href="#"><i class="icon-list"></i></a> -->
+        <!-- </li> -->
+        <!-- <li class="nav-item"> -->
+        <!-- <a class="nav-link" href="#"><i class="icon-location-pin"></i></a> -->
+        <!-- </li> -->
+        <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <img ng-src="{{ userdata.image }}" class="img-avatar"><br>
+                {{ userdata.name }}
+            </a>
+            <div class="dropdown-menu dropdown-menu-right">
+
+                <!-- <div class="dropdown-header text-center"> -->
+                <!-- <strong>Account</strong> -->
+                <!-- </div> -->
+
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="badge badge-info">42</span></a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="badge badge-success">42</span></a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="badge badge-danger">42</span></a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comment<span class="badge badge-warning">42</span></a> -->
+
+                <!-- <div class="dropdown-header text-center"> -->
+                <!-- <strong>Settings</strong> -->
+                <!-- </div> -->
+
+                <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Setting</a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="badge badge-secondary">42</span></a> -->
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a> -->
+                <div class="divider"></div>
+                <!-- <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
+                <a class="dropdown-item" ng-click="signout()"><i class="fa fa-lock"></i> Logout {{ userdata.name }}</a>
+            </div>
+        </li>
+        <!-- <li class="nav-item"> -->
+        <!-- <a class="nav-link navbar-toggler aside-menu-toggler" href="#"> -->
+        <!-- <span class="navbar-toggler-icon"></span> -->
+        <!-- </a> -->
+        <!-- </li> -->
+
+    </ul>
+</header>
+<div class="app-body">
+    <!-- Navigation -->
+    <div class="sidebar">
+        <nav class="sidebar-nav">
+            <ul class="nav">
+                <li class="nav-item" style=" ">
+                    <center><br>
+                        {#                        <img ng-src="{{userdata.image}}" class="img-avatar" style="width:100px"><br>#}
+                        {#                        {{userdata.name}}#}
+                    </center>
+                </li>
+                <li class="nav-item">
+
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.main"><i class="icon-pie-chart"></i> Your
+                        Projects
+
+                        <!-- <span class="badge badge-info">NEW</span>  {{userdata.Company}} -->
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddNewProject" ng-if="userdata.Company==2"><i
+                            class="icon-layers"></i>Add Custom Project
+
+
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddNewMarketProject"
+                       ng-if="userdata.Company==1"><i class="icon-layers"></i>Add Market Project
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.MarketProjectDash"
+                       ng-if="userdata.Company==2"><i class="icon-layers"></i>All Market Project
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddModel"><i class="icon-puzzle"></i>Add
+                        Models & Pickle
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddData"><i class="icon-calculator"></i>Add
+                        Data
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.Direct_Execute"><i
+                            class="icon-speedometer"></i>Direct Execute
+                        <span class="badge badge-info">NEW</span>
+
+                    </a>
+                </li>
+
+                <li class="nav-item">
+                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddOrgData"><i class="icon-calculator"></i>Add
+                        Org
+                        Data
+                        <span class="badge badge-info">NEW</span>
+                    </a>
+                </li>
+
+
+                <li class="divider"></li>
+                <li class="nav-item">
+                    <a class="nav-link" ng-click="signout()"><i class="fa fa-lock"></i> Logout
+
+                        <!-- <span class="badge badge-info">NEW</span> -->
+                    </a>
+                </li>
+                <!-- <li class="nav-title"> -->
+                <!-- UI Elements -->
+                <!-- </li> -->
+                <!-- <li class="nav-item nav-dropdown" ng-class="{open: $state.includes('app.components')}"> -->
+                <!-- <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes('app.components')}" href="#"><i class="icon-puzzle"></i> Components</a> -->
+                <!-- <ul class="nav-dropdown-items"> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.buttons"><i class="icon-puzzle"></i> Buttons</a> -->
+                <!-- </li> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.social-buttons"><i class="icon-puzzle"></i> Social Buttons</a> -->
+                <!-- </li> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.cards"><i class="icon-puzzle"></i> Cards</a> -->
+                <!-- </li> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.forms"><i class="icon-puzzle"></i> Forms</a> -->
+                <!-- </li> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.switches"><i class="icon-puzzle"></i> Switches</a> -->
+                <!-- </li> -->
+                <!-- <li class="nav-item"> -->
+                <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.components.tables"><i class="icon-puzzle"></i> Tables</a> -->
+                <!-- </li> -->
+            </ul>
+            </li>
+            <!-- <li class="nav-item nav-dropdown" ng-class="{open: $state.includes('app.icons')}"> -->
+            <!-- <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes('app.icons')}" href="#"><i class="icon-star"></i> Icons</a> -->
+            <!-- <ul class="nav-dropdown-items"> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.icons.flags"><i class="icon-star"></i> Flags <span class="badge badge-success">NEW</span></a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.icons.fontawesome"><i class="icon-star"></i> Font Awesome <span class="badge badge-secondary">4.7</span></a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.icons.simplelineicons"><i class="icon-star"></i> Simple Line Icons</a> -->
+            <!-- </li> -->
+            <!-- </ul> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.widgets"><i class="icon-calculator"></i> Widgets <span class="badge badge-info">NEW</span></a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="app.charts"><i class="icon-pie-chart"></i> Charts</a> -->
+            <!-- </li> -->
+            <!-- <li class="divider"></li> -->
+            <!-- <li class="nav-title"> -->
+            <!-- Extras -->
+            <!-- </li> -->
+            <!-- <li class="nav-item nav-dropdown" ng-class="{open: $state.includes('app.pages')}"> -->
+            <!-- <a class="nav-link nav-dropdown-toggle" ng-class="{active: $state.includes('app.pages')}" href="#"><i class="icon-star"></i> Pages</a> -->
+            <!-- <ul class="nav-dropdown-items"> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="appSimple.login"><i class="icon-star"></i> Login</a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="appSimple.register"><i class="icon-star"></i> Register</a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="appSimple.404"><i class="icon-star"></i> Error 404</a> -->
+            <!-- </li> -->
+            <!-- <li class="nav-item"> -->
+            <!-- <a class="nav-link" ui-sref-active="active" ui-sref="appSimple.500"><i class="icon-star"></i> Error 500</a> -->
+            <!-- </li> -->
+            <!-- </ul> -->
+            <!-- </li> -->
+
+            </ul>
+        </nav>
+    </div>
+    <!-- Main content -->
+    <main class="main">
+        <!-- Breadcrumb -->
+        <ol class="breadcrumb" breadcrumb>
+            {#            <ncy-breadcrumb></ncy-breadcrumb>#}
+
+            <!-- Breadcrumb Menu-->
+            <li class="breadcrumb-menu">
+                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
+                    <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
+                    <a class="btn" ui-sref="app.main"><i class="icon-graph"></i> &nbsp;Dashboard</a>
+                    <!-- <a class="btn" ui-sref="app.main"><i class="icon-settings"></i> &nbsp;Settings</a> -->
+                </div>
+            </li>
+
+        </ol>
+        <div class="container-fluid">
+            <ui-view></ui-view>
+        </div>
+        <!-- /.conainer-fluid -->
+    </main>
+
+    <!-- Aside Menu -->
+    {#    <div ng-include="'views/common/aside.html'" include-replace></div>#}
+
+</div>
+
+{% block content %}
+
+{% endblock %}
+
+</body>
+</html>

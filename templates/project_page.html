@@ -20,8 +20,16 @@
                 {% endfor %}
             </select>
         </label>
-    <input type="submit" value="Use model">
+        <input type="submit" value="Use model">
     </form>
+
+    {% if results %}
+        <ul>
+        {% for resinfo in results %}
+            <li>{{ resinfo.user.name }}: {{ resinfo.result }}</li>
+        {% endfor %}
+        </ul>
+    {% endif %}
 
 </div>
 </body>

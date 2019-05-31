@@ -9,7 +9,8 @@ import pandas as pd
 import json
 from sklearn.model_selection import train_test_split
 import pickle
-
+from sklearn.metrics import mean_absolute_error
+import numpy as np
 
 from Algoritma.utils import *
 
@@ -47,7 +48,7 @@ def login(request):
             return render(request, "login_page.html", {"message": message})
         session_id = user['idToken']
         request.session['uid'] = str(session_id)
-        return render(request, "welcome_page.html", {"e": email})
+        return redirect('project_index')
 
 def logout(request):
     auth.logout(request)
@@ -224,7 +225,7 @@ def market_project(request):
             "firename": firename.split(".")[0]
         }
 
-        firedb.child('projects').child(prj_id).set(data)
+        firedb.child('projects').child(prj_id).child("info").set(data)
         firedb.child('users').child(account).child('projects').push({"prj_id": prj_id})
 
         return redirect('market_project')
@@ -264,13 +265,13 @@ def project_index(request):
         prj_keys = firedb.child('projects').shallow().get().val()
 
         projects = []
-        for key in prj_keys:
-            prj = firedb.child('projects').child(key).get().val()
-            prj["id"] = key
-            projects.append(dict(prj))
+        if prj_keys:
+            for key in prj_keys:
+                prj = firedb.child('projects').child(key).child("info").get().val()
+                prj["id"] = key
+                projects.append(dict(prj))
 
         return render(request, "project_index.html", {"projects": projects})
-
 
 def project_page(request, prj_id):
     if request.method == 'GET':
@@ -278,22 +279,40 @@ def project_page(request, prj_id):
         account = fireauth.get_account_info(idtoken)
         account = account['users'][0]['localId']
 
-        project = firedb.child('projects').child(prj_id).get().val()
+        project = firedb.child('projects').child(prj_id).child("info").get().val()
         project["id"] = prj_id
         project = dict(project)
 
         model_keys = firedb.child('users').child(account).child("models").shallow().get().val()
 
         models = []
-        for key in model_keys:
-            model = firedb.child('users').child(account).child("models").child(key).get().val()
-            models.append(dict(model))
+        if model_keys:
+            for key in model_keys:
+                model = firedb.child('users').child(account).child("models").child(key).get().val()
+                models.append(dict(model))
 
-        return render(request, "project_page.html", {"project": project, "models": models})
+        res_keys = firedb.child('projects').child(prj_id).child("results").shallow().get().val()
+
+        results = []
+        if res_keys:
+            for key in res_keys:
+                res_info = firedb.child("projects").child(prj_id).child("results").child(key).get().val()
+                # model = firedb.child("models").child(res_info["model"]).get().val()
+                # res_info["model"] = dict(model)
+                user = firedb.child("users").child(account)
+                user = user.child("details").get().val()
+                res_info["user"] = dict(user)
+                results.append(res_info)
+
+        return render(request, "project_page.html", {"project": project, "models": models, "results": results})
     if request.method == 'POST':
+        idtoken = request.session['uid']
+        account = fireauth.get_account_info(idtoken)
+        account = account['users'][0]['localId']
+
         mid = request.POST.get("mid")
         model = firedb.child('models').child(mid).get().val()
-        project = firedb.child('projects').child(prj_id).get().val()
+        project = firedb.child('projects').child(prj_id).child("info").get().val()
 
         model_path = "%s.sav" % (model["firename"])
         xpickle_path = "%s_pickle_x.sav" % (project["firename"])
@@ -309,9 +328,22 @@ def project_page(request, prj_id):
 
         ypicle_blob = bucket.get_blob(ypickle_path)
         ypickle = ypicle_blob.download_as_string()
-        y = pickle.loads(ypickle)
 
+        y = pickle.loads(ypickle)
         y_pred = model.predict(X)
+
+        #checking
+        m = mean_absolute_error(y, y_pred, multioutput='raw_values')
+
+        check_result = np.average(m)
+
+        check_data = {
+            "user": account,
+            "model": mid,
+            "result": check_result
+        }
+
+        firedb.child("projects").child(prj_id).child("results").push(check_data)
 
         return redirect('project_page', prj_id)
 
@@ -330,3 +362,9 @@ def model_index(request):
             models.append(dict(model))
 
         return render(request, "model_index.html", {"models": models})
+
+def error404(request):
+    return render(request, '404.html')
+
+def temp(request):
+    return render(request, 'temp.html')

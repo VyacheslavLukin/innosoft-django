@@ -29,6 +29,7 @@ urlpatterns = [
     path('projects/<prj_id>', views.project_page, name="project_page"),
     path('models/', views.model_index, name="model_index"),
     path('models/upload', views.upload_model, name="upload_model"),
-    path('admin/', admin.site.urls)
+    path('admin/', admin.site.urls),
+    path('temp/', views.temp, name='temp')
     # path(r'/')
 ]
