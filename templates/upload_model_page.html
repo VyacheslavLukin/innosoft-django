@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Upload model</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <h1>Upload model</h1>
 <form action="{% url 'upload_model' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -21,5 +17,4 @@
 
     <input type="submit" value="Submit">
 </form>
-</body>
-</html>
+{% endblock %}

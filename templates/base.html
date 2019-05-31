@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load staticfiles %}
+{% load static %}
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,7 +15,8 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.13/daterangepicker.min.css" />
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-daterangepicker/2.1.13/daterangepicker.min.css"/>
 
     <title>Algorithma</title>
 
@@ -33,7 +34,7 @@
     <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
 
-{#    <script type="text/javascript" src="https://rawgit.com/Foliotek/Croppie/master/croppie.js"></script>#}
+    {#    <script type="text/javascript" src="https://rawgit.com/Foliotek/Croppie/master/croppie.js"></script>#}
 </head>
 
 <!-- BODY options, add following classes to body to change options
@@ -70,6 +71,7 @@
 {% endblock %}
 <!-- Navbar -->
 <!-- <div ng-include="'views/common/navbar.html'" include-replace></div> -->
+
 <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
         <span class="navbar-toggler-icon"></span>
@@ -105,8 +107,9 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false">
-                <img ng-src="{{ userdata.image }}" class="img-avatar"><br>
-                {{ userdata.name }}
+                <div align="center">
+                    <img src="{{ userdata.image }}" class="img-avatar"><br>
+                    {{ userdata.name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
 
@@ -129,7 +132,7 @@
                 <!-- <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a> -->
                 <div class="divider"></div>
                 <!-- <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
-                <a class="dropdown-item" ng-click="signout()"><i class="fa fa-lock"></i> Logout {{ userdata.name }}</a>
+                <a class="dropdown-item"><i class="fa fa-lock"></i> Logout {{ user.name }}</a>
             </div>
         </li>
         <!-- <li class="nav-item"> -->
@@ -140,54 +143,46 @@
 
     </ul>
 </header>
+
 <div class="app-body">
     <!-- Navigation -->
     <div class="sidebar">
         <nav class="sidebar-nav">
             <ul class="nav">
                 <li class="nav-item" style=" ">
-                    <center><br>
-                        {#                        <img ng-src="{{userdata.image}}" class="img-avatar" style="width:100px"><br>#}
-                        {#                        {{userdata.name}}#}
-                    </center>
+                    <br>
+                    <img src="{{ userdata.image }}" class="img-avatar" style="width:100px"><br>
+                    {{ userdata.name }}
                 </li>
                 <li class="nav-item">
 
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.main"><i class="icon-pie-chart"></i> Your
-                        Projects
-
-                        <!-- <span class="badge badge-info">NEW</span>  {{userdata.Company}} -->
+                    <a class="nav-link" href="{% url 'project_index' %}"><i class="icon-pie-chart"></i>Projects
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddNewProject" ng-if="userdata.Company==2"><i
+                    <a class="nav-link"><i
                             class="icon-layers"></i>Add Custom Project
-
-
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddNewMarketProject"
-                       ng-if="userdata.Company==1"><i class="icon-layers"></i>Add Market Project
+                    <a class="nav-link" href="{% url 'market_project' %}"><i class="icon-layers"></i>Add Market Project
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.MarketProjectDash"
-                       ng-if="userdata.Company==2"><i class="icon-layers"></i>All Market Project
+                    <a class="nav-link"><i class="icon-layers"></i>All Market Project
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddModel"><i class="icon-puzzle"></i>Add
-                        Models & Pickle
+                    <a class="nav-link" href="{% url 'upload_model' %}"><i class="icon-puzzle"></i>Add Models & Pickle
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddData"><i class="icon-calculator"></i>Add
+                    <a class="nav-link"><i class="icon-calculator"></i>Add
                         Data
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.Direct_Execute"><i
+                    <a class="nav-link"><i
                             class="icon-speedometer"></i>Direct Execute
                         <span class="badge badge-info">NEW</span>
 
@@ -195,7 +190,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" ui-sref-active="active" ui-sref="app.AddOrgData"><i class="icon-calculator"></i>Add
+                    <a class="nav-link"><i class="icon-calculator"></i>Add
                         Org
                         Data
                         <span class="badge badge-info">NEW</span>
@@ -205,7 +200,7 @@
 
                 <li class="divider"></li>
                 <li class="nav-item">
-                    <a class="nav-link" ng-click="signout()"><i class="fa fa-lock"></i> Logout
+                    <a class="nav-link"><i class="fa fa-lock"></i> Logout
 
                         <!-- <span class="badge badge-info">NEW</span> -->
                     </a>
@@ -284,21 +279,23 @@
     <!-- Main content -->
     <main class="main">
         <!-- Breadcrumb -->
-        <ol class="breadcrumb" breadcrumb>
+        <ol class="breadcrumb">
             {#            <ncy-breadcrumb></ncy-breadcrumb>#}
 
             <!-- Breadcrumb Menu-->
             <li class="breadcrumb-menu">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
                     <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
-                    <a class="btn" ui-sref="app.main"><i class="icon-graph"></i> &nbsp;Dashboard</a>
+                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>
                     <!-- <a class="btn" ui-sref="app.main"><i class="icon-settings"></i> &nbsp;Settings</a> -->
                 </div>
             </li>
 
         </ol>
         <div class="container-fluid">
-            <ui-view></ui-view>
+            {% block content %}
+
+            {% endblock %}
         </div>
         <!-- /.conainer-fluid -->
     </main>
@@ -308,9 +305,6 @@
 
 </div>
 
-{% block content %}
-
-{% endblock %}
 
 </body>
 </html>

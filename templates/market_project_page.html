@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Create market project</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <h1>Create market project</h1>
 <form action="{% url 'market_project' %}" method="post" enctype="multipart/form-data">
     {% csrf_token %}
@@ -25,5 +21,4 @@
 
     <input type="submit" value="Submit">
 </form>
-</body>
-</html>
+{% endblock %}

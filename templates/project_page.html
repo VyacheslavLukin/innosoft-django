@@ -1,10 +1,6 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Project {{ project.title }}</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
 <h1>Project {{ project.title }}</h1>
 <div>
     <p>{{ project.description }}</p>
@@ -30,7 +26,5 @@
         {% endfor %}
         </ul>
     {% endif %}
-
 </div>
-</body>
-</html>
+{% endblock %}
