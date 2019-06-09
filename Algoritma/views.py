@@ -1,5 +1,4 @@
 from django.shortcuts import render, redirect
-import pyrebase
 from django.contrib import auth
 import firebase_admin
 from firebase_admin import credentials, firestore, storage
@@ -12,22 +11,9 @@ import pickle
 from sklearn.metrics import mean_absolute_error
 import numpy as np
 
+import Algoritma.dbutils as db
+
 from Algoritma.utils import *
-
-config = {
-    "apiKey": "AIzaSyCEEBWHipEhE8wjQNXVtmd0CDUUEUq9kGQ",
-    "authDomain": "innosoft-django.firebaseapp.com",
-    "databaseURL": "https://innosoft-django.firebaseio.com",
-    "projectId": "innosoft-django",
-    "storageBucket": "innosoft-django.appspot.com",
-    "messagingSenderId": "728530690260",
-    "appId": "1:728530690260:web:790af9c28f5476e8"
-}
-
-firebase = pyrebase.initialize_app(config)
-fireauth = firebase.auth()
-firedb = firebase.database()
-
 
 # cred = credentials.Certificate('innosoft-django-firebase-adminsdk-kml31-03d2439b89.json')
 # firebase_admin.initialize_app(cred, {
@@ -43,7 +29,7 @@ def signin(request):
         email = request.POST.get('email')
         password = request.POST.get('password')
         try:
-            user = fireauth.sign_in_with_email_and_password(email, password)
+            user = db.signin(email, password)
         except:
             message = "Invalid credentials"
             return render(request, "signin_page.html", {"message": message})
@@ -59,27 +45,16 @@ def signup(request):
     if request.method == 'GET':
         return render(request, "signup_page.html")
     elif request.method == 'POST':
-        name = request.POST.get('name')
-        email = request.POST.get('email')
-        password = request.POST.get('password')
-        role = request.POST.get('account_type')
-        # password_conf = request.POST.get("password_conf")
-        image = request.FILES.get("image")
+        cred = {}
+        cred["name"] = request.POST.get('name')
+        cred["email"] = request.POST.get('email')
+        cred["password"] = request.POST.get('password')
+        cred["role"] = request.POST.get('account_type')
+        cred["image"] = request.FILES.get("image")
 
-        try:
-            user = fireauth.create_user_with_email_and_password(email, password)
-        except Exception as e:
-            message = e
-            return render(request, 'signup_page.html', {"message": message})
+        #try except
+        user = db.create_account(cred)
 
-        uid = user['localId']
-
-        firename = "%s.%s" % (generate_rand_name(13), image.name.split(".")[-1])
-        image_path = upload_file(image, firename)
-
-        data = {"name": name, "role": role, "image": image_path}
-
-        firedb.child("users").child(uid).child("details").set(data)
         return redirect('signin')
 
 
@@ -219,14 +194,7 @@ def upload_model(request):
 def project_index(request):
     user = get_user(request)
     if request.method == 'GET':
-        prj_keys = firedb.child('projects').shallow().get().val()
-
-        projects = []
-        if prj_keys:
-            for key in prj_keys:
-                prj = firedb.child('projects').child(key).child("info").get().val()
-                prj["id"] = key
-                projects.append(dict(prj))
+        projects = db.get_projects()
 
         return render(request, "project_index.html", {"projects": projects, "userdata": user})
 
@@ -321,20 +289,12 @@ def model_index(request):
 def error404(request):
     return render(request, '404.html')
 
-
 def temp(request):
     user = get_user(request)
-
     return render(request, 'base.html', {"userdata": user})
 
 
 def get_user(request):
     idtoken = request.session['uid']
-    account = fireauth.get_account_info(idtoken)
-    account = account['users'][0]['localId']
-
-    user = firedb.child("users").child(account).child("details").get().val()
-    user["id"] = account
-    user = dict(user)
-
+    user = db.get_user_info(idtoken)
     return user
