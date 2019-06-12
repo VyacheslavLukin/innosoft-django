@@ -5,6 +5,7 @@ import pytz
 import whitenoise
 import pandas
 import sklearn
+import numpy
 import pyrebase
 import firebase_admin
 print(django.__version__)
@@ -16,3 +17,4 @@ print(pandas.__version__)
 print("sklearn", sklearn.__version__)
 # print("pyrebase", pyrebase.__version__)
 print("firebase_admin", firebase_admin.__version__)
+print("numpy", numpy.__version__)
