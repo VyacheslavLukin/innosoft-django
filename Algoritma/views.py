@@ -128,7 +128,6 @@ def market_project(request):
             "title": request.POST.get('title'),
             "description": request.POST.get('description'),
             "percentage": int(request.POST.get('percentage')),
-            "file": file
         }
 
         # prj_id = generate_rand_name(9)
@@ -136,11 +135,7 @@ def market_project(request):
         # description = request.POST.get('description')
 
 
-        json_blob, train_blob, test_blob = autils.split_json(info["file"], info["percentage"])
-
-        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
-        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
-        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
+        json_blob, train_blob, test_blob = autils.split_json(file, info["percentage"])
 
         test_json = json.loads(test_blob)
 
@@ -148,6 +143,9 @@ def market_project(request):
         testpic_x, testpic_y = autils.split_xy(test_json,
                                         ['dew_point_temperature', 'underground_temperature', 'underground_temperature'])
 
+        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
+        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
+        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
         testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
         testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
@@ -201,69 +199,45 @@ def project_page(request, prj_id):
     user = get_user(request)
     uid = user["id"]
     if request.method == 'GET':
-        project = firedb.child('projects').child(prj_id).child("info").get().val()
-        project["id"] = prj_id
-        project = dict(project)
 
-        model_keys = firedb.child('users').child(uid).child("models").shallow().get().val()
+        project = db.get_project(prj_id, option="full")
 
-        models = []
-        if model_keys:
-            for key in model_keys:
-                model = firedb.child('users').child(uid).child("models").child(key).get().val()
-                models.append(dict(model))
-
-        res_keys = firedb.child('projects').child(prj_id).child("results").shallow().get().val()
-
-        results = []
-        if res_keys:
-            for key in res_keys:
-                res_info = firedb.child("projects").child(prj_id).child("results").child(key).get().val()
-                # model = firedb.child("models").child(res_info["model"]).get().val()
-                # res_info["model"] = dict(model)
-                user = firedb.child("users").child(uid)
-                user = user.child("details").get().val()
-                res_info["user"] = dict(user)
-                results.append(res_info)
+        models = db.get_user_models(uid)
 
         return render(request, "project_page.html",
-                      {"project": project, "models": models, "results": results, "userdata": user})
+                      {"project": project, "models": models, "userdata": user})
 
     if request.method == 'POST':
         mid = request.POST.get("mid")
-        model = firedb.child('models').child(mid).get().val()
-        project = firedb.child('projects').child(prj_id).child("info").get().val()
+        model = db.get_model(mid)
 
-        model_path = "%s.sav" % (model["firename"])
-        xpickle_path = "%s_pickle_x.sav" % (project["firename"])
-        ypickle_path = "%s_pickle_y.sav" % (project["firename"])
+        project = db.get_project(prj_id)
 
-        model_blob = bucket.get_blob(model_path)
-        model_pickle = model_blob.download_as_string()
-        model = pickle.loads(model_pickle)
+        model_file = db.get_file_string(model["data"][0])
+        model = pickle.loads(model_file)
 
-        xpickle_blob = bucket.get_blob(xpickle_path)
-        xpickle = xpickle_blob.download_as_string()
-        X = pickle.loads(xpickle)
+        xpickle_file = db.get_file_string(project["pickle_x"][0])
+        X = pickle.loads(xpickle_file)
 
-        ypicle_blob = bucket.get_blob(ypickle_path)
-        ypickle = ypicle_blob.download_as_string()
+        ypickle_file = db.get_file_string(project["pickle_y"][0])
+        y = pickle.loads(ypickle_file)
 
-        y = pickle.loads(ypickle)
         y_pred = model.predict(X)
 
-        # checking
+        # checking. Make dynamic
         m = mean_absolute_error(y, y_pred, multioutput='raw_values')
 
         check_result = np.average(m)
 
         check_data = {
+            "project": prj_id,
             "user": uid,
             "model": mid,
             "result": check_result
         }
 
-        firedb.child("projects").child(prj_id).child("results").push(check_data)
+        db.create_check_data(check_data)
+
 
         return redirect('project_page', prj_id)
 
@@ -272,17 +246,9 @@ def model_index(request):
     user = get_user(request)
     uid = user["id"]
     if request.method == 'GET':
-
-        model_keys = firedb.child('users').child(uid).child("models").shallow().get().val()
-
-        models = []
-        for key in model_keys:
-            model = firedb.child('users').child(uid).child("models").child(key).get().val()
-            model["id"] = key
-            models.append(dict(model))
+        models = db.get_user_models(uid)
 
         return render(request, "model_index.html", {"models": models, "userdata": user})
-
 
 def error404(request):
     return render(request, '404.html')

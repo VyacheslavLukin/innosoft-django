@@ -4,7 +4,7 @@
 <h1>Project {{ project.title }}</h1>
 <div>
     <p>{{ project.description }}</p>
-    <a href="{{ project.train_data }}">JSON</a>
+    <a href="{{ project.train_data.1 }}">JSON</a>
     <form action="{% url 'project_page' project.id %}" method="post">
         {% csrf_token %}
 
@@ -19,9 +19,9 @@
         <input type="submit" value="Use model">
     </form>
 
-    {% if results %}
+    {% if project.results %}
         <ul>
-        {% for resinfo in results %}
+        {% for resinfo in project.results %}
             <li>{{ resinfo.user.name }}: {{ resinfo.result }}</li>
         {% endfor %}
         </ul>

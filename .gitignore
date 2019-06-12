@@ -21,6 +21,7 @@
 *.json
 
 *.sqlite3
+*.pickle
 
 Innosoft_plan.txt
 
