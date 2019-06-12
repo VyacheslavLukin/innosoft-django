@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.contrib import auth
 import json
 import pickle
-from sklearn.metrics import mean_absolute_error
 import numpy as np
+from sklearn.metrics import mean_absolute_error
 
 import Algoritma.dbutils as db
 import Algoritma.utils as autils
