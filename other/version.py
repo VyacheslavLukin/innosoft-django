@@ -1,14 +1,18 @@
 import django
-import django_heroku
 import gunicorn
 import psycopg2
 import pytz
 import whitenoise
 import pandas
+import sklearn
+import pyrebase
+import firebase_admin
 print(django.__version__)
-print(django_heroku.__version__)
 print(gunicorn.__version__)
 print(psycopg2.__version__)
 print(pytz.__version__)
 print(whitenoise.__version__)
 print(pandas.__version__)
+print("sklearn", sklearn.__version__)
+# print("pyrebase", pyrebase.__version__)
+print("firebase_admin", firebase_admin.__version__)

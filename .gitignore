@@ -24,4 +24,6 @@
 *.pickle
 
 Innosoft_plan.txt
+version.py
+
 
