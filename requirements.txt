@@ -7,3 +7,4 @@ django_heroku==0.3.1
 firebase_admin==2.17.0
 numpy==1.16.1
 scikit-learn==0.20.2
+pyrebase4==4.3.0
