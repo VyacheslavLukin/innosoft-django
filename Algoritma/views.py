@@ -10,10 +10,10 @@ from sklearn.model_selection import train_test_split
 import pickle
 from sklearn.metrics import mean_absolute_error
 import numpy as np
+import mimetypes
 
 import Algoritma.dbutils as db
-
-from Algoritma.utils import *
+import Algoritma.utils as autils
 
 # cred = credentials.Certificate('innosoft-django-firebase-adminsdk-kml31-03d2439b89.json')
 # firebase_admin.initialize_app(cred, {
@@ -21,6 +21,10 @@ from Algoritma.utils import *
 # })
 # db = firestore.client()
 # bucket = storage.bucket()
+
+FILENAME_SIZE = 13
+ID_SIZE = 9
+PICKLE_EXTENSION = "pickle"
 
 def signin(request):
     if request.method == 'GET':
@@ -45,15 +49,16 @@ def signup(request):
     if request.method == 'GET':
         return render(request, "signup_page.html")
     elif request.method == 'POST':
-        cred = {}
-        cred["name"] = request.POST.get('name')
-        cred["email"] = request.POST.get('email')
-        cred["password"] = request.POST.get('password')
-        cred["role"] = request.POST.get('account_type')
-        cred["image"] = request.FILES.get("image")
+        data = {
+            "name": request.POST.get('name'),
+            "email": request.POST.get('email'),
+            "password": request.POST.get('password'),
+            "role": request.POST.get('account_type'),
+            "image": request.FILES.get("image")
+        }
 
         #try except
-        user = db.create_account(cred)
+        user = db.create_account(data)
 
         return redirect('signin')
 
@@ -114,51 +119,48 @@ def market_project(request):
         return render(request, "market_project_page.html", {"userdata": user})
     elif request.method == 'POST':
 
-        prj_id = generate_rand_name(9)
-
-        title = request.POST.get('title')
-        description = request.POST.get('description')
-
         file = request.FILES.get('file')
+        if not file:
+            return redirect("market_project")
 
-        perc = request.POST.get('percentage')
-        perc = int(perc)
+        info = {
+            "user": uid,
+            "title": request.POST.get('title'),
+            "description": request.POST.get('description'),
+            "percentage": int(request.POST.get('percentage')),
+            "file": file
+        }
 
-        json_blob, train_blob, test_blob = split_json(file, perc)
+        # prj_id = generate_rand_name(9)
 
-        basename = generate_rand_name(13)
+        # description = request.POST.get('description')
 
-        firename = "%s.%s" % (basename, file.name.split(".")[-1])
 
-        train_path = upload_file_string(train_blob, firename, "train")
-        test_path = upload_file_string(test_blob, firename, "test")
-        json_path = upload_file_string(json_blob, firename)
+        json_blob, train_blob, test_blob = autils.split_json(info["file"], info["percentage"])
+
+        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
+        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
+        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
 
         test_json = json.loads(test_blob)
 
-        testpic_x, testpic_y = split_xy(test_json,
+        #make dynamic
+        testpic_x, testpic_y = autils.split_xy(test_json,
                                         ['dew_point_temperature', 'underground_temperature', 'underground_temperature'])
 
-        picklename = "%s.sav" % (basename)
+        testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
+        testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
-        testpic_x_path = upload_file_string(testpic_x, picklename, "pickle_x")
-        testpic_y_path = upload_file_string(testpic_y, picklename, "pickle_y")
+        info["data"] = json_path
+        info["train_data"] = train_path
+        info["test_data"] = test_path
+        info["pickle_x"] = testpic_x_path
+        info["pickle_y"] = testpic_y_path
 
-        data = {
-            "user": uid,
-            "title": title,
-            "description": description,
-            "percentage": perc,
-            "data": json_path,
-            "train_data": train_path,
-            "test_data": test_path,
-            "pickle_x": testpic_x_path,
-            "pickle_y": testpic_y_path,
-            "firename": firename.split(".")[0]
-        }
+        prj_id = db.create_project(info)
 
-        firedb.child('projects').child(prj_id).child("info").set(data)
-        firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
+        # firedb.child('projects').child(prj_id).child("info").set(data)
+        # firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
 
         return redirect('market_project')
 
@@ -168,25 +170,21 @@ def upload_model(request):
     if request.method == 'GET':
         return render(request, "upload_model_page.html", {"userdata": user})
     if request.method == 'POST':
-        mid = generate_rand_name(9)
-
         file = request.FILES.get('file')
+        if not file:
+            return redirect('upload_model')
 
         filename = request.POST.get('filename')
 
-        firename = "%s.%s" % (generate_rand_name(13), file.name.split(".")[-1])
+        sav_path = db.upload_file(file, extension="pickle", content_type="text/plain")
 
-        sav_path = upload_file(file, firename)
-
-        data = {
+        info = {
             "user": uid,
             "name": filename,
             "data": sav_path,
-            "firename": firename.split(".")[0]
         }
 
-        firedb.child('models').child(mid).set(data)
-        firedb.child('users').child(uid).child('models').push({"mid": mid, "name": filename, "userdata": user})
+        firemodel = db.create_model(info)
 
         return redirect('upload_model')
 
