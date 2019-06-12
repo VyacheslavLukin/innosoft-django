@@ -1,6 +1,4 @@
 import json
-import firebase_admin
-from firebase_admin import credentials, firestore, storage
 from random import randrange
 import pandas as pd
 import pickle

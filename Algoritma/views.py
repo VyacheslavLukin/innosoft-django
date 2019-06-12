@@ -1,16 +1,9 @@
 from django.shortcuts import render, redirect
 from django.contrib import auth
-import firebase_admin
-from firebase_admin import credentials, firestore, storage
-import traceback
-from collections import namedtuple
-import pandas as pd
 import json
-from sklearn.model_selection import train_test_split
 import pickle
 from sklearn.metrics import mean_absolute_error
 import numpy as np
-import mimetypes
 
 import Algoritma.dbutils as db
 import Algoritma.utils as autils
