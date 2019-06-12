@@ -24,7 +24,7 @@ SECRET_KEY = '6o9i111c=mn8&upsd1z54r_m_qn6y6_f4$or%_fexb6=c(d7r4'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['innosoft-django.herokuapp.com']
 
 # Application definition
 
@@ -127,3 +127,4 @@ APPEND_SLASH = True
 
 # Activate Django-Heroku.
 django_heroku.settings(locals())
+
