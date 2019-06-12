@@ -18,12 +18,13 @@
 *.wav
 *.ogg
 *.sav
-*.json
+
 
 *.sqlite3
 *.pickle
 
 Innosoft_plan.txt
 version.py
+other
 
 
