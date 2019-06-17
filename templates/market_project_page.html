@@ -1,24 +1,41 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Create market project</h1>
-<form action="{% url 'market_project' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% if message %}
-        <script>
-        alert('{{ message }}')
-        </script>
-    {% endif %}
+    <h1>Create market project</h1>
+    <form action="{% url 'market_project' %}" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {% if message %}
+            <script>
+                alert('{{ message }}')
+            </script>
+        {% endif %}
 
-    Main title:<br>
-    <input type="text" name="title"><br>
-    Description:<br>
-    <textarea rows="3" cols="30" name="description"></textarea><br>
-    Json File:<br>
-    <input type="file" name="file" id="file"><br>
-    Percentage:<br>
-    <input type="number" min="0" max="100" name="percentage"><br>
+        Main title:<br>
+        <input type="text" name="title"><br>
+        Description:<br>
+        <textarea rows="3" cols="30" name="description"></textarea><br>
+        Json File:<br>
+        <input type="file" name="file" id="file"><br>
+        Percentage:<br>
+        <input type="number" min="0" max="100" name="percentage"><br>
 
-    <input type="submit" value="Submit">
-</form>
+        <input type="submit" value="Submit">
+    </form>
+    <script type="application/javascript">
+        document.getElementById('file').addEventListener('change', onChange);
+
+        function onChange(event) {
+            let reader = new FileReader();
+            let file = event.target.files[0];
+            console.log(file);
+            reader.onload = onReaderLoad;
+            reader.read(file);
+        };
+
+        function onReaderLoad(event){
+            console.log("Reader read");
+            let obj = JSON.parse(event.target.result);
+            console.log(obj)
+        }
+    </script>
 {% endblock %}
