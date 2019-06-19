@@ -155,12 +155,65 @@ def market_project(request):
         info["pickle_x"] = testpic_x_path
         info["pickle_y"] = testpic_y_path
 
-        prj_id = db.create_project(info)
+        prj_id = db.create_market_project(info)
 
         # firedb.child('projects').child(prj_id).child("info").set(data)
         # firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
 
         return redirect('market_project')
+
+def custom_project(request):
+    user = get_user(request)
+    uid = user["id"]
+    if request.method == 'GET':
+        return render(request, "custom_project_page.html", {"userdata": user})
+    elif request.method == 'POST':
+
+        file = request.FILES.get('file')
+        if not file:
+            return redirect("market_project")
+
+        info = {
+            "user": uid,
+            "title": request.POST.get('title'),
+            "description": request.POST.get('description'),
+            "percentage": int(request.POST.get('percentage')),
+            "eval_rules": request.POST.get('eval_rules'),
+            "req_cols": request.POST.get('req_cols[]'),
+            "opt_cols": request.POST.get('opt_cols[]'),
+        }
+
+        # prj_id = generate_rand_name(9)
+
+        # description = request.POST.get('description')
+
+
+        json_blob, train_blob, test_blob = autils.split_json(file, info["percentage"])
+
+        test_json = json.loads(test_blob)
+
+        #make dynamic
+        testpic_x, testpic_y = autils.split_xy(test_json,
+                                        ['dew_point_temperature', 'underground_temperature', 'underground_temperature'])
+
+        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
+        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
+        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
+        testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
+        testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
+
+        info["data"] = json_path
+        info["train_data"] = train_path
+        info["test_data"] = test_path
+        info["pickle_x"] = testpic_x_path
+        info["pickle_y"] = testpic_y_path
+
+        prj_id = db.create_custom_project(info)
+
+        # firedb.child('projects').child(prj_id).child("info").set(data)
+        # firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
+
+        return redirect('custom_project')
 
 def upload_model(request):
     user = get_user(request)
@@ -190,7 +243,7 @@ def upload_model(request):
 def project_index(request):
     user = get_user(request)
     if request.method == 'GET':
-        projects = db.get_projects()
+        projects = db.get_market_projects()
 
         return render(request, "project_index.html", {"projects": projects, "userdata": user})
 
