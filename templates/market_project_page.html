@@ -12,10 +12,43 @@
 
         Main title:<br>
         <input type="text" name="title"><br>
-        Description:<br>
+        Small Description:<br>
+        <textarea rows="2" cols="30" name="short_desc"></textarea><br>
+        Full Description:<br>
         <textarea rows="3" cols="30" name="description"></textarea><br>
+
+        Start date:<br>
+        <input type="datetime-local" name="start_date"><br>
+        End date date:<br>
+        <input type="datetime-local" name="end_date"><br>
+
+        Evaluation Rules:<br>
+        <textarea rows="2" cols="30" name="eval_rules"></textarea><br>
+
+        Rules:<br>
+        <textarea rows="5" cols="30" name="rules"></textarea><br>
+
+        Prizes:<br>
+        <textarea rows="2" cols="30" name="rules"></textarea><br>
+
         Json File:<br>
         <input type="file" name="file" id="file"><br>
+
+        Columns to predict<br>
+
+        Required:<br>
+        <select multiple name="req_cols[]">
+            <option>Req 1</option>
+            <option>Req 2</option>
+            <option>Req 3</option>
+        </select>
+
+        Optional:<br>
+        <select multiple name="opt_cols[]">
+            <option>Opt 1</option>
+            <option>Opt 2</option>
+        </select>
+
         Percentage:<br>
         <input type="number" min="0" max="100" name="percentage"><br>
 
@@ -32,7 +65,7 @@
             reader.read(file);
         };
 
-        function onReaderLoad(event){
+        function onReaderLoad(event) {
             console.log("Reader read");
             let obj = JSON.parse(event.target.result);
             console.log(obj)

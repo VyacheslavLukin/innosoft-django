@@ -119,8 +119,15 @@ def market_project(request):
         info = {
             "user": uid,
             "title": request.POST.get('title'),
+            "short_desc": request.POST.get('short_desc'),
             "description": request.POST.get('description'),
             "percentage": int(request.POST.get('percentage')),
+            "start_date": request.POST.get('start_date'),
+            "end_date": request.POST.get('end_date'),
+            "eval_rules": request.POST.get('eval_rules'),
+            "rules": request.POST.get('rules'),
+            "req_cols": request.POST.get('req_cols[]'),
+            "opt_cols": request.POST.get('opt_cols[]'),
         }
 
         # prj_id = generate_rand_name(9)
