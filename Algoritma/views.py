@@ -253,7 +253,7 @@ def project_page(request, prj_id):
     uid = user["id"]
     if request.method == 'GET':
 
-        project = db.get_project(prj_id, option="full")
+        project = db.get_market_project(prj_id, option="full")
 
         models = db.get_user_models(uid)
 
@@ -264,7 +264,7 @@ def project_page(request, prj_id):
         mid = request.POST.get("mid")
         model = db.get_model(mid)
 
-        project = db.get_project(prj_id)
+        project = db.get_market_project(prj_id)
 
         model_file = db.get_file_string(model["data"][0])
         model = pickle.loads(model_file)

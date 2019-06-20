@@ -161,8 +161,8 @@ def create_model(info: dict):
 OPTIONS = ["info", "full"]
 
 
-def get_project(prj_id, option=OPTIONS[0]):
-    project = firedb.child('projects').child(prj_id).child("info").get().val()
+def get_market_project(prj_id, option=OPTIONS[0]):
+    project = firedb.child('projects').child('market').child(prj_id).child("info").get().val()
     project["id"] = prj_id
     project = dict(project)
 
