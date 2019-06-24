@@ -76,19 +76,17 @@
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand">
-        <center><h2 style="font-size: 20px;font-weight: bold;">Algorithma</h2></center>
-    </a>
+    <a class="navbar-brand"><h2>Algorithma</h2></a>
     <ul class="nav navbar-nav d-md-down-none">
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link navbar-toggler sidebar-toggler" href="#"> -->
-        <!-- <span class="navbar-toggler-icon"></span> -->
-        <!-- </a> -->
-        <!-- </li> -->
+        <li class="nav-item">
+            <a class="nav-link navbar-toggler sidebar-toggler" href="#">
+                <span class="navbar-toggler-icon"></span>
+            </a>
+        </li>
 
-        <!-- <li class="nav-item px-3"> -->
-        <!-- <a class="nav-link" href="#">Dashboard</a> -->
-        <!-- </li> -->
+        <li class="nav-item px-3">
+            <a class="nav-link" href="#">Dashboard</a>
+        </li>
         <!-- <li class="nav-item px-3"> -->
         <!-- <a class="nav-link" href="#">Users</a> -->
         <!-- </li> -->
@@ -107,13 +105,11 @@
         <!-- <a class="nav-link" href="#"><i class="icon-location-pin"></i></a> -->
         <!-- </li> -->
         <li class="nav-item dropdown">
-            <center>
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    <div align="center">
-                        <img src="{{ userdata.image }}" class="img-avatar"><br>
-                        <b> {{ userdata.name }} </b></div>
-            </center>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <div align="center">
+                    <img src="{{ userdata.image }}" class="img-avatar"><br>
+                    {{ userdata.name }}</div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
 
@@ -136,8 +132,7 @@
                 <!-- <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a> -->
                 <div class="divider"></div>
                 <!-- <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
-                <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i>
-                    Logout {{ userdata.name }}</a>
+                <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i> Logout {{ userdata.name }}</a>
             </div>
         </li>
         <!-- <li class="nav-item"> -->
@@ -166,6 +161,10 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'market_project' %}"><i class="icon-layers"></i>Add Market Project
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'custom_project' %}"><i class="icon-layers"></i>Add Custom Project
                     </a>
                 </li>
                 <li class="nav-item">
@@ -206,10 +205,6 @@
 
             {% endblock %}
         </div>
-        <footer class="app-footer ng-scope">
-            <span><a href="">ALgorithma</a> © 2019 </span>
-            <span class="ml-auto">Powered by InnoSoft </span>
-        </footer>
         <!-- /.conainer-fluid -->
     </main>
 

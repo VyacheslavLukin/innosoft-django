@@ -2,40 +2,121 @@
 {% load static %}
 {% block content %}
     <h1>Create market project</h1>
-    <form action="{% url 'market_project' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if message %}
-            <script>
-                alert('{{ message }}')
-            </script>
-        {% endif %}
 
-        Main title:<br>
-        <input type="text" name="title"><br>
-        Description:<br>
-        <textarea rows="3" cols="30" name="description"></textarea><br>
-        Json File:<br>
-        <input type="file" name="file" id="file"><br>
-        Percentage:<br>
-        <input type="number" min="0" max="100" name="percentage"><br>
 
-        <input type="submit" value="Submit">
-    </form>
-    <script type="application/javascript">
-        document.getElementById('file').addEventListener('change', onChange);
 
-        function onChange(event) {
-            let reader = new FileReader();
-            let file = event.target.files[0];
-            console.log(file);
-            reader.onload = onReaderLoad;
-            reader.read(file);
-        };
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
 
-        function onReaderLoad(event){
-            console.log("Reader read");
-            let obj = JSON.parse(event.target.result);
-            console.log(obj)
-        }
-    </script>
+                            <strong>Add Market Project </strong>
+                        </div>
+                        <div class="card-body">
+                            <form class="ng-pristine ng-valid" action="{% url 'market_project' %}" method="post"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if message %}
+                                    <script>
+                                        alert('{{ message }}')
+                                    </script>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label for="nf-email">Main title </label>
+                                    <input type="text" name="title" id="nf-email"
+                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                           placeholder="Enter Name..">
+                                    <input>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Full Description
+
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="3" cols="30" name="description" rows="10"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+
+
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">JSON</span>
+                                        </div>
+                                        <input type="file" name="file" id="file" class="form-control">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-file"></i></span>
+                                        </div>
+
+                                        <div></div>
+                                    </div>
+                                    <br>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nf-email">Percentage </label>
+                                    <input type="number" min="0" max="100" name="percentage"
+                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+
+                                </div>
+
+
+                                <div class="card-footer">
+                                    <button type="submit" value="Submit" class="btn btn-sm btn-primary"><i
+                                            class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+
+
+
 {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

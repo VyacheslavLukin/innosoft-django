@@ -24,6 +24,7 @@ urlpatterns = [
     path('signup/', views.signup, name="signup"),
     path('projects/', views.project_index, name="project_index"),
     path('projects/market/', views.market_project, name="market_project"),
+    path('projects/custom/', views.custom_project, name="custom_project"),
     path('projects/<prj_id>/', views.project_page, name="project_page"),
     path('models/', views.model_index, name="model_index"),
     path('models/upload/', views.upload_model, name="upload_model"),

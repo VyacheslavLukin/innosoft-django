@@ -109,31 +109,42 @@ def get_user_info(idtoken):
     return user
 
 
-def get_projects():
-    prj_keys = firedb.child('projects').shallow().get().val()
+def get_market_projects():
+    prj_keys = firedb.child('projects').child('market').shallow().get().val()
 
     projects = []
     if prj_keys:
         for key in prj_keys:
-            prj = firedb.child('projects').child(key).child("info").get().val()
+            prj = firedb.child('projects').child('market').child(key).child("info").get().val()
             prj["id"] = key
             projects.append(dict(prj))
 
     return projects
 
 
-def create_project(info: dict):
+def create_market_project(info: dict):
     user = info["user"]
     # prj_id = utils.generate_rand_name(ID_SIZE)
     info.pop("user")
     project = {}
     project["info"] = info
     # firedb.child('projects').child(prj_id).child("info").set(info)
-    fireproject = firedb.child('projects').push(project)
+    fireproject = firedb.child('projects').child("market").push(project)
     prj_id = fireproject["name"]
     firedb.child('users').child(user).child('projects').push({"prj_id": prj_id})
     return prj_id
 
+def create_custom_project(info: dict):
+    user = info["user"]
+    # prj_id = utils.generate_rand_name(ID_SIZE)
+    info.pop("user")
+    project = {}
+    project["info"] = info
+    # firedb.child('projects').child(prj_id).child("info").set(info)
+    fireproject = firedb.child('projects').child("custom").push(project)
+    prj_id = fireproject["name"]
+    firedb.child('users').child(user).child('projects').push({"prj_id": prj_id})
+    return prj_id
 
 def create_model(info: dict):
     user = info["user"]
@@ -150,8 +161,8 @@ def create_model(info: dict):
 OPTIONS = ["info", "full"]
 
 
-def get_project(prj_id, option=OPTIONS[0]):
-    project = firedb.child('projects').child(prj_id).child("info").get().val()
+def get_market_project(prj_id, option=OPTIONS[0]):
+    project = firedb.child('projects').child('market').child(prj_id).child("info").get().val()
     project["id"] = prj_id
     project = dict(project)
 
