@@ -1,7 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h1>Create market project</h1>
 
 
 
@@ -28,7 +27,7 @@
                                     <input type="text" name="title" id="nf-email"
                                            class="form-control ng-pristine ng-untouched ng-valid ng-empty"
                                            placeholder="Enter Name..">
-                                    <input>
+
                                 </div>
 
                                 <div class="form-group row">
@@ -55,10 +54,22 @@
                                             <span class="input-group-text"><i class="fa fa-file"></i></span>
                                         </div>
 
-                                        <div></div>
+                                        <div> </div>
                                     </div>
                                     <br>
                                 </div>
+
+                            <div class="form-group">
+                                    <label for="nf-email">Keys X </label>
+                                     <select class="form-control" name="col" id="col" multiple></select>
+
+                                </div>
+                              <div class="form-group">
+                                    <label for="nf-email">Keys Y </label>
+                                     <select class="form-control" name="col2" id="col2" multiple></select>
+
+                                </div>
+
                                 <div class="form-group">
                                     <label for="nf-email">Percentage </label>
                                     <input type="number" min="0" max="100" name="percentage"
@@ -67,12 +78,12 @@
                                 </div>
 
 
-                                <div class="card-footer">
-                                    <button type="submit" value="Submit" class="btn btn-sm btn-primary"><i
+                                <center>
+                                    <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit" value="Submit" class="btn btn-sm btn-primary"><i
                                             class="fa fa-dot-circle-o"></i> Submit
                                     </button>
 
-                                </div>
+                                </center>
                             </form>
                         </div>
 
@@ -86,7 +97,42 @@
 
     </div>
 
+<script>
 
+
+  (function(){
+
+    function onChange(event) {
+        var reader = new FileReader();
+        reader.onload = onReaderLoad;
+        reader.readAsText(event.target.files[0]);
+    }
+
+    function onReaderLoad(event){
+        var select = document.getElementById('col');
+        var select2 = document.getElementById('col2');
+        var options = "";
+
+        //console.log(event.target.result);
+        var obj = JSON.parse(event.target.result);
+        //alert_data(obj);
+       // console.log(obj);
+        for (x in Object.values(obj)[0]) {
+          console.log(x);
+           options += "<option value="+x+">"+x+"</option>";
+        }
+            $(select).append(options);
+            $(select2).append(options);
+
+    }
+
+
+    document.getElementById('file').addEventListener('change', onChange);
+
+}());
+
+
+</script>
 
 
 
