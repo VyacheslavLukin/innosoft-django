@@ -109,7 +109,7 @@ def market_project(request):
     user = get_user(request)
     uid = user["id"]
     if request.method == 'GET':
-        return render(request, "market_project_page.html", {"userdata": user})
+        return render(request, "market_project_page_old.html", {"userdata": user})
     elif request.method == 'POST':
 
         file = request.FILES.get('file')
