@@ -121,29 +121,35 @@ def get_market_projects():
 
     return projects
 
+MARKET_PROJECT = 'market'
+CUSTOM_PROJECT = 'custom'
 
 def create_market_project(info: dict):
     user = info["user"]
     # prj_id = utils.generate_rand_name(ID_SIZE)
     info.pop("user")
+    info["owner"] = user
+    info["type"] = MARKET_PROJECT
     project = {}
     project["info"] = info
     # firedb.child('projects').child(prj_id).child("info").set(info)
     fireproject = firedb.child('projects').child("market").push(project)
     prj_id = fireproject["name"]
-    firedb.child('users').child(user).child('projects').push({"prj_id": prj_id})
+    firedb.child('users').child(user).child('projects').push({"prj_id": prj_id, "type": MARKET_PROJECT})
     return prj_id
 
 def create_custom_project(info: dict):
     user = info["user"]
     # prj_id = utils.generate_rand_name(ID_SIZE)
     info.pop("user")
+    info["owner"] = user
+    info["type"] = CUSTOM_PROJECT
     project = {}
     project["info"] = info
     # firedb.child('projects').child(prj_id).child("info").set(info)
     fireproject = firedb.child('projects').child("custom").push(project)
     prj_id = fireproject["name"]
-    firedb.child('users').child(user).child('projects').push({"prj_id": prj_id})
+    firedb.child('users').child(user).child('projects').push({"prj_id": prj_id, "type": CUSTOM_PROJECT})
     return prj_id
 
 def create_model(info: dict):
@@ -160,19 +166,40 @@ def create_model(info: dict):
 
 OPTIONS = ["info", "full"]
 
-
 def get_market_project(prj_id, option=OPTIONS[0]):
     project = firedb.child('projects').child('market').child(prj_id).child("info").get().val()
     project["id"] = prj_id
     project = dict(project)
 
     if option == "full":
-        res_keys = firedb.child('projects').child(prj_id).child("results").shallow().get().val()
+        res_keys = firedb.child('projects').child('market').child(prj_id).child("results").shallow().get().val()
 
         results = []
         if res_keys:
             for key in res_keys:
-                res_info = firedb.child("projects").child(prj_id).child("results").child(key).get().val()
+                res_info = firedb.child("projects").child('market').child(prj_id).child("results").child(key).get().val()
+                # model = firedb.child("models").child(res_info["model"]).get().val()
+                # res_info["model"] = dict(model)
+                user = firedb.child("users").child(res_info["user"])
+                user = user.child("details").get().val()
+                res_info["user"] = dict(user)
+                results.append(res_info)
+
+        project["results"] = results
+    return project
+
+def get_custom_project(prj_id, option=OPTIONS[0]):
+    project = firedb.child('projects').child('custom').child(prj_id).child("info").get().val()
+    project["id"] = prj_id
+    project = dict(project)
+
+    if option == "full":
+        res_keys = firedb.child('projects').child('custom').child(prj_id).child("results").shallow().get().val()
+
+        results = []
+        if res_keys:
+            for key in res_keys:
+                res_info = firedb.child("projects").child('custom').child(prj_id).child("results").child(key).get().val()
                 # model = firedb.child("models").child(res_info["model"]).get().val()
                 # res_info["model"] = dict(model)
                 user = firedb.child("users").child(res_info["user"])
@@ -195,6 +222,18 @@ def get_user_models(user):
 
     return models
 
+def get_user_projects(user):
+    project_keys = firedb.child('users').child(user).child("projects").shallow().get().val()
+
+    projects = []
+    if project_keys:
+        for key in project_keys:
+            prj_info = firedb.child('users').child(user).child("projects").child(key).get(0).val()
+            prj = firedb.child('projects').child(prj_info["type"]).child(prj_info["prj_id"]).child("info").get().val()
+            prj["id"] = prj_info["prj_id"]
+            projects.append(dict(prj))
+
+    return projects
 
 def get_model(mid):
     model = firedb.child('models').child(mid).get().val()
@@ -208,5 +247,4 @@ def get_file_string(name):
 
 
 def create_check_data(info):
-    prj_id = info["project"]
-    firedb.child("projects").child(prj_id).child("results").push(info)
+    firedb.child("projects").child(info["prj_type"]).child(info["project"]).child("results").push(info)

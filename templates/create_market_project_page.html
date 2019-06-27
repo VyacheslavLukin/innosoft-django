@@ -1,0 +1,170 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+
+                            <strong>Add Market Project </strong>
+                        </div>
+                        <div class="card-body">
+                            <form class="ng-pristine ng-valid" action="{% url 'create_market_project' %}" method="post"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if message %}
+                                    <script>
+                                        alert('{{ message }}')
+                                    </script>
+                                {% endif %}
+                                <div class="form-group">
+                                    <label for="nf-email">Main title </label>
+                                    <input type="text" name="title" id="nf-email"
+                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                           placeholder="Enter Name..">
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Short Description
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" cols="30" name="short_desc"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Full Description
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="4" cols="30" name="description"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+                                Start date:<br>
+                                <input type="datetime-local" name="start_date"><br>
+                                End date date:<br>
+                                <input type="datetime-local" name="end_date"><br>
+
+                                {#                                Make select option#}
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Evaluation Rules
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" cols="30" name="eval_rules"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Rules
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" cols="30" name="rules"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="form-group row">
+                                    <label class="col-md-4 col-form-label" for="textarea-input">Prizes
+                                    </label>
+                                    <div class="col-md-8">
+                                        <textarea rows="2" cols="30" name="prizes"
+                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                                  placeholder="Content.."></textarea>
+                                    </div>
+                                </div>
+
+                                <div class="card-body">
+                                    <div class="input-group">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">JSON</span>
+                                        </div>
+                                        <input type="file" name="file" id="file" class="form-control">
+
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-file"></i></span>
+                                        </div>
+                                    </div>
+                                    <br>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="nf-email">Required fields </label>
+                                    <select class="form-control" name="req_cols" id="req_cols" multiple></select>
+
+                                </div>
+                                <div class="form-group">
+                                    <label for="nf-email">Optional fields </label>
+                                    <select class="form-control" name="opt_cols" id="opt_cols" multiple></select>
+
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="nf-email">Percentage </label>
+                                    <input type="number" min="0" max="100" name="percentage"
+                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty">
+
+                                </div>
+
+                                <center>
+                                    <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit"
+                                            value="Submit" class="btn btn-sm btn-primary"><i
+                                            class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+                                </center>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+
+    <script>
+        (function () {
+            function onChange(event) {
+                var reader = new FileReader();
+                reader.onload = onReaderLoad;
+                reader.readAsText(event.target.files[0]);
+            }
+
+            function onReaderLoad(event) {
+                var select = document.getElementById('req_cols');
+                var select2 = document.getElementById('opt_cols');
+                $(select).html("");
+                $(select2).html("");
+                var options = "";
+                //console.log(event.target.result);
+                var obj = JSON.parse(event.target.result);
+                //alert_data(obj);
+                // console.log(obj);
+                for (x in Object.values(obj)[0]) {
+                    console.log(x);
+                    options += "<option value=" + x + ">" + x + "</option>";
+                }
+                $(select).append(options);
+                $(select2).append(options);
+            }
+
+            document.getElementById('file').addEventListener('change', onChange);
+        }());
+    </script>
+
+
+
+
+{% endblock %}
