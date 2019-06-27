@@ -1,20 +1,61 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-<h1>Upload model</h1>
-<form action="{% url 'upload_model' %}" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {% if message %}
-        <script>
-        alert('{{ message }}')
-        </script>
-    {% endif %}
 
-    Model File:<br>
-    <input type="file" name="file" id="file"><br>
-    Filename:<br>
-    <input type="text" name="filename"><br>
+    <div class="animated fadeIn ng-scope">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="col-md-6">
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Upload Models </strong>
+                        </div>
+                        <div class="card-body">
 
-    <input type="submit" value="Submit">
-</form>
+                            <form class="ng-pristine ng-valid" action="{% url 'upload_model' %}" method="post"
+                                  enctype="multipart/form-data">
+                                {% csrf_token %}
+                                {% if message %}
+                                    <script>
+                                        alert('{{ message }}')
+                                    </script>
+                                {% endif %}
+
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">Model</span>
+                                    </div>
+                                    <input type="file" name="file" id="file" class="form-control">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-file"></i></span>
+                                    </div>
+
+                                    <div></div>
+                                </div>
+                                <br>
+
+                                <div class="form-group">
+                                    <label for="nf-email" style="font-weight:bold">Model Name </label>
+                                    <input type="text" name="filename"
+                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                           placeholder="Enter Name.." ng-model="Name">
+
+                                </div>
+
+                                <div class="card-footer">
+                                    <button type="submit" style="padding: 10px;font-size: 14px;border-radius: 10px;"
+                                            class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
 {% endblock %}

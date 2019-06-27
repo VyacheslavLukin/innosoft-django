@@ -38,28 +38,22 @@
 </head>
 
 <!-- BODY options, add following classes to body to change options
-
   // Header options
   1. '.header-fixed'					- Fixed Header
-
   // Sidebar options
   1. '.sidebar-fixed'					- Fixed Sidebar
   2. '.sidebar-hidden'				- Hidden Sidebar
   3. '.sidebar-off-canvas'		- Off Canvas Sidebar
   4. '.sidebar-minimized'			- Minimized Sidebar (Only icons)
   5. '.sidebar-compact'			  - Compact Sidebar
-
   // Aside options
   1. '.aside-menu-fixed'			- Fixed Aside Menu
   2. '.aside-menu-hidden'			- Hidden Aside Menu
   3. '.aside-menu-off-canvas'	- Off Canvas Aside Menu
-
   // Breadcrumb options
   1. '.breadcrumb-fixed'			- Fixed Breadcrumb
-
   // Footer options
   1. 'footer-fixed'						- Fixed footer
-
 -->
 
 <body class="header-fixed sidebar-fixed aside-menu-fixed aside-menu-hidden">
@@ -76,8 +70,8 @@
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand">
-        <center><h2 style="font-size: 20px;font-weight: bold;">Algorithma</h2></center>
+    <a class="navbar-brandg" style="position: absolute;left: 3%;">
+        <h2 style="font-size: 20px;font-weight: bold;">Algorithma</h2>
     </a>
     <ul class="nav navbar-nav d-md-down-none">
         <!-- <li class="nav-item"> -->
@@ -107,44 +101,20 @@
         <!-- <a class="nav-link" href="#"><i class="icon-location-pin"></i></a> -->
         <!-- </li> -->
         <li class="nav-item dropdown">
-            <center>
-                <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-                   aria-expanded="false">
-                    <div align="center">
-                        <img src="{{ userdata.image }}" class="img-avatar"><br>
-                        <b> {{ userdata.name }} </b></div>
-            </center>
+            <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
+               aria-expanded="false">
+                <div align="center">
+                    <img src="{{ userdata.image }}" class="img-avatar"><br>
+                    <b> {{ userdata.name }} </b>
+                </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-
-                <!-- <div class="dropdown-header text-center"> -->
-                <!-- <strong>Account</strong> -->
-                <!-- </div> -->
-
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="badge badge-info">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="badge badge-success">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="badge badge-danger">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comment<span class="badge badge-warning">42</span></a> -->
-
-                <!-- <div class="dropdown-header text-center"> -->
-                <!-- <strong>Settings</strong> -->
-                <!-- </div> -->
-
-                <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Setting</a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="badge badge-secondary">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a> -->
                 <div class="divider"></div>
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
                 <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i>
                     Logout {{ userdata.name }}</a>
             </div>
         </li>
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link navbar-toggler aside-menu-toggler" href="#"> -->
-        <!-- <span class="navbar-toggler-icon"></span> -->
-        <!-- </a> -->
-        <!-- </li> -->
+
 
     </ul>
 </header>
@@ -156,29 +126,48 @@
             <ul class="nav">
                 <li class="nav-item" style=" ">
                     <br>
-                    <img src="{{ userdata.image }}" class="img-avatar" style="width:100px"><br>
-                    {{ userdata.name }}
+                    <center>
+                        <img src="{{ userdata.image }}" class="img-avatar" style="width:100px"><br>
+
+                        <h2><b> {{ userdata.name }} </b></h2></center>
                 </li>
                 <li class="nav-item">
 
-                    <a class="nav-link" href="{% url 'project_index' %}"><i class="icon-pie-chart"></i>Projects
+                    <a class="nav-link" href="{% url 'user_project_index' %}"><i class="icon-pie-chart"></i>My
+                        Projects
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'market_project' %}"><i class="icon-layers"></i>Add Market Project
+
+                    <a class="nav-link" href="{% url 'market_project_index' %}"><i class="icon-pie-chart"></i>Market
+                        Projects
                     </a>
                 </li>
-                                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'custom_project' %}"><i class="icon-layers"></i>Add Custom Project
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'upload_model' %}"><i class="icon-puzzle"></i>Add Models & Pickle
-                    </a>
-                </li>
+                {% if userdata.role == 'org' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_market_project' %}"><i class="icon-layers"></i>Add Market
+                            Project
+                        </a>
+                    </li>
+                {% endif %}
+                {% if userdata.role == 'ds' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'create_custom_project' %}"><i class="icon-layers"></i>Add Custom
+                            Project
+                        </a>
+                    </li>
+                {% endif %}
+                {% if userdata.role == 'ds' %}
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'upload_model' %}"><i class="icon-puzzle"></i>Add Models &
+                            Pickle
+                        </a>
+                    </li>
+                {% endif %}
 
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'signout' %}"><i class="fa fa-lock"></i> Sign Out
+                    <a class="nav-link" href="{% url 'signout' %}"><i class="fa fa-lock"></i>Sign Out
 
                         <!-- <span class="badge badge-info">NEW</span> -->
                     </a>
@@ -190,30 +179,25 @@
         </nav>
     </div>
     <!-- Main content -->
-    <main class="main">
+    <main class="main" style="min-height: 545px;">
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
-            {#            <ncy-breadcrumb></ncy-breadcrumb>#}
 
-            <!-- Breadcrumb Menu-->
             <li class="breadcrumb-menu">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
-                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>
-                    <!-- <a class="btn" ui-sref="app.main"><i class="icon-settings"></i> &nbsp;Settings</a> -->
+                    {#                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>#}
+
                 </div>
             </li>
 
         </ol>
+
         <div class="container-fluid">
             {% block content %}
 
             {% endblock %}
         </div>
-        <footer class="app-footer ng-scope">
-            <span><a href="">ALgorithma</a> © 2019 </span>
-            <span class="ml-auto">Powered by InnoSoft </span>
-        </footer>
+
         <!-- /.conainer-fluid -->
     </main>
 
@@ -222,6 +206,13 @@
 
 </div>
 
+<footer class="app-footer ng-scope">
+    <span><a href="">ALgorithma</a> © 2019 </span>
+    <span class="ml-auto">Powered by InnoSoft </span>
+</footer>
+
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </html>

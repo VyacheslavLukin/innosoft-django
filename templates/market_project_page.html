@@ -1,122 +1,118 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h1>Create market project</h1>
+    <div>
 
 
-
-    <div class="animated fadeIn ng-scope">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="col-md-6">
-                    <div class="card">
-                        <div class="card-header">
-
-                            <strong>Add Market Project </strong>
-                        </div>
-                        <div class="card-body">
-                            <form class="ng-pristine ng-valid" action="{% url 'market_project' %}" method="post"
-                                  enctype="multipart/form-data">
-                                {% csrf_token %}
-                                {% if message %}
-                                    <script>
-                                        alert('{{ message }}')
-                                    </script>
-                                {% endif %}
-                                <div class="form-group">
-                                    <label for="nf-email">Main title </label>
-                                    <input type="text" name="title" id="nf-email"
-                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                           placeholder="Enter Name..">
-                                    <input>
-                                </div>
-
-                                <div class="form-group row">
-                                    <label class="col-md-4 col-form-label" for="textarea-input">Full Description
-
-                                    </label>
-                                    <div class="col-md-8">
-                                        <textarea rows="3" cols="30" name="description" rows="10"
-                                                  class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                                  placeholder="Content.."></textarea>
-                                    </div>
-                                </div>
-
-                                <div class="card-body">
-
-
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <span class="input-group-text">JSON</span>
-                                        </div>
-                                        <input type="file" name="file" id="file" class="form-control">
-
-                                        <div class="input-group-append">
-                                            <span class="input-group-text"><i class="fa fa-file"></i></span>
-                                        </div>
-
-                                        <div></div>
-                                    </div>
-                                    <br>
-                                </div>
-                                <div class="form-group">
-                                    <label for="nf-email">Percentage </label>
-                                    <input type="number" min="0" max="100" name="percentage"
-                                           class="form-control ng-pristine ng-untouched ng-valid ng-empty">
-
-                                </div>
-
-
-                                <div class="card-footer">
-                                    <button type="submit" value="Submit" class="btn btn-sm btn-primary"><i
-                                            class="fa fa-dot-circle-o"></i> Submit
-                                    </button>
-
-                                </div>
-                            </form>
-                        </div>
-
-
+        <div class="card-group mb-4">
+            <!-- ngRepeat: p in Projects -->
+            <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+                <div class="card">
+                    <div class="card-header ng-binding">
+                        {{ project.title }}
+                        <!-- <span class="badge badge-success float-right">Success</span> -->
                     </div>
+                    <div class="card-body ng-binding">
+                        {{ project.description }}<br>
+                        Fields to predict:<br>
+                        {% if project.req_cols %}
 
+                            <ul>
+                                {% for col in project.req_cols %}
+                                    <li>{{ col }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                        <a target="" class="float-left ng-scope" href="{{ project.train_data.1 }}">
+                            <span class="badge badge-success">DownLoad JSON</span> </a>
+                        <br>
+                        <form action="{% url 'market_project_page' project.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label" for="file-input">
+                                    Model:
+                                </label>
+
+
+                                <div class="col-md-7">
+
+
+                                    <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                        <option value="None">(select model)</option>
+                                        {% for model in models %}
+                                            <option value="{{ model.mid }}">{{ model.name }}</option>
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <button type="submit" style="padding: 10px;font-size: 15px;"
+                                    class="badge badge-success float-right">
+                                Use model
+                            </button>
+
+
+                        </form>
+                    </div>
                 </div>
-            </div>
+            </div><!-- end ngRepeat: p in Projects -->
 
         </div>
 
-    </div>
 
 
 
 
 
+        {% if project.results %}
 
+            <div class="animated fadeIn ng-scope">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="icon-file"></i>
+                                    Data Sceintist Name
+                                </th>
+                                <th class="text-center">PickleName URL</th>
+                                <th class="text-center ng-binding">Average mean absolute error</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for resinfo in project.results %}
+                                <tr class="ng-scope">
+                                    <td class="text-center">
+
+
+                                        <div class="ng-binding"> {{ resinfo.user.name }}</div>
+
+                                    </td>
+                                    <td class="text-center">
+
+
+                                    </td>
+
+
+                                    <td class="ng-binding">
+                                        <a class="badge badge-danger" style="color:#fff">Result
+                                            =</a>{{ resinfo.result }}
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+
+
+        {% endif %}
 {% endblock %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

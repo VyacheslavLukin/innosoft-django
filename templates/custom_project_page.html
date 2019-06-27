@@ -1,61 +1,120 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h1>Create market project</h1>
-    <form action="{% url 'custom_project' %}" method="post" enctype="multipart/form-data">
-        {% csrf_token %}
-        {% if message %}
-            <script>
-                alert('{{ message }}')
-            </script>
+    <div>
+
+
+        <div class="card-group mb-4">
+            <!-- ngRepeat: p in Projects -->
+            <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+                <div class="card">
+                    <div class="card-header ng-binding">
+                        {{ project.title }}
+                        <!-- <span class="badge badge-success float-right">Success</span> -->
+                    </div>
+                    <div class="card-body ng-binding">
+                        {{ project.description }}<br>
+                        Fields to predict:<br>
+                        {% if project.req_cols %}
+
+                            <ul>
+                                {% for col in project.req_cols %}
+                                    <li>{{ col }}</li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+
+                        <br>
+                        <a target="" class="float-left ng-scope" href="{{ project.train_data.1 }}">
+                            <span class="badge badge-success">DownLoad JSON</span> </a>
+                        <br>
+                        <form action="{% url 'custom_project_page' project.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label" for="file-input">
+                                    Model:
+                                </label>
+
+
+                                <div class="col-md-7">
+
+
+                                    <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                        <option value="None">(select model)</option>
+                                        {% for model in models %}
+                                            <option value="{{ model.mid }}">{{ model.name }}</option>
+                                        {% endfor %}
+
+                                    </select>
+
+                                </div>
+                            </div>
+                            <button type="submit" style="padding: 10px;font-size: 15px;"
+                                    class="badge badge-success float-right">
+                                Use model
+                            </button>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div><!-- end ngRepeat: p in Projects -->
+
+        </div>
+
+
+
+
+
+
+        {% if project.results %}
+
+            <div class="animated fadeIn ng-scope">
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
+                            <thead class="thead-light">
+                            <tr>
+                                <th class="text-center"><i class="icon-file"></i>
+                                    Data Sceintist Name
+                                </th>
+                                <th class="text-center">PickleName URL</th>
+                                <th class="text-center ng-binding">Average mean absolute error</th>
+
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            {% for resinfo in project.results %}
+                                <tr class="ng-scope">
+                                    <td class="text-center">
+
+
+                                        <div class="ng-binding"> {{ resinfo.user.name }}</div>
+
+                                    </td>
+                                    <td class="text-center">
+
+
+                                    </td>
+
+
+                                    <td class="ng-binding">
+                                        <a class="badge badge-danger" style="color:#fff">Result
+                                            =</a>{{ resinfo.result }}
+
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- /.row -->
+                </div>
+            </div>
+
+
         {% endif %}
-
-        Main title:<br>
-        <input type="text" name="title"><br>
-        Full Description:<br>
-        <textarea rows="3" cols="30" name="description"></textarea><br>
-
-        Evaluation Rules:<br>
-        <textarea rows="2" cols="30" name="eval_rules"></textarea><br>
-
-        Json File:<br>
-        <input type="file" name="file" id="file"><br>
-
-        Columns to predict<br>
-
-        Required:<br>
-        <select multiple name="req_cols[]">
-            <option>Req 1</option>
-            <option>Req 2</option>
-            <option>Req 3</option>
-        </select>
-
-        Optional:<br>
-        <select multiple name="opt_cols[]">
-            <option>Opt 1</option>
-            <option>Opt 2</option>
-        </select>
-
-        Percentage:<br>
-        <input type="number" min="0" max="100" name="percentage"><br>
-
-        <input type="submit" value="Submit">
-    </form>
-    <script type="application/javascript">
-        document.getElementById('file').addEventListener('change', onChange);
-
-        function onChange(event) {
-            let reader = new FileReader();
-            let file = event.target.files[0];
-            console.log(file);
-            reader.onload = onReaderLoad;
-            reader.read(file);
-        };
-
-        function onReaderLoad(event) {
-            console.log("Reader read");
-            let obj = JSON.parse(event.target.result);
-            console.log(obj)
-        }
-    </script>
 {% endblock %}

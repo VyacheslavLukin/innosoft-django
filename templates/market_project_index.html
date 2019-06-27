@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <h1>Projects</h1>
+    <div class="animated fadeIn ng-scope">
+
+
+        <div class="card-group mb-4">
+            {% for project in projects %}
+                <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+                    <div class="card">
+                        <div class="card-header ng-binding">
+                            {{ project.title }}
+
+                        </div>
+                        <div class="card-body ng-binding">
+                            <span> {{ project.description }} </span>
+
+                            <a href="{% url 'market_project_page' project.id %}">Link {{ project.id }}</a>
+
+
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}
