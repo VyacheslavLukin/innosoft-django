@@ -76,8 +76,8 @@
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
         <span class="navbar-toggler-icon"></span>
     </button>
-    <a class="navbar-brand">
-        <center><h2 style="font-size: 20px;font-weight: bold;">Algorithma</h2></center>
+    <a class="navbar-brandg" style="position: absolute;left: 3%;">
+         <h2 style="font-size: 20px;font-weight: bold;">Algorithma</h2>
     </a>
     <ul class="nav navbar-nav d-md-down-none">
         <!-- <li class="nav-item"> -->
@@ -107,44 +107,28 @@
         <!-- <a class="nav-link" href="#"><i class="icon-location-pin"></i></a> -->
         <!-- </li> -->
         <li class="nav-item dropdown">
-            <center>
+
                 <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                    aria-expanded="false">
                     <div align="center">
-                        <img src="{{ userdata.image }}" class="img-avatar"><br>
-                        <b> {{ userdata.name }} </b></div>
-            </center>
+
+                           <img src="{{ userdata.image }}" class="img-avatar"><br>
+                        <b> {{ userdata.name }} </b>
+
+
+                        </div>
+
             </a>
             <div class="dropdown-menu dropdown-menu-right">
 
-                <!-- <div class="dropdown-header text-center"> -->
-                <!-- <strong>Account</strong> -->
-                <!-- </div> -->
 
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-bell-o"></i> Updates<span class="badge badge-info">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-envelope-o"></i> Messages<span class="badge badge-success">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-tasks"></i> Tasks<span class="badge badge-danger">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-comments"></i> Comment<span class="badge badge-warning">42</span></a> -->
-
-                <!-- <div class="dropdown-header text-center"> -->
-                <!-- <strong>Settings</strong> -->
-                <!-- </div> -->
-
-                <a class="dropdown-item" href="#"><i class="fa fa-user"></i> Profile</a>
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-wrench"></i> Setting</a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-usd"></i> Payments<span class="badge badge-secondary">42</span></a> -->
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-file"></i> Projects<span class="badge badge-primary">42</span></a> -->
                 <div class="divider"></div>
-                <!-- <a class="dropdown-item" href="#"><i class="fa fa-shield"></i> Lock account</a> -->
+
                 <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i>
                     Logout {{ userdata.name }}</a>
             </div>
         </li>
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link navbar-toggler aside-menu-toggler" href="#"> -->
-        <!-- <span class="navbar-toggler-icon"></span> -->
-        <!-- </a> -->
-        <!-- </li> -->
+
 
     </ul>
 </header>
@@ -156,8 +140,10 @@
             <ul class="nav">
                 <li class="nav-item" style=" ">
                     <br>
+                      <center>
                     <img src="{{ userdata.image }}" class="img-avatar" style="width:100px"><br>
-                    {{ userdata.name }}
+
+                <h2> <b> {{ userdata.name }} </b></h2>  </center>
                 </li>
                 <li class="nav-item">
 
@@ -186,30 +172,25 @@
         </nav>
     </div>
     <!-- Main content -->
-    <main class="main">
+    <main class="main" style="min-height: 545px;">
         <!-- Breadcrumb -->
         <ol class="breadcrumb">
-            {#            <ncy-breadcrumb></ncy-breadcrumb>#}
 
-            <!-- Breadcrumb Menu-->
             <li class="breadcrumb-menu">
                 <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    <!-- <a class="btn" href="#"><i class="icon-speech"></i></a> -->
-                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>
-                    <!-- <a class="btn" ui-sref="app.main"><i class="icon-settings"></i> &nbsp;Settings</a> -->
+{#                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>#}
+
                 </div>
             </li>
 
         </ol>
+
         <div class="container-fluid">
             {% block content %}
 
             {% endblock %}
         </div>
-        <footer class="app-footer ng-scope">
-            <span><a href="">ALgorithma</a> © 2019 </span>
-            <span class="ml-auto">Powered by InnoSoft </span>
-        </footer>
+
         <!-- /.conainer-fluid -->
     </main>
 
@@ -218,6 +199,13 @@
 
 </div>
 
+  <footer class="app-footer ng-scope">
+            <span><a href="">ALgorithma</a> © 2019 </span>
+            <span class="ml-auto">Powered by InnoSoft </span>
+        </footer>
+
 
 </body>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
 </html>
