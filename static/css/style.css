@@ -18061,3 +18061,38 @@ hr.transparent {
 .slider .slider-selection {
     background: #cbcbcb;
 }
+.form-control{
+    height: 40px; !important;
+}
+
+
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.lll {
+  position: absolute;
+    font-size: 15px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
+  border: 3px dotted #bebebe;
+  border-radius: 10px;
+}
+
+.label {
+  display: inline-block;
+  position: relative;
+  height: 100px;
+  width: 400px;
+}

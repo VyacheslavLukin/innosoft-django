@@ -6,20 +6,31 @@
 
 
         <div class="card-group mb-4">
-            {% for project in projects %}
+
+
+
+          {% for project in projects %}
                 <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
-                    <div class="card">
-                        <div class="card-header ng-binding">
-                            {{ project.title }}
-
+                    <div class="card" style="border: 1px solid #b1b1b1;margin: 0px;box-shadow: 1px 1px 1px #bdbfc2;">
+                                <a href="{% url 'market_project_page' project.id %}" style="text-decoration:none;color:black">
+                                   <div class="card-body ng-binding row">
+                        <div class="col-6">
+<center>
+<img src="https://storage.googleapis.com/innosoft-django.appspot.com/8Yuu9nA1zqNz6.jpg" style="border-radius: 50%;border: 1px solid #e3e3e3;" width="80%"/>
+    </center>
                         </div>
-                        <div class="card-body ng-binding">
+                            <div class="col-6">
+                             <h1> {{ project.title }} </h1>
+                               <h5> {{ project.type }}</h5>
                             <span> {{ project.description }} </span>
-
-                            <a href="{% url 'market_project_page' project.id %}">Link {{ project.id }}</a>
+                        </div>
 
 
                         </div>
+
+
+                                </a>
+
                     </div>
                 </div>
             {% endfor %}
