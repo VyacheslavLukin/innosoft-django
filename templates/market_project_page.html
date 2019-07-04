@@ -33,38 +33,33 @@
                                 <label class="col-md-5 col-form-label" for="file-input">
                                     Model:
                                 </label>
-
-
                                 <div class="col-md-7">
-
-
                                     <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
                                         <option value="None">(select model)</option>
                                         {% for model in models %}
                                             <option value="{{ model.mid }}">{{ model.name }}</option>
                                         {% endfor %}
-
                                     </select>
-
                                 </div>
                             </div>
                             <button type="submit" style="padding: 10px;font-size: 15px;"
                                     class="badge badge-success float-right">
                                 Use model
                             </button>
-
-
+                        </form>
+                        <form action="{% url 'join_market_project' project.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="">
+                            <button type="submit" style="padding: 10px;font-size: 15px;"
+                                    class="badge badge-cyan float-right">
+                                Join competition
+                            </button>
                         </form>
                     </div>
                 </div>
             </div><!-- end ngRepeat: p in Projects -->
 
         </div>
-
-
-
-
-
 
         {% if project.results %}
 
