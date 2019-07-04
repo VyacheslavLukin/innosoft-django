@@ -212,8 +212,7 @@ def market_project_page(request, prj_id):
     user = get_user(request)
     uid = user["id"]
     if request.method == 'GET':
-        project = db.get_market_project(prj_id, option="full")
-
+        project = db.get_project(prj_id, option="full")
         models = db.get_user_models(uid)
 
         return render(request, "market_project_page.html",
@@ -223,7 +222,7 @@ def market_project_page(request, prj_id):
         mid = request.POST.get("mid")
         model = db.get_model(mid)
 
-        project = db.get_market_project(prj_id)
+        project = db.get_project(prj_id)
 
         model_file = db.get_file_string(model["data"][0])
         model = pickle.loads(model_file)
@@ -252,11 +251,21 @@ def market_project_page(request, prj_id):
         db.create_check_data(check_data)
         return redirect('market_project_page', prj_id)
 
+def join_market_project(request, prj_id):
+    if request.method == 'POST':
+        user = get_user(request)
+        if user:
+            project = db.get_project(prj_id)
+            db.add_participant(project, user)
+        return redirect('market_project_page', prj_id)
+
+
+
 def custom_project_page(request, prj_id):
     user = get_user(request)
     uid = user["id"]
     if request.method == 'GET':
-        project = db.get_custom_project(prj_id, option="full")
+        project = db.get_project(prj_id, option="full")
 
         models = db.get_user_models(uid)
 
@@ -267,7 +276,7 @@ def custom_project_page(request, prj_id):
         mid = request.POST.get("mid")
         model = db.get_model(mid)
 
-        project = db.get_custom_project(prj_id)
+        project = db.get_project(prj_id)
 
         model_file = db.get_file_string(model["data"][0])
         model = pickle.loads(model_file)
