@@ -11,7 +11,7 @@
                     <div class="card" style="border: 1px solid #b1b1b1;margin: 0px;box-shadow: 1px 1px 1px #bdbfc2;">
 
                           {% if project.type == 'market' %}
-                                <a href="{% url 'market_project_page' project.id %}" style="text-decoration:none;color:black">
+                                <a href="{% url 'custom_project_page' project.id %}" style="text-decoration:none;color:black">
                                    <div class="card-body ng-binding row">
                         <div class="col-6">
 <center>
@@ -51,7 +51,10 @@
                             {% endif %}
 
                     </div>
+                 <br>
+
                 </div>
+
             {% endfor %}
         </div>
 
