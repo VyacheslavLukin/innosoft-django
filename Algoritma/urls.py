@@ -18,7 +18,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.signin, name="signin"),
+    path('signin/', views.signin, name="signin"),
     # path('signin/', views.signin, name="signin"),
     path('signout/', views.signout, name="signout"),
     path('signup/', views.signup, name="signup"),
@@ -32,7 +32,6 @@ urlpatterns = [
     # path('projects/market/<prj_id>/join', views.custom_project_page, name="custom_project_page"),
     path('models/', views.model_index, name="model_index"),
     path('models/upload/', views.upload_model, name="upload_model"),
-    path('admin/', admin.site.urls),
-    path('temp/', views.temp, name='temp')
+    path('admin/', admin.site.urls)
     # path(r'/')
 ]
