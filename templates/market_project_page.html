@@ -13,11 +13,10 @@
                         <!-- <span class="badge badge-success float-right">Success</span> -->
                     </div>
                     <div class="card-body ng-binding">
-                    <b> Details :</b>
+                        <b> Details :</b>
                         {{ project.description }}<br>
-                       <b>Fields to Predict: </b> <br>
+                        <b>Fields to Predict: </b> <br>
                         {% if project.req_cols %}
-
                             <ul>
                                 {% for col in project.req_cols %}
                                     <li>{{ col }}</li>
@@ -27,37 +26,37 @@
                         <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
                             <span class="badge badge-success">DownLoad JSON</span> </a>
                         <br>
-{#                        <form action="{% url 'market_project_page' project.id %}" method="post">#}
-{#                            {% csrf_token %}#}
-{##}
-{#                            <div class="form-group row">#}
-{#                                <label class="col-md-5 col-form-label" for="file-input">#}
-{#                                    Model:#}
-{#                                </label>#}
-{#                                <div class="col-md-7">#}
-{#                                    <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">#}
-{#                                        <option value="None">(select model)</option>#}
-{#                                        {% for model in models %}#}
-{#                                            <option value="{{ model.mid }}">{{ model.name }}</option>#}
-{#                                        {% endfor %}#}
-{#                                    </select>#}
-{#                                </div>#}
-{#                            </div>#}
-{#                            <button type="submit" style="padding: 10px;font-size: 15px;"#}
-{#                                    class="badge badge-success float-right">#}
-{#                                Use model#}
-{#                            </button>#}
-{#                        </form>#}
-                    {% if user.id in project.participants %}
-                        <form action="{% url 'join_market_project' project.id %}" method="post">
+                        <form action="{% url 'market_project_page' project.id %}" method="post">
                             {% csrf_token %}
-                            <input type="hidden" name="">
+
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label" for="file-input">
+                                    Model:
+                                </label>
+                                <div class="col-md-7">
+                                    <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                        <option value="None">(select model)</option>
+                                        {% for model in models %}
+                                            <option value="{{ model.mid }}">{{ model.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
                             <button type="submit" style="padding: 10px;font-size: 15px;"
-                                    class="badge badge-cyan float-right">
-                                Join competition
+                                    class="badge badge-success float-right">
+                                Use model
                             </button>
                         </form>
-                    {% endif %}
+                        {% if user.id in project.participants %}
+                            <form action="{% url 'join_market_project' project.id %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="">
+                                <button type="submit" style="padding: 10px;font-size: 15px;"
+                                        class="badge badge-cyan float-right">
+                                    Join competition
+                                </button>
+                            </form>
+                        {% endif %}
                     </div>
                 </div>
             </div><!-- end ngRepeat: p in Projects -->
@@ -76,7 +75,6 @@
                                 <th class="text-center"><i class="icon-file"></i>
                                     Data Sceintist Name
                                 </th>
-                                <th class="text-center">PickleName URL</th>
                                 <th class="text-center ng-binding">Average mean absolute error</th>
 
                             </tr>
@@ -91,11 +89,6 @@
                                         <div class="ng-binding"> {{ resinfo.user.name }}</div>
 
                                     </td>
-                                    <td class="text-center">
-
-
-                                    </td>
-
 
                                     <td class="ng-binding">
                                         <a class="badge badge-danger" style="color:#fff">Result
