@@ -21,6 +21,10 @@ PICKLE_EXTENSION = "pickle"
 
 
 def signin(request):
+    # user = get_user(request)
+    # if user:
+    #     return redirect('user_project_index')
+
     if request.method == 'GET':
         return render(request, "signin_page.html")
     elif request.method == 'POST':
@@ -42,6 +46,10 @@ def signout(request):
 
 
 def signup(request):
+    user = get_user(request)
+    if user:
+        return redirect('user_project_index')
+
     if request.method == 'GET':
         return render(request, "signup_page.html")
     elif request.method == 'POST':
@@ -61,6 +69,8 @@ def signup(request):
 
 def create_market_project(request):
     user = get_user(request)
+    if not user:
+        return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
         return render(request, "create_market_project_page.html", {"userdata": user})
@@ -118,6 +128,10 @@ def create_market_project(request):
 
 def create_custom_project(request):
     user = get_user(request)
+
+    if user == None:
+        return redirect('signin')
+
     uid = user["id"]
     if request.method == 'GET':
         return render(request, "create_custom_project_page.html", {"userdata": user})
@@ -170,6 +184,10 @@ def create_custom_project(request):
 
 def upload_model(request):
     user = get_user(request)
+
+    if user == None:
+        return redirect('signin')
+
     uid = user["id"]
     if request.method == 'GET':
         return render(request, "upload_model_page.html", {"userdata": user})
@@ -195,21 +213,29 @@ def upload_model(request):
 
 def market_project_index(request):
     user = get_user(request)
+    if user == None:
+        return redirect('signin')
+
     if request.method == 'GET':
         projects = db.get_market_projects()
-
         return render(request, "market_project_index.html", {"projects": projects, "userdata": user})
+
 
 def user_project_index(request):
     user = get_user(request)
+    if user == None:
+        return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
         # pass
         projects = db.get_user_projects(uid)
         return render(request, "user_project_index.html", {"projects": projects, "userdata": user})
 
+
 def market_project_page(request, prj_id):
     user = get_user(request)
+    if user == None:
+        return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
         project = db.get_project(prj_id, option="full")
@@ -251,7 +277,12 @@ def market_project_page(request, prj_id):
         db.create_check_data(check_data)
         return redirect('market_project_page', prj_id)
 
+
 def join_market_project(request, prj_id):
+    user = get_user(request)
+    if user == None:
+        return redirect('signin')
+
     if request.method == 'POST':
         user = get_user(request)
         if user:
@@ -260,9 +291,10 @@ def join_market_project(request, prj_id):
         return redirect('market_project_page', prj_id)
 
 
-
 def custom_project_page(request, prj_id):
     user = get_user(request)
+    if user == None:
+        return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
         project = db.get_project(prj_id, option="full")
@@ -305,8 +337,11 @@ def custom_project_page(request, prj_id):
         db.create_check_data(check_data)
         return redirect('custom_project_page', prj_id)
 
+
 def model_index(request):
     user = get_user(request)
+    if user == None:
+        return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
         models = db.get_user_models(uid)
@@ -318,12 +353,9 @@ def error404(request):
     return render(request, '404.html')
 
 
-def temp(request):
-    user = get_user(request)
-    return render(request, 'base.html', {"userdata": user})
-
-
 def get_user(request):
-    idtoken = request.session['uid']
-    user = db.get_user_info(idtoken)
-    return user
+    if request.session.get("uid"):
+        idtoken = request.session['uid']
+        user = db.get_user_info(idtoken)
+        return user
+    return None
