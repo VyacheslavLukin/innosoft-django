@@ -48,13 +48,14 @@
                                         </select>
                                     </div>
 
+   <label  class="label" for="test">
+                        <div class="lll">Click or drop Image  here</div>
+                          <input type="file"  onchange="document.getElementById('filename').src = window.URL.createObjectURL(this.files[0])" accept="image/*"  id="file" name="image"  >
+                      </label>
+                                   <center> <img id="filename"  width="100px"  /></center>
 
-                                    <div class="input-group mb-3">
-                                        <input type="file" id="upload" accept="image/*" name="image"/>
-                                    </div>
-
-
-                                    <button type="submit" class="btn btn-success px-4">Create Account</button>
+<center>
+                                    <button type="submit" class="btn btn-success px-4">Create Account</button></center>
                                 </form>
                             </div>
                         </div>
@@ -76,4 +77,15 @@
             </div>
         </div>
     </div>
+    <script>
+ {#(function () {#}
+ {#  function onChange(event) {#}
+ {#          var fileInput = document.querySelector('#file');#}
+ {#      var filenameContainer = document.querySelector('#filename');#}
+ {#      var reader = new FileReader();#}
+ {#      filenameContainer.src = reader.readAsDataURL(this.files[0]);#}
+ {#  }#}
+ {#    document.getElementById('file').addEventListener('change', onChange);#}
+ {#       }());#}
+</script>
 {% endblock %}

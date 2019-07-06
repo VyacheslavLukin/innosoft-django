@@ -6,7 +6,7 @@
 
         <div class="card-group mb-4">
             <!-- ngRepeat: p in Projects -->
-            <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+            <div class="col-sm-8 col-md-6 ng-scope" >
                 <div class="card">
                     <div class="card-header ng-binding">
                         {{ project.title }}
@@ -27,7 +27,8 @@
                         <br>
                         <a target="" class="float-left ng-scope" href="{{ project.train_data.1 }}">
                             <span class="badge badge-success">DownLoad JSON</span> </a>
-                        <br>
+                        <br> <br>
+
                         <form action="{% url 'custom_project_page' project.id %}" method="post">
                             {% csrf_token %}
 
@@ -103,8 +104,9 @@
 
 
                                     <td class="ng-binding">
-                                        <a class="badge badge-danger" style="color:#fff">Result</a>{{ resinfo.result }}
-
+                                        <center>
+                                        <span class="badge badge-danger" style="color:#fff"> {{ resinfo.result }}</span>
+</center>
                                     </td>
                                 </tr>
                             {% endfor %}
