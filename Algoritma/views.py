@@ -21,9 +21,9 @@ PICKLE_EXTENSION = "pickle"
 
 
 def signin(request):
-    user = get_user(request)
-    if user:
-        return redirect('user_project_index')
+    # user = get_user(request)
+    # if user:
+    #     return redirect('user_project_index')
 
     if request.method == 'GET':
         return render(request, "signin_page.html")

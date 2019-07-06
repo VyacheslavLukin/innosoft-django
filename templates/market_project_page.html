@@ -48,6 +48,7 @@
 {#                                Use model#}
 {#                            </button>#}
 {#                        </form>#}
+                    {% if user.id in project.participants %}
                         <form action="{% url 'join_market_project' project.id %}" method="post">
                             {% csrf_token %}
                             <input type="hidden" name="">
@@ -56,6 +57,7 @@
                                 Join competition
                             </button>
                         </form>
+                    {% endif %}
                     </div>
                 </div>
             </div><!-- end ngRepeat: p in Projects -->
