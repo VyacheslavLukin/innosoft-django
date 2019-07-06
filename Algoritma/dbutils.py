@@ -175,6 +175,14 @@ def get_project_owner_info(project):
 def get_project_results(project):
     res_keys = firedb.child('projects').child(project["type"]).child(project["id"]).child("results").shallow().get().val()
 
+    #get results by project type
+    # if project["type"] == 'market':
+    #     return get_market_project_results(project)
+    #
+    # if project["type"] == 'custom':
+    #     return get_custom_project_results(project)
+
+
     results = []
     if res_keys:
         for key in res_keys:
@@ -184,6 +192,7 @@ def get_project_results(project):
             user = firedb.child("users").child(res_info["user"])
             user = user.child("details").get().val()
             res_info["user"] = dict(user)
+            res_info["model"] = get_model(res_info["model"])
             results.append(res_info)
 
     return results
@@ -292,9 +301,14 @@ def get_file_string(name):
     model_pickle = model_blob.download_as_string()
     return model_pickle
 
+CHECK_SUBJECT = ["market", "custom"]
 
-def create_check_data(info):
-    firedb.child("projects").child(info["prj_type"]).child(info["project"]).child("results").push(info)
+def create_check_data(info, check_subject = CHECK_SUBJECT[0]):
+    if check_subject == "market":
+        firedb.child("projects").child(info["prj_type"]).child(info["project"]).child("results").child(info["user"]).set(info)
+        #I just reqrite new information, but we have to deal with uploaded pickle (DELETE MB?)
+    if check_subject == "custom":
+        firedb.child("projects").child(info["prj_type"]).child(info["project"]).child("results").push(info)
 
 
 def add_participant(project, user):

@@ -232,6 +232,12 @@ def user_project_index(request):
         return render(request, "user_project_index.html", {"projects": projects, "userdata": user})
 
 
+def is_participant(user, project):
+    project = db.get_project(project['id'], "participants")
+    if user["id"] in project["participants"]:
+        return True
+    return False
+
 def market_project_page(request, prj_id):
     user = get_user(request)
     if user == None:
@@ -249,6 +255,10 @@ def market_project_page(request, prj_id):
         model = db.get_model(mid)
 
         project = db.get_project(prj_id)
+
+        #TODO: check if user is a partisipant
+        if not is_participant(user, project):
+            return redirect('market_project_page', project["id"])
 
         model_file = db.get_file_string(model["data"][0])
         model = pickle.loads(model_file)
@@ -274,7 +284,7 @@ def market_project_page(request, prj_id):
             "result": check_result
         }
 
-        db.create_check_data(check_data)
+        db.create_check_data(check_data, "market")
         return redirect('market_project_page', prj_id)
 
 
@@ -334,7 +344,7 @@ def custom_project_page(request, prj_id):
             "result": check_result
         }
 
-        db.create_check_data(check_data)
+        db.create_check_data(check_data, "custom")
         return redirect('custom_project_page', prj_id)
 
 
