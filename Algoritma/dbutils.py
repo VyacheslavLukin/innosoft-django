@@ -52,24 +52,6 @@ def upload_file_string(file, nlength=FILENAME_SIZE, extension=None, content_type
     return blobname, path
 
 
-# def upload_file(file, filename, suffix=None):
-#     blobname = filename
-#     if suffix:
-#         blobname = "%s_%s.%s" % (filename.split(".")[0], suffix, filename.split(".")[-1])
-#     blob = bucket.blob(blobname)
-#     blob.upload_from_file(file)
-#     path = blob.public_url
-#     return path
-#
-# def upload_file_string(file, filename, suffix=None):
-#     blobname = filename
-#     if suffix:
-#         blobname = "%s_%s.%s" % (filename.split(".")[0], suffix, filename.split(".")[-1])
-#     blob = bucket.blob(blobname)
-#     blob.upload_from_string(file)
-#     path = blob.public_url
-#     return path
-
 def signin(email, password):
     user = fireauth.sign_in_with_email_and_password(email, password)
     return user
@@ -115,9 +97,8 @@ def get_market_projects():
     projects = []
     if prj_keys:
         for key in prj_keys:
-            prj = firedb.child('projects').child('market').child(key).child("info").get().val()
-            prj["id"] = key
-            projects.append(dict(prj))
+            project = get_project(key)
+            projects.append(dict(project))
 
     return projects
 
@@ -169,30 +150,58 @@ def create_model(info: dict):
 
 # def create_project(info):
 
-OPTIONS = ["info", "full"]
+OPTIONS = ["info", "full", "participants"]
 
 def get_project(prj_id, option=OPTIONS[0]):
     prj_type = firedb.child('projects').child('links').child(prj_id).get().val()["type"]
     project = firedb.child('projects').child(prj_type).child(prj_id).child("info").get().val()
     project["id"] = prj_id
     project = dict(project)
+    project["owner"] = get_project_owner_info(project)
 
     if option == "full":
-        res_keys = firedb.child('projects').child(prj_type).child(prj_id).child("results").shallow().get().val()
+        project["results"] = get_project_results(project)
+        project["participants"] = get_project_participants(project)
 
-        results = []
-        if res_keys:
-            for key in res_keys:
-                res_info = firedb.child("projects").child(prj_type).child(prj_id).child("results").child(key).get().val()
-                # model = firedb.child("models").child(res_info["model"]).get().val()
-                # res_info["model"] = dict(model)
-                user = firedb.child("users").child(res_info["user"])
-                user = user.child("details").get().val()
-                res_info["user"] = dict(user)
-                results.append(res_info)
+    if option == "participants":
+        project["participants"] = get_project_participants(project)
 
-        project["results"] = results
     return project
+
+def get_project_owner_info(project):
+    user = firedb.child("users").child(project["owner"]).child("details").get().val()
+    return dict(user)
+
+def get_project_results(project):
+    res_keys = firedb.child('projects').child(project["type"]).child(project["id"]).child("results").shallow().get().val()
+
+    results = []
+    if res_keys:
+        for key in res_keys:
+            res_info = firedb.child("projects").child(project["type"]).child(project["id"]).child("results").child(key).get().val()
+            # model = firedb.child("models").child(res_info["model"]).get().val()
+            # res_info["model"] = dict(model)
+            user = firedb.child("users").child(res_info["user"])
+            user = user.child("details").get().val()
+            res_info["user"] = dict(user)
+            results.append(res_info)
+
+    return results
+
+def get_project_participants(project):
+    res_keys = firedb.child('projects').child(project['type']).child(project['id']).child('participants').shallow().get().val()
+
+    participants = {}
+    if res_keys:
+        for key in res_keys:
+            participant_info = firedb.child('projects').child(project['type']).child(project['id']).child('participants').child(key).get().val()
+
+            user_key = participant_info["user"]
+            user = firedb.child("users").child(user_key).child("details").get().val()
+            participants[user_key] = dict(user)
+
+    return participants
+
 
 # def get_market_project(prj_id, option=OPTIONS[0]):
 #     project = firedb.child('projects').child('market').child(prj_id).child("info").get().val()
@@ -267,9 +276,10 @@ def get_projects_by_user(user, type: str):
     if project_keys:
         for key in project_keys:
             prj_info = firedb.child('users').child(user).child('projects').child(type).child(key).get(0).val()
-            prj = firedb.child('projects').child(prj_info["type"]).child(prj_info["prj_id"]).child("info").get().val()
-            prj["id"] = prj_info["prj_id"]
-            projects.append(dict(prj))
+            project = get_project(prj_info["prj_id"])
+            # prj = firedb.child('projects').child(prj_info["type"]).child(prj_info["prj_id"]).child("info").get().val()
+            # prj["id"] = prj_info["prj_id"]
+            projects.append(dict(project))
     return projects
 
 def get_model(mid):
@@ -288,5 +298,13 @@ def create_check_data(info):
 
 
 def add_participant(project, user):
-    firedb.child("projects").child(project['type']).child(project['id']).child('participants').push({"uid": user["id"]})
-    firedb.child("users").child(user["id"]).child("projects").child("party").push({"prj_id": project["id"], "type": project["type"]})
+    party_users = get_party_users(project)
+    if not user["id"] in party_users:
+        firedb.child("projects").child(project['type']).child(project['id']).child('participants').push({"user": user["id"]})
+        firedb.child("users").child(user["id"]).child("projects").child("party").push({"prj_id": project["id"], "type": project["type"]})
+
+def get_party_users(project):
+    project = get_project(project["id"], "participants")
+    return project["participants"]
+
+
