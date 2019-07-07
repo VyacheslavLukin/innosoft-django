@@ -10,9 +10,9 @@
 
                             <strong>Add Market Project </strong>
                         </div>
-                       <form class="ng-pristine ng-valid" action="{% url 'create_market_project' %}" method="post"
-                                  enctype="multipart/form-data">
-                        <div class="card-body">
+                        <form class="ng-pristine ng-valid" action="{% url 'create_market_project' %}" method="post"
+                              enctype="multipart/form-data">
+                            <div class="card-body">
 
                                 {% csrf_token %}
                                 {% if message %}
@@ -48,24 +48,24 @@
                                     </div>
                                 </div>
 
-                            <div class="form-group row">
-                                    <div class="col-md-6" >
-
-  <b> Start date:</b>
-                                <input type="date"  class="form-control ng-pristine ng-untouched ng-valid ng-empty"  name="start_date">
-
-
-                                             </div>
+                                <div class="form-group row">
                                     <div class="col-md-6">
-   <b>End date </b>
-                                <input type="date"   class="form-control ng-pristine ng-untouched ng-valid ng-empty"name="end_date"><br>
+
+                                        <b> Start date:</b>
+                                        <input type="date"
+                                               class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                               name="start_date">
+
+
+                                    </div>
+                                    <div class="col-md-6">
+                                        <b>End date </b>
+                                        <input type="date"
+                                               class="form-control ng-pristine ng-untouched ng-valid ng-empty"
+                                               name="end_date"><br>
 
                                     </div>
                                 </div>
-
-
-
-
                                 {#                                Make select option#}
                                 <div class="form-group row">
                                     <label class="col-md-4 col-form-label" for="textarea-input">Evaluation Rules
@@ -99,29 +99,29 @@
 
                                 <div class="card-body">
 
-                                          <label class="col-md-4 col-form-label" for="textarea-input">JSON
+                                    <label class="col-md-4 col-form-label" for="textarea-input">JSON
                                     </label>
 
-                      <label  class="label" for="test">
-                        <div class="lll">Click or drop something here</div>
-                          <input type="file" type="file" name="file" id="file"  >
-                      </label>
+                                    <label class="label" for="test">
+                                        <div class="lll">Click or drop something here</div>
+                                        <input type="file" type="file" name="file" id="file">
+                                    </label>
+                                </div>
+                                <div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="nf-email">Required fields </label>
+                                        <select class="form-control" name="req_cols" id="req_cols" multiple></select>
+
                                     </div>
-                            <div>
+                                    <div class="form-group col-md-6">
+                                        <label for="nf-email">Optional fields </label>
+                                        <select class="form-control" name="opt_cols" id="opt_cols" multiple></select>
 
-                                <div class="form-group col-md-6">
-                                    <label for="nf-email">Required fields </label>
-                                    <select class="form-control" name="req_cols" id="req_cols" multiple></select>
+                                    </div>
+
 
                                 </div>
-                                <div class="form-group col-md-6">
-                                    <label for="nf-email">Optional fields </label>
-                                    <select class="form-control" name="opt_cols" id="opt_cols" multiple></select>
-
-                                </div>
-
-
-                            </div>
 
 
                                 <div class="form-group">
@@ -131,15 +131,14 @@
                                 </div>
 
 
-
-                        </div>
-                     <div class="card-footer">
-                                   <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit"
-                                            value="Submit" class="btn btn-sm btn-primary"><i
-                                            class="fa fa-dot-circle-o"></i> Submit
-                                    </button>
-                                </div>
-  </form>
+                            </div>
+                            <div class="card-footer">
+                                <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit"
+                                        value="Submit" class="btn btn-sm btn-primary"><i
+                                        class="fa fa-dot-circle-o"></i> Submit
+                                </button>
+                            </div>
+                        </form>
 
                     </div>
 
