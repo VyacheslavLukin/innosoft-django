@@ -5,12 +5,12 @@
 
 
         <div class="card-group mb-4">
-            <!-- ngRepeat: p in Projects -->
-            <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+
+            <div class="col-sm-8 col-md-6 ng-scope" >
                 <div class="card">
                     <div class="card-header ng-binding">
                         {{ project.title }}
-                        <!-- <span class="badge badge-success float-right">Success</span> -->
+
                     </div>
                     <div class="card-body ng-binding">
                         <b> Details :</b>
@@ -47,7 +47,7 @@
                                 Use model
                             </button>
                         </form>
-                        {% if user.id in project.participants %}
+                        {% if userdata.id not in project.participants %}
                             <form action="{% url 'join_market_project' project.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="">
@@ -91,8 +91,9 @@
                                     </td>
 
                                     <td class="ng-binding">
-                                        <a class="badge badge-danger" style="color:#fff">Result
-                                            =</a>{{ resinfo.result }}
+                                         <center>
+                                        <span class="badge badge-danger" style="color:#fff"> {{ resinfo.result }}</span>
+</center>
 
                                     </td>
                                 </tr>

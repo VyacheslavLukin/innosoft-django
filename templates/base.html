@@ -109,7 +109,7 @@
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <div class="divider"></div>
+
                 <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i>
                     Logout {{ userdata.name }}</a>
             </div>
@@ -181,16 +181,7 @@
     <!-- Main content -->
     <main class="main" style="min-height: 545px;">
         <!-- Breadcrumb -->
-        <ol class="breadcrumb">
-
-            <li class="breadcrumb-menu">
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    {#                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>#}
-
-                </div>
-            </li>
-
-        </ol>
+      <br>
 
         <div class="container-fluid">
             {% block content %}

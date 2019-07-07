@@ -10,9 +10,10 @@
 
                             <strong>Add Market Project </strong>
                         </div>
-                        <div class="card-body">
-                            <form class="ng-pristine ng-valid" action="{% url 'create_market_project' %}" method="post"
+                       <form class="ng-pristine ng-valid" action="{% url 'create_market_project' %}" method="post"
                                   enctype="multipart/form-data">
+                        <div class="card-body">
+
                                 {% csrf_token %}
                                 {% if message %}
                                     <script>
@@ -129,15 +130,16 @@
                                            class="form-control ng-pristine ng-untouched ng-valid ng-empty">
                                 </div>
 
-                                <center>
-                                    <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit"
+
+
+                        </div>
+                     <div class="card-footer">
+                                   <button style="padding: 10px;font-size: 14px;border-radius: 14px;" type="submit"
                                             value="Submit" class="btn btn-sm btn-primary"><i
                                             class="fa fa-dot-circle-o"></i> Submit
                                     </button>
-                                </center>
-                            </form>
-                        </div>
-
+                                </div>
+  </form>
 
                     </div>
 
