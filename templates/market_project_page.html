@@ -8,68 +8,75 @@
 
             <div class="col-sm-8 col-md-6 ng-scope">
                 <div class="card">
-                    <div class="card-header ng-binding">
-                        {{ project.title }}
+                    <div class="card-header col-md-12 ">
+                       Project Title: {{ project.title }}
 
                     </div>
-                    <div class="card-body ng-binding">
+                    <div class="card-body  ">
                         <b> Description: </b>
                         {{ project.description }}
+                        <br>
+                          <b> Rules: </b>
+                        {{ project.rules }}<br>
+                         <b> Prizes: </b>
+                        {{ project.prizes}}<br>
+                         <b>Start date:</b>
+                        {{ project.start_date }}<br>
+                         <b>End date:</b>
+                        {{ project.end_date }}<br>
                     </div>
-                    <div class="card-body ng-binding">
+                    <div class="card-header">
 
-                        <b> Rules: </b>
-                        {{ project.rules }}
+                        Model Checking Details
                     </div>
-
-                    <div class="card-body ng-binding">
-
-                        <b> Prizes: </b>
-                        {{ project.prizes}}
-                    </div>
-                    <div class="card-body ng-binding">
-                        <b>Start date</b>
-                        {{ project.start_date }}
-                    </div>
-                    <div class="card-body ng-binding">
-
-                        <b>End date</b>
-                        {{ project.end_date }}
-                    </div>
-
-                    <h2>Model checking details</h2>
                     <div class="card-body ng-binding">
                         <b> Evaluation rules: </b>
-                        {{ project.eval_rules }}
-                    </div>
-                    {% if project.req_cols and project.req_cols|length > 0%}
-                        <b>Fields to Predict (required): </b> <br>
+                        {{ project.eval_rules }}<br>
+                        {% if project.req_cols and project.req_cols|length > 0%}
+                        <b>Fields to Predict : </b> <br>
                         <ul>
                             {% for col in project.req_cols %}
                                 <li>{{ col }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
-                    {% if project.opt_cols and project.opt_cols|length > 0 %}
-                        <b>Fields to Predict (optional): </b> <br>
+                     {% if project.opt_cols and project.opt_cols|length > 0 %}
+                        <b>Optional Fields to Predict : </b> <br>
                         <ul>
                             {% for col in project.opt_cols %}
                                 <li>{{ col }}</li>
                             {% endfor %}
                         </ul>
                     {% endif %}
-                {% if project.participants and project.participants|length > 0 %}
-                    <h2>Participants ({{ project.participants|length }})</h2>
-                    {% for user_id, info in project.participants.items %}
-                        <p>{{ info.name }}</p>
-                    {% endfor %}
-                {% endif %}
-                    {% if userdata.role == "ds" %}
-                        {% if userdata.id in project.participants %}
-
-                            <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
+    <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
                                 <span class="badge badge-success">DownLoad JSON</span> </a>
-                            <br>
+
+                    </div>
+
+  {% if project.participants and project.participants|length > 0 %}
+                         <div class="card-header">
+                       Current Participants is <b>{{ project.participants|length }}</b> Data Scientist
+                    </div>
+       <div class="card-body ng-binding">
+                        <ul>
+                    {% for user_id, info in project.participants.items %}
+                        <li>{{ info.name }}</li>
+                    {% endfor %}
+                         </ul>
+        </div>
+                {% endif %}
+
+
+
+     <div class="card-header">
+                      Add Models
+                    </div>
+       <div class="card-body ng-binding">
+
+
+        <div style="width: 100%">
+           {% if userdata.role == "ds" %}
+                        {% if userdata.id in project.participants %}
                             <form action="{% url 'market_project_page' project.id %}" method="post">
                                 {% csrf_token %}
 
@@ -97,13 +104,19 @@
                             <form action="{% url 'join_market_project' project.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="">
-                                <button type="submit" style="padding: 10px;font-size: 15px;"
-                                        class="badge badge-cyan float-right">
+                                <button type="submit" style="padding: 10px;font-size: 15px;color:#fff;"
+                                        class="badge badge-cyan float-right" >
                                     Join competition
                                 </button>
                             </form>
                         {% endif %}
                     {% endif %}
+
+        </div>
+
+                            </div>
+
+
                 </div>
             </div>
         </div><!-- end ngRepeat: p in Projects -->
@@ -148,7 +161,9 @@
                         {% endfor %}
                         </tbody>
                     </table>
+                 <br> <br> <br>
                 </div>
+
                 <!-- /.row -->
             </div>
         </div>
