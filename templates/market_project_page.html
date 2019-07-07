@@ -13,16 +13,58 @@
 
                     </div>
                     <div class="card-body ng-binding">
-                        <b> Details :</b>
-                        {{ project.description }}<br>
-                        <b>Fields to Predict: </b> <br>
-                        {% if project.req_cols %}
-                            <ul>
-                                {% for col in project.req_cols %}
-                                    <li>{{ col }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
+                        <b> Description: </b>
+                        {{ project.description }}
+                    </div>
+                    <div class="card-body ng-binding">
+
+                        <b> Rules: </b>
+                        {{ project.rules }}
+                    </div>
+
+                    <div class="card-body ng-binding">
+
+                        <b> Prizes: </b>
+                        {{ project.prizes}}
+                    </div>
+                    <div class="card-body ng-binding">
+                        <b>Start date</b>
+                        {{ project.start_date }}
+                    </div>
+                    <div class="card-body ng-binding">
+
+                        <b>End date</b>
+                        {{ project.end_date }}
+                    </div>
+
+                    <h2>Model checking details</h2>
+                    <div class="card-body ng-binding">
+                        <b> Evaluation rules: </b>
+                        {{ project.eval_rules }}
+                    </div>
+                    {% if project.req_cols and project.req_cols|length > 0%}
+                        <b>Fields to Predict (required): </b> <br>
+                        <ul>
+                            {% for col in project.req_cols %}
+                                <li>{{ col }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                    {% if project.opt_cols and project.opt_cols|length > 0 %}
+                        <b>Fields to Predict (optional): </b> <br>
+                        <ul>
+                            {% for col in project.opt_cols %}
+                                <li>{{ col }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                {% if project.participants and project.participants|length > 0 %}
+                    <h2>Participants ({{ project.participants|length }})</h2>
+                    {% for user_id, info in project.participants.items %}
+                        <p>{{ info.name }}</p>
+                    {% endfor %}
+                {% endif %}
+                    {% if userdata.role == "ds" %}
                         {% if userdata.id in project.participants %}
 
                             <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
@@ -61,55 +103,56 @@
                                 </button>
                             </form>
                         {% endif %}
-                    </div>
-                </div>
-            </div><!-- end ngRepeat: p in Projects -->
-
-        </div>
-
-        {% if project.results %}
-
-            <div class="animated fadeIn ng-scope">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
-                            <thead class="thead-light">
-                            <tr>
-                                <th class="text-center"><i class="icon-file"></i>
-                                    Data Sceintist Name
-                                </th>
-                                <th class="text-center ng-binding">Mean absolute deviation</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            {% for resinfo in project.results %}
-                                <tr class="ng-scope">
-                                    <td class="text-center">
-
-
-                                        <div class="ng-binding"> {{ resinfo.user.name }}</div>
-
-                                    </td>
-
-                                    <td class="ng-binding">
-                                        <center>
-                                            <span class="badge badge-danger"
-                                                  style="color:#fff"> {{ resinfo.result }}</span>
-                                        </center>
-
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.row -->
+                    {% endif %}
                 </div>
             </div>
+        </div><!-- end ngRepeat: p in Projects -->
+
+    </div>
+
+    {% if project.results %}
+
+        <div class="animated fadeIn ng-scope">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-center"><i class="icon-file"></i>
+                                Data Sceintist Name
+                            </th>
+                            <th class="text-center ng-binding">Mean absolute deviation</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for resinfo in project.results %}
+                            <tr class="ng-scope">
+                                <td class="text-center">
 
 
-        {% endif %}
-{% endblock %}
+                                    <div class="ng-binding"> {{ resinfo.user.name }}</div>
+
+                                </td>
+
+                                <td class="ng-binding">
+                                    <center>
+                                            <span class="badge badge-danger"
+                                                  style="color:#fff"> {{ resinfo.result }}</span>
+                                    </center>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.row -->
+            </div>
+        </div>
+
+
+    {% endif %}
+    </div>{% endblock %}

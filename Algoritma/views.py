@@ -90,6 +90,7 @@ def create_market_project(request):
             "end_date": request.POST.get('end_date'),
             "eval_rules": request.POST.get('eval_rules'),
             "rules": request.POST.get('rules'),
+            "prizes": request.POST.get('prizes'),
             "req_cols": request.POST.getlist('req_cols'),
             "opt_cols": request.POST.getlist('opt_cols'),
         }
