@@ -47,7 +47,7 @@
                                 Use model
                             </button>
                         </form>
-                        {% if user.id in project.participants %}
+                        {% if userdata.id not in project.participants %}
                             <form action="{% url 'join_market_project' project.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="">
