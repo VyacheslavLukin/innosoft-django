@@ -10,10 +10,11 @@
                         <div class="card-header">
                             <strong>Upload Models </strong>
                         </div>
+                     <form   action="{% url 'upload_model' %}" method="post"
+                                  enctype="multipart/form-data">
                         <div class="card-body">
 
-                            <form class="ng-pristine ng-valid" action="{% url 'upload_model' %}" method="post"
-                                  enctype="multipart/form-data">
+
                                 {% csrf_token %}
                                 {% if message %}
                                     <script>
@@ -23,13 +24,14 @@
 
                                <div class="card-body">
 
-                                          <label class="col-md-4 col-form-label" for="textarea-input">Model
+                                          <label class="col-md-4 col-form-label" for="textarea-input">Model:
                                     </label>
 
                       <label  class="label" for="test">
                         <div class="lll">Click or drop something here</div>
                           <input type="file" type="file" name="file" id="file"  >
                       </label>
+                                   <p id="filename"></p>
                                     </div>
                                 <br>
 
@@ -37,18 +39,18 @@
                                     <label for="nf-email" style="font-weight:bold">Model Name </label>
                                     <input type="text" name="filename"
                                            class="form-control ng-pristine ng-untouched ng-valid ng-empty"
-                                           placeholder="Enter Name.." ng-model="Name">
+                                           placeholder="Enter Name.." id="name_id">
 
                                 </div>
 
-                                <div class="card-footer">
+
+                        </div>
+ <div class="card-footer">
                                     <button type="submit" style="padding: 10px;font-size: 14px;border-radius: 10px;"
                                             class="btn btn-sm btn-primary"><i class="fa fa-dot-circle-o"></i> Submit
                                     </button>
                                 </div>
                             </form>
-                        </div>
-
                     </div>
                 </div>
 
@@ -56,5 +58,16 @@
         </div>
 
     </div>
+<script>
+ (function () {
+   function onChange(event) {
+           var fileInput = document.querySelector('#file');
+       var filenameContainer = document.querySelector('#filename');
+       filenameContainer.innerText = fileInput.value.split('\\').pop();
 
+        document.getElementById('name_id').value=filenameContainer.innerText;
+   }
+     document.getElementById('file').addEventListener('change', onChange);
+        }());
+</script>
 {% endblock %}
