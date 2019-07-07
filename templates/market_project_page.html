@@ -6,105 +6,168 @@
 
         <div class="card-group mb-4">
 
-            <div class="col-sm-8 col-md-6 ng-scope" >
+            <div class="col-sm-8 col-md-6 ng-scope">
                 <div class="card">
-                    <div class="card-header ng-binding">
-                        {{ project.title }}
+                    <div class="card-header col-md-12 ">
+                       Project Title: {{ project.title }}
 
                     </div>
-                    <div class="card-body ng-binding">
-                        <b> Details :</b>
-                        {{ project.description }}<br>
-                        <b>Fields to Predict: </b> <br>
-                        {% if project.req_cols %}
-                            <ul>
-                                {% for col in project.req_cols %}
-                                    <li>{{ col }}</li>
-                                {% endfor %}
-                            </ul>
-                        {% endif %}
-                        <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
-                            <span class="badge badge-success">DownLoad JSON</span> </a>
+                    <div class="card-body  ">
+                        <b> Description: </b>
+                        {{ project.description }}
                         <br>
-                        <form action="{% url 'market_project_page' project.id %}" method="post">
-                            {% csrf_token %}
+                          <b> Rules: </b>
+                        {{ project.rules }}<br>
+                         <b> Prizes: </b>
+                        {{ project.prizes}}<br>
+                         <b>Start date:</b>
+                        {{ project.start_date }}<br>
+                         <b>End date:</b>
+                        {{ project.end_date }}<br>
+                    </div>
+                    <div class="card-header">
 
-                            <div class="form-group row">
-                                <label class="col-md-5 col-form-label" for="file-input">
-                                    Model:
-                                </label>
-                                <div class="col-md-7">
-                                    <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
-                                        <option value="None">(select model)</option>
-                                        {% for model in models %}
-                                            <option value="{{ model.mid }}">{{ model.name }}</option>
-                                        {% endfor %}
-                                    </select>
+                        Model Checking Details
+                    </div>
+                    <div class="card-body ng-binding">
+                        <b> Evaluation rules: </b>
+                        {{ project.eval_rules }}<br>
+                        {% if project.req_cols and project.req_cols|length > 0%}
+                        <b>Fields to Predict : </b> <br>
+                        <ul>
+                            {% for col in project.req_cols %}
+                                <li>{{ col }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                     {% if project.opt_cols and project.opt_cols|length > 0 %}
+                        <b>Optional Fields to Predict : </b> <br>
+                        <ul>
+                            {% for col in project.opt_cols %}
+                                <li>{{ col }}</li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+    <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
+                                <span class="badge badge-success">DownLoad JSON</span> </a>
+
+                    </div>
+
+  {% if project.participants and project.participants|length > 0 %}
+                         <div class="card-header">
+                       Current Participants is <b>{{ project.participants|length }}</b> Data Scientist
+                    </div>
+       <div class="card-body ng-binding">
+                        <ul>
+                    {% for user_id, info in project.participants.items %}
+                        <li>{{ info.name }}</li>
+                    {% endfor %}
+                         </ul>
+        </div>
+                {% endif %}
+
+
+
+     <div class="card-header">
+                      Add Models
+                    </div>
+       <div class="card-body ng-binding">
+
+
+        <div style="width: 100%">
+           {% if userdata.role == "ds" %}
+                        {% if userdata.id in project.participants %}
+                            <form action="{% url 'market_project_page' project.id %}" method="post">
+                                {% csrf_token %}
+
+                                <div class="form-group row">
+                                    <label class="col-md-5 col-form-label" for="file-input">
+                                        Model:
+                                    </label>
+                                    <div class="col-md-7">
+                                        <select name="mid"
+                                                class="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                            <option value="None">(select model)</option>
+                                            {% for model in models %}
+                                                <option value="{{ model.mid }}">{{ model.name }}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
                                 </div>
-                            </div>
-                            <button type="submit" style="padding: 10px;font-size: 15px;"
-                                    class="badge badge-success float-right">
-                                Use model
-                            </button>
-                        </form>
+                                <button type="submit" style="padding: 10px;font-size: 15px;"
+                                        class="badge badge-success float-right">
+                                    Use model
+                                </button>
+                            </form>
+                        {% endif %}
                         {% if userdata.id not in project.participants %}
                             <form action="{% url 'join_market_project' project.id %}" method="post">
                                 {% csrf_token %}
                                 <input type="hidden" name="">
-                                <button type="submit" style="padding: 10px;font-size: 15px;"
-                                        class="badge badge-cyan float-right">
+                                <button type="submit" style="padding: 10px;font-size: 15px;color:#fff;"
+                                        class="badge badge-cyan float-right" >
                                     Join competition
                                 </button>
                             </form>
                         {% endif %}
-                    </div>
-                </div>
-            </div><!-- end ngRepeat: p in Projects -->
+                    {% endif %}
 
         </div>
 
-        {% if project.results %}
-
-            <div class="animated fadeIn ng-scope">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
-                            <thead class="thead-light">
-                            <tr>
-                                <th class="text-center"><i class="icon-file"></i>
-                                    Data Sceintist Name
-                                </th>
-                                <th class="text-center ng-binding">Average mean absolute error</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            {% for resinfo in project.results %}
-                                <tr class="ng-scope">
-                                    <td class="text-center">
+                            </div>
 
 
-                                        <div class="ng-binding"> {{ resinfo.user.name }}</div>
-
-                                    </td>
-
-                                    <td class="ng-binding">
-                                         <center>
-                                        <span class="badge badge-danger" style="color:#fff"> {{ resinfo.result }}</span>
-</center>
-
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.row -->
                 </div>
             </div>
+        </div><!-- end ngRepeat: p in Projects -->
+
+    </div>
+
+    {% if project.results %}
+
+        <div class="animated fadeIn ng-scope">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-center"><i class="icon-file"></i>
+                                Data Sceintist Name
+                            </th>
+                            <th class="text-center ng-binding">Mean absolute deviation</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for resinfo in project.results %}
+                            <tr class="ng-scope">
+                                <td class="text-center">
 
 
-        {% endif %}
-{% endblock %}
+                                    <div class="ng-binding"> {{ resinfo.user.name }}</div>
+
+                                </td>
+
+                                <td class="ng-binding">
+                                    <center>
+                                            <span class="badge badge-danger"
+                                                  style="color:#fff"> {{ resinfo.result }}</span>
+                                    </center>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                 <br> <br> <br>
+                </div>
+
+                <!-- /.row -->
+            </div>
+        </div>
+
+
+    {% endif %}
+    </div>{% endblock %}
