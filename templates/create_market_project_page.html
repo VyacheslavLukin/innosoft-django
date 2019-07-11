@@ -126,9 +126,10 @@
 
                                 <div class="form-group">
                                     <label for="nf-email">Percentage </label>
-                                <input  oninput="showVal(this.value)" onchange="showVal(this.value)" type="range" min="0" max="100" step="1" name="percentage"
+                               <input  oninput="showVal(this.value)" onchange="showVal(this.value)" value="50" type="range" min="0" max="100" step="1" name="percentage"
                                            class="form-control ng-pristine ng-untouched ng-valid ng-empty">
-<center><p id="value"></p></center>
+                                    <center>Train :<span id="value"></span>%</center>
+                                    <center>Test :<span id="value2"></span>%</center>
                                 </div>
 
 
@@ -154,6 +155,7 @@
      <script>
     function showVal(newVal){
   document.getElementById("value").innerHTML=newVal;
+    document.getElementById("value2").innerHTML=100-newVal;
 }
         (function () {
             function onChange(event) {
