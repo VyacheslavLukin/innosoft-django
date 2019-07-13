@@ -5,10 +5,14 @@
 <br><br>
     <div class="animated fadeIn ng-scope">
 
-
         <div class="card-group mb-4">
+        {% if projects|length == 0 %}
+        <center>
+            <img src="{% static 'img/banner-2.png' %}" width="33%" />
+        </center>
+        {% endif %}
             {% for project in projects %}
-                <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+                <div class="col-sm-6 col-md-4 ng-scope" >
                     <div class="card" style="border: 1px solid #b1b1b1;margin: 0px;box-shadow: 1px 1px 1px #bdbfc2;">
 
                         {% if project.type == 'market' %}
@@ -18,7 +22,7 @@
                                     <div class="col-6">
                                         <center>
                                             <img src="{{ project.owner.image }}"
-                                                 style="border-radius: 50%;border: 1px solid #e3e3e3;max-height: 100px;" width="80%"/>
+                                                 style="border-radius: 50%;border: 1px solid #e3e3e3;max-height: 100px;max-width: 100px;" width="80%"/>
                                         </center>
                                     </div>
                                     <div class="col-6">
@@ -36,7 +40,7 @@
                                         <center>
 {#                                            Hardcode!?#}
                                             <img src="{{ project.owner.image }}"
-                                                 style="border-radius: 50%;border: 1px solid #e3e3e3;max-height: 100px;" width="80%"/>
+                                                 style="border-radius: 50%;border: 1px solid #e3e3e3;max-height: 100px;max-width: 100px;" width="80%"/>
                                         </center>
                                     </div>
                                     <div class="col-6">
