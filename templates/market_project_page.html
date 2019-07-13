@@ -1,38 +1,35 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <div>
+    <div class="card-group mb-4">
 
+        <div class="col-sm-8 col-md-6 ng-scope">
+            <div class="card">
+                <div class="card-header col-md-12 ">
+                    Project Title: {{ project.title }}
 
-        <div class="card-group mb-4">
+                </div>
+                <div class="card-body  ">
+                    <b> Description: </b>
+                    {{ project.description }}
+                    <br>
+                    <b> Rules: </b>
+                    {{ project.rules }}<br>
+                    <b> Prizes: </b>
+                    {{ project.prizes }}<br>
+                    <b>Start date:</b>
+                    {{ project.start_date }}<br>
+                    <b>End date:</b>
+                    {{ project.end_date }}<br>
+                </div>
+                <div class="card-header">
 
-            <div class="col-sm-8 col-md-6 ng-scope">
-                <div class="card">
-                    <div class="card-header col-md-12 ">
-                       Project Title: {{ project.title }}
-
-                    </div>
-                    <div class="card-body  ">
-                        <b> Description: </b>
-                        {{ project.description }}
-                        <br>
-                          <b> Rules: </b>
-                        {{ project.rules }}<br>
-                         <b> Prizes: </b>
-                        {{ project.prizes}}<br>
-                         <b>Start date:</b>
-                        {{ project.start_date }}<br>
-                         <b>End date:</b>
-                        {{ project.end_date }}<br>
-                    </div>
-                    <div class="card-header">
-
-                        Model Checking Details
-                    </div>
-                    <div class="card-body ng-binding">
-                        <b> Evaluation rules: </b>
-                        {{ project.eval_rules }}<br>
-                        {% if project.req_cols and project.req_cols|length > 0%}
+                    Model Checking Details
+                </div>
+                <div class="card-body ng-binding">
+                    <b> Evaluation rules: </b>
+                    {{ project.eval_rules }}<br>
+                    {% if project.req_cols and project.req_cols|length > 0 %}
                         <b>Fields to Predict : </b> <br>
                         <ul>
                             {% for col in project.req_cols %}
@@ -40,7 +37,7 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-                     {% if project.opt_cols and project.opt_cols|length > 0 %}
+                    {% if project.opt_cols and project.opt_cols|length > 0 %}
                         <b>Optional Fields to Predict : </b> <br>
                         <ul>
                             {% for col in project.opt_cols %}
@@ -48,80 +45,82 @@
                             {% endfor %}
                         </ul>
                     {% endif %}
-    <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
-                                <span class="badge badge-success">DownLoad JSON</span> </a>
+                    {% if userdata.role == "ds" %}
 
-                    </div>
-
-  {% if project.participants and project.participants|length > 0 %}
-                         <div class="card-header">
-                       Current Participants is <b>{{ project.participants|length }}</b> Data Scientist
-                    </div>
-       <div class="card-body ng-binding">
-                        <ul>
-                    {% for user_id, info in project.participants.items %}
-                        <li>{{ info.name }}</li>
-                    {% endfor %}
-                         </ul>
-        </div>
-                {% endif %}
-
-
-
-     <div class="card-header">
-                      Add Models
-                    </div>
-       <div class="card-body ng-binding">
-
-
-        <div style="width: 100%">
-           {% if userdata.role == "ds" %}
-                        {% if userdata.id in project.participants %}
-                            <form action="{% url 'market_project_page' project.id %}" method="post">
-                                {% csrf_token %}
-
-                                <div class="form-group row">
-                                    <label class="col-md-5 col-form-label" for="file-input">
-                                        Model:
-                                    </label>
-                                    <div class="col-md-7">
-                                        <select name="mid"
-                                                class="form-control ng-pristine ng-valid ng-empty ng-touched">
-                                            <option value="None">(select model)</option>
-                                            {% for model in models %}
-                                                <option value="{{ model.mid }}">{{ model.name }}</option>
-                                            {% endfor %}
-                                        </select>
-                                    </div>
-                                </div>
-                                <button type="submit" style="padding: 10px;font-size: 15px;"
-                                        class="badge badge-success float-right">
-                                    Use model
-                                </button>
-                            </form>
-                        {% endif %}
-                        {% if userdata.id not in project.participants %}
-                            <form action="{% url 'join_market_project' project.id %}" method="post">
-                                {% csrf_token %}
-                                <input type="hidden" name="">
-                                <button type="submit" style="padding: 10px;font-size: 15px;color:#fff;"
-                                        class="badge badge-cyan float-right" >
-                                    Join competition
-                                </button>
-                            </form>
-                        {% endif %}
+                        <a target="_blank" class="float-left ng-scope" href="{{ project.train_data.1 }}">
+                            <span class="badge badge-success">DownLoad JSON</span> </a>
                     {% endif %}
 
-        </div>
+                </div>
 
+                {% if project.participants and project.participants|length > 0 %}
+                    <div class="card-header">
+                        Current Participants <b>({{ project.participants|length }})</b>
+                    </div>
+                    <div class="card-body ng-binding">
+                        <ul>
+                            {% for user_id, info in project.participants.items %}
+                                <li>{{ info.name }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+
+                {% if userdata.role == "ds" %}
+
+
+                    <div class="card-header">
+                        Add Models
+                    </div>
+                    <div class="card-body ng-binding">
+
+
+                    <div style="width: 100%">
+                    {% if userdata.id in project.participants %}
+                        <form action="{% url 'market_project_page' project.id %}" method="post">
+                            {% csrf_token %}
+
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label" for="file-input">
+                                    Model:
+                                </label>
+                                <div class="col-md-7">
+                                    <select name="mid"
+                                            class="form-control ng-pristine ng-valid ng-empty ng-touched">
+                                        <option value="None">(select model)</option>
+                                        {% for model in models %}
+                                            <option value="{{ model.mid }}">{{ model.name }}</option>
+                                        {% endfor %}
+                                    </select>
+                                </div>
                             </div>
-
+                            <button type="submit" style="padding: 10px;font-size: 15px;"
+                                    class="badge badge-success float-right">
+                                Use model
+                            </button>
+                        </form>
+                    {% endif %}
+                    {% if userdata.id not in project.participants %}
+                        <form action="{% url 'join_market_project' project.id %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="">
+                            <button type="submit" style="padding: 10px;font-size: 15px;color:#fff;"
+                                    class="badge badge-cyan float-right">
+                                Join competition
+                            </button>
+                        </form>
+                    {% endif %}
+                {% endif %}
 
                 </div>
-            </div>
-        </div><!-- end ngRepeat: p in Projects -->
 
-    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </div><!-- end ngRepeat: p in Projects -->
+
 
     {% if project.results %}
 
@@ -161,7 +160,7 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                 <br> <br> <br>
+                    <br> <br> <br>
                 </div>
 
                 <!-- /.row -->

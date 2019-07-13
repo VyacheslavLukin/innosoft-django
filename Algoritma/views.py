@@ -46,9 +46,9 @@ def signout(request):
 
 
 def signup(request):
-    user = get_user(request)
-    if user:
-        return redirect('user_project_index')
+    # user = get_user(request)
+    # if user:
+    #     return redirect('user_project_index')
 
     if request.method == 'GET':
         return render(request, "signup_page.html")
@@ -362,6 +362,21 @@ def model_index(request):
 
 def error404(request):
     return render(request, '404.html')
+
+def invite_user(request):
+    user = get_user(request)
+    if user == None:
+        return redirect('signing')
+    uid = user["id"]
+    user_email = request.POST.get("email")
+    prj_id = request.POST.get("prj_id")
+    collab_user = db.get_user_by_email(user_email)
+    if collab_user:
+        project = db.get_project(prj_id)
+        db.add_participant(project, collab_user)
+    return redirect('custom_project_page', prj_id)
+
+
 
 
 def get_user(request):
