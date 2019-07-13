@@ -61,7 +61,7 @@ def create_account(info):
     # check account
     user = fireauth.create_user_with_email_and_password(info["email"], info["password"])
     uid = user["localId"]
-    data = {"name": info["name"], "role": info["role"]}
+    data = {"name": info["name"], "role": info["role"], "email": info["email"]}
     if info["image"]:
         image_bucket, image_path = upload_file(info["image"], 13)
         data["image"] = image_path
@@ -76,7 +76,7 @@ def save_image(image):
 
 
 def save_user_info(uid, info: dict):
-    data = {"name": info["name"], "role": info["role"], "image": info["image"]}
+    data = {"name": info["name"], "role": info["role"], "image": info["image"], "email": info["email"]}
     firedb.child("users").child(uid).child("details").set(data)
 
 
@@ -322,3 +322,16 @@ def get_party_users(project):
     return project["participants"]
 
 
+def get_user_by_email(email):
+    user_keys = firedb.child('users').shallow().get().val()
+
+    user = None
+    if user_keys:
+        for key in user_keys:
+            temp_user = firedb.child('users').child(key).child("details").get().val()
+            if (temp_user.get("email") == email):
+                user = temp_user
+                user["id"] = key
+                break
+
+    return user

@@ -29,6 +29,7 @@ urlpatterns = [
     path('projects/market/<prj_id>/', views.market_project_page, name="market_project_page"),
     path('projects/my/<prj_id>/', views.custom_project_page, name="custom_project_page"),
     path('projects/market/<prj_id>/join/', views.join_market_project, name="join_market_project"),
+    path('projects/invite_user', views.invite_user, name="invite_user"),
     # path('projects/market/<prj_id>/join', views.custom_project_page, name="custom_project_page"),
     path('models/', views.model_index, name="model_index"),
     path('models/upload/', views.upload_model, name="upload_model"),
