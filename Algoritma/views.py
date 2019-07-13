@@ -46,9 +46,9 @@ def signout(request):
 
 
 def signup(request):
-    user = get_user(request)
-    if user:
-        return redirect('user_project_index')
+    # user = get_user(request)
+    # if user:
+    #     return redirect('user_project_index')
 
     if request.method == 'GET':
         return render(request, "signup_page.html")
