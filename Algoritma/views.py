@@ -3,27 +3,23 @@ from django.contrib import auth
 import json
 import pickle
 import numpy as np
+from requests import HTTPError
 from sklearn.metrics import mean_absolute_error
 
 import Algoritma.dbutils as db
 import Algoritma.utils as autils
-
-# cred = credentials.Certificate('innosoft-django-firebase-adminsdk-kml31-03d2439b89.json')
-# firebase_admin.initialize_app(cred, {
-#     'storageBucket': 'innosoft-django.appspot.com'
-# })
-# db = firestore.client()
-# bucket = storage.bucket()
 
 FILENAME_SIZE = 13
 ID_SIZE = 9
 PICKLE_EXTENSION = "pickle"
 
 
+
+
 def signin(request):
-    # user = get_user(request)
-    # if user:
-    #     return redirect('user_project_index')
+    user = get_user(request)
+    if user:
+        return redirect('user_project_index')
 
     if request.method == 'GET':
         return render(request, "signin_page.html")
@@ -46,9 +42,9 @@ def signout(request):
 
 
 def signup(request):
-    # user = get_user(request)
-    # if user:
-    #     return redirect('user_project_index')
+    user = get_user(request)
+    if user:
+        return redirect('user_project_index')
 
     if request.method == 'GET':
         return render(request, "signup_page.html")
@@ -239,6 +235,7 @@ def is_participant(user, project):
         return True
     return False
 
+
 def market_project_page(request, prj_id):
     user = get_user(request)
     if user == None:
@@ -252,41 +249,54 @@ def market_project_page(request, prj_id):
                       {"project": project, "models": models, "userdata": user})
 
     if request.method == 'POST':
-        mid = request.POST.get("mid")
-        model = db.get_model(mid)
-
         project = db.get_project(prj_id)
 
-        #TODO: check if user is a partisipant
+        # TODO: check if user is a partisipant
         if not is_participant(user, project):
             return redirect('market_project_page', project["id"])
 
+        mid = request.POST.get("mid")
+        model = db.get_model(mid)
+
+        check_result = check_model(project, model)
+
+        if check_result:
+            check_data = {
+                "project": project["id"],
+                "prj_type": project["type"],
+                "user": uid,
+                "model": mid,
+                "result": check_result
+            }
+
+            db.create_check_data(check_data, "market")
+        return redirect('market_project_page', prj_id)
+
+
+def check_model(project, model):
+    try:
         model_file = db.get_file_string(model["data"][0])
         model = pickle.loads(model_file)
+    except TypeError:
+        return None
 
-        xpickle_file = db.get_file_string(project["pickle_x"][0])
-        X = pickle.loads(xpickle_file)
+    xpickle_file = db.get_file_string(project["pickle_x"][0])
+    X = pickle.loads(xpickle_file)
 
-        ypickle_file = db.get_file_string(project["pickle_y"][0])
-        y = pickle.loads(ypickle_file)
+    ypickle_file = db.get_file_string(project["pickle_y"][0])
+    y = pickle.loads(ypickle_file)
 
+    try:
         y_pred = model.predict(X)
+    except ValueError:
+        return None
 
-        # checking. Make dynamic
-        m = mean_absolute_error(y, y_pred, multioutput='raw_values')
 
-        check_result = np.average(m)
+    # checking. Make dynamic
+    m = mean_absolute_error(y, y_pred, multioutput='raw_values')
 
-        check_data = {
-            "project": prj_id,
-            "prj_type": project["type"],
-            "user": uid,
-            "model": mid,
-            "result": check_result
-        }
-
-        db.create_check_data(check_data, "market")
-        return redirect('market_project_page', prj_id)
+    check_result = np.average(m)
+    return check_result
 
 
 def join_market_project(request, prj_id):
@@ -316,36 +326,22 @@ def custom_project_page(request, prj_id):
                       {"project": project, "models": models, "userdata": user})
 
     if request.method == 'POST':
+        project = db.get_project(prj_id)
+
         mid = request.POST.get("mid")
         model = db.get_model(mid)
 
-        project = db.get_project(prj_id)
+        check_result = check_model(project, model)
+        if check_result:
+            check_data = {
+                "project": project["id"],
+                "prj_type": project["type"],
+                "user": uid,
+                "model": mid,
+                "result": check_result
+            }
 
-        model_file = db.get_file_string(model["data"][0])
-        model = pickle.loads(model_file)
-
-        xpickle_file = db.get_file_string(project["pickle_x"][0])
-        X = pickle.loads(xpickle_file)
-
-        ypickle_file = db.get_file_string(project["pickle_y"][0])
-        y = pickle.loads(ypickle_file)
-
-        y_pred = model.predict(X)
-
-        # checking. Make dynamic
-        m = mean_absolute_error(y, y_pred, multioutput='raw_values')
-
-        check_result = np.average(m)
-
-        check_data = {
-            "project": prj_id,
-            "prj_type": project["type"],
-            "user": uid,
-            "model": mid,
-            "result": check_result
-        }
-
-        db.create_check_data(check_data, "custom")
+            db.create_check_data(check_data, "custom")
         return redirect('custom_project_page', prj_id)
 
 
@@ -356,12 +352,12 @@ def model_index(request):
     uid = user["id"]
     if request.method == 'GET':
         models = db.get_user_models(uid)
-
         return render(request, "model_index.html", {"models": models, "userdata": user})
 
 
 def error404(request):
     return render(request, '404.html')
+
 
 def invite_user(request):
     user = get_user(request)
@@ -377,11 +373,13 @@ def invite_user(request):
     return redirect('custom_project_page', prj_id)
 
 
-
-
 def get_user(request):
-    if request.session.get("uid"):
-        idtoken = request.session['uid']
-        user = db.get_user_info(idtoken)
-        return user
-    return None
+    try:
+        if request.session.get("uid"):
+            idtoken = request.session['uid']
+            user = db.get_user_info(idtoken)
+            return user
+        return None
+    except HTTPError as e:
+        print(e)
+        return None

@@ -16,28 +16,35 @@ config = {
     "appId": "1:728530690260:web:790af9c28f5476e8"
 }
 
-firebase = pyrebase.initialize_app(config)
-fireauth = firebase.auth()
-firedb = firebase.database()
+certificate_file = 'innosoft-django-firebase-adminsdk-kml31-03d2439b89.json'
+bucket_path = 'innosoft-django.appspot.com'
 
-cred = credentials.Certificate('innosoft-django-firebase-adminsdk-kml31-03d2439b89.json')
-firebase_admin.initialize_app(cred, {
-    'storageBucket': 'innosoft-django.appspot.com'
-})
-db = firestore.client()
-bucket = storage.bucket()
+class DBService:
+    def __init__(self):
+        self.config = config
+        self.firebase = pyrebase.initialize_app(config)
+        self.fireauth = self.firebase.auth()
+        self.firedb = self.firebase.database()
 
 
-def upload_file(file, nlength=FILENAME_SIZE, extension=None, content_type=None):
-    if not extension:
-        extension = file.name.split(".")[-1]
-    if not content_type:
-        content_type = file.content_type
-    blobname = "%s.%s" % (utils.generate_rand_name(nlength), extension)
-    blob = bucket.blob(blobname)
-    blob.upload_from_file(file, content_type=content_type)
-    path = blob.public_url
-    return blobname, path
+        self.cred = credentials.Certificate(certificate_file)
+        firebase_admin.initialize_app(self.cred, {
+            'storageBucket': bucket_path
+        })
+        self.db = firestore.client()
+        self.bucket = storage.bucket()
+
+class FileService(DBService):
+    def upload_file(file, nlength=FILENAME_SIZE, extension=None, content_type=None):
+        if not extension:
+            extension = file.name.split(".")[-1]
+        if not content_type:
+            content_type = file.content_type
+        blobname = "%s.%s" % (utils.generate_rand_name(nlength), extension)
+        blob = bucket.blob(blobname)
+        blob.upload_from_file(file, content_type=content_type)
+        path = blob.public_url
+        return blobname, path
 
 
 def upload_file_string(file, nlength=FILENAME_SIZE, extension=None, content_type="text/plain"):
@@ -210,52 +217,6 @@ def get_project_participants(project):
             participants[user_key] = dict(user)
 
     return participants
-
-
-# def get_market_project(prj_id, option=OPTIONS[0]):
-#     project = firedb.child('projects').child('market').child(prj_id).child("info").get().val()
-#     project["id"] = prj_id
-#     project = dict(project)
-#
-#     if option == "full":
-#         res_keys = firedb.child('projects').child('market').child(prj_id).child("results").shallow().get().val()
-#
-#         results = []
-#         if res_keys:
-#             for key in res_keys:
-#                 res_info = firedb.child("projects").child('market').child(prj_id).child("results").child(key).get().val()
-#                 # model = firedb.child("models").child(res_info["model"]).get().val()
-#                 # res_info["model"] = dict(model)
-#                 user = firedb.child("users").child(res_info["user"])
-#                 user = user.child("details").get().val()
-#                 res_info["user"] = dict(user)
-#                 results.append(res_info)
-#
-#         project["results"] = results
-#     return project
-
-# def get_custom_project(prj_id, option=OPTIONS[0]):
-#     project = firedb.child('projects').child('custom').child(prj_id).child("info").get().val()
-#     project["id"] = prj_id
-#     project = dict(project)
-#
-#     if option == "full":
-#         res_keys = firedb.child('projects').child('custom').child(prj_id).child("results").shallow().get().val()
-#
-#         results = []
-#         if res_keys:
-#             for key in res_keys:
-#                 res_info = firedb.child("projects").child('custom').child(prj_id).child("results").child(key).get().val()
-#                 # model = firedb.child("models").child(res_info["model"]).get().val()
-#                 # res_info["model"] = dict(model)
-#                 user = firedb.child("users").child(res_info["user"])
-#                 user = user.child("details").get().val()
-#                 res_info["user"] = dict(user)
-#                 results.append(res_info)
-#
-#         project["results"] = results
-#     return project
-
 
 def get_user_models(user):
     model_keys = firedb.child('users').child(user).child("models").shallow().get().val()
