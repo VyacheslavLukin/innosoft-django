@@ -107,9 +107,9 @@ def create_market_project(request):
         testpic_x, testpic_y = autils.split_xy(test_json, info["req_cols"])
         # ['dew_point_temperature', 'underground_temperature', 'underground_temperature']
 
-        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
-        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
-        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
+        train_path = db.upload_file_string(train_blob, extension="json", content_type="text/json")
+        test_path = db.upload_file_string(test_blob, extension="json", content_type="text/json")
+        json_path = db.upload_file_string(json_blob, extension="json", content_type="text/json")
         testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
         testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
@@ -163,9 +163,9 @@ def create_custom_project(request):
         # make dynamic
         testpic_x, testpic_y = autils.split_xy(test_json, info["req_cols"])
 
-        train_path = db.upload_file_string(train_blob, extension="json", content_type="application/json")
-        test_path = db.upload_file_string(test_blob, extension="json", content_type="application/json")
-        json_path = db.upload_file_string(json_blob, extension="json", content_type="application/json")
+        train_path = db.upload_file_string(train_blob, extension="json", content_type="text/json")
+        test_path = db.upload_file_string(test_blob, extension="json", content_type="text/json")
+        json_path = db.upload_file_string(json_blob, extension="json", content_type="text/json")
         testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
         testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
