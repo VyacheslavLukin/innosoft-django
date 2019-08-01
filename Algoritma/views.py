@@ -6,28 +6,32 @@ import numpy as np
 from requests import HTTPError
 from sklearn.metrics import mean_absolute_error
 
-import Algoritma.dbutils as db
 import Algoritma.utils as autils
+from Algoritma.services.file_service import FileService
+from Algoritma.services.model_service import ModelService
+from Algoritma.services.project_service import ProjectService
+from Algoritma.services.user_service import UserService
 
 FILENAME_SIZE = 13
 ID_SIZE = 9
 PICKLE_EXTENSION = "pickle"
 
-
-
+file_service = FileService.getInstance()
+project_service = ProjectService.getInstance()
+user_service = UserService.getInstance()
+model_service = ModelService.getInstance()
 
 def signin(request):
-    user = get_user(request)
-    if user:
-        return redirect('user_project_index')
-
     if request.method == 'GET':
+        user = get_user(request)
+        if user:
+            return redirect('user_project_index')
         return render(request, "signin_page.html")
     elif request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
         try:
-            user = db.signin(email, password)
+            user = user_service.signin(email, password)
         except:
             message = "Invalid credentials"
             return render(request, "signin_page.html", {"message": message})
@@ -42,11 +46,10 @@ def signout(request):
 
 
 def signup(request):
-    user = get_user(request)
-    if user:
-        return redirect('user_project_index')
-
     if request.method == 'GET':
+        user = get_user(request)
+        if user:
+            return redirect('user_project_index')
         return render(request, "signup_page.html")
     elif request.method == 'POST':
         data = {
@@ -58,7 +61,7 @@ def signup(request):
         }
 
         # try except
-        user = db.create_account(data)
+        user = user_service.create_account(data)
 
         return redirect('signin')
 
@@ -103,11 +106,11 @@ def create_market_project(request):
         testpic_x, testpic_y = autils.split_xy(test_json, info["req_cols"])
         # ['dew_point_temperature', 'underground_temperature', 'underground_temperature']
 
-        train_path = db.upload_file_string(train_blob, extension="json", content_type="text/json")
-        test_path = db.upload_file_string(test_blob, extension="json", content_type="text/json")
-        json_path = db.upload_file_string(json_blob, extension="json", content_type="text/json")
-        testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
-        testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
+        train_path = file_service.upload_file_string(train_blob, extension="json", content_type="text/json")
+        test_path = file_service.upload_file_string(test_blob, extension="json", content_type="text/json")
+        json_path = file_service.upload_file_string(json_blob, extension="json", content_type="text/json")
+        testpic_x_path = file_service.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
+        testpic_y_path = file_service.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
         info["data"] = json_path
         info["train_data"] = train_path
@@ -115,7 +118,7 @@ def create_market_project(request):
         info["pickle_x"] = testpic_x_path
         info["pickle_y"] = testpic_y_path
 
-        prj_id = db.create_market_project(info)
+        prj_id = project_service.create_market_project(info)
 
         # firedb.child('projects').child(prj_id).child("info").set(data)
         # firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
@@ -159,11 +162,11 @@ def create_custom_project(request):
         # make dynamic
         testpic_x, testpic_y = autils.split_xy(test_json, info["req_cols"])
 
-        train_path = db.upload_file_string(train_blob, extension="json", content_type="text/json")
-        test_path = db.upload_file_string(test_blob, extension="json", content_type="text/json")
-        json_path = db.upload_file_string(json_blob, extension="json", content_type="text/json")
-        testpic_x_path = db.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
-        testpic_y_path = db.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
+        train_path = file_service.upload_file_string(train_blob, extension="json", content_type="text/json")
+        test_path = file_service.upload_file_string(test_blob, extension="json", content_type="text/json")
+        json_path = file_service.upload_file_string(json_blob, extension="json", content_type="text/json")
+        testpic_x_path = file_service.upload_file_string(testpic_x, extension="pickle", content_type="text/plain")
+        testpic_y_path = file_service.upload_file_string(testpic_y, extension="pickle", content_type="text/plain")
 
         info["data"] = json_path
         info["train_data"] = train_path
@@ -171,7 +174,7 @@ def create_custom_project(request):
         info["pickle_x"] = testpic_x_path
         info["pickle_y"] = testpic_y_path
 
-        prj_id = db.create_custom_project(info)
+        prj_id = project_service.create_custom_project(info)
 
         # firedb.child('projects').child(prj_id).child("info").set(data)
         # firedb.child('users').child(uid).child('projects').push({"prj_id": prj_id})
@@ -195,7 +198,7 @@ def upload_model(request):
 
         filename = request.POST.get('filename')
 
-        sav_path = db.upload_file(file, extension="pickle", content_type="text/plain")
+        sav_path = file_service.upload_file(file, extension="pickle", content_type="text/plain")
 
         info = {
             "user": uid,
@@ -203,7 +206,7 @@ def upload_model(request):
             "data": sav_path,
         }
 
-        firemodel = db.create_model(info)
+        firemodel = model_service.create_model(info)
 
         return redirect('upload_model')
 
@@ -214,7 +217,7 @@ def market_project_index(request):
         return redirect('signin')
 
     if request.method == 'GET':
-        projects = db.get_market_projects()
+        projects = project_service.get_market_projects()
         return render(request, "market_project_index.html", {"projects": projects, "userdata": user})
 
 
@@ -225,12 +228,12 @@ def user_project_index(request):
     uid = user["id"]
     if request.method == 'GET':
         # pass
-        projects = db.get_user_projects(uid)
+        projects = user_service.get_user_projects(uid)
         return render(request, "user_project_index.html", {"projects": projects, "userdata": user})
 
 
 def is_participant(user, project):
-    project = db.get_project(project['id'], "participants")
+    project = project_service.get_project(project['id'], "participants")
     if user["id"] in project["participants"]:
         return True
     return False
@@ -242,21 +245,21 @@ def market_project_page(request, prj_id):
         return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
-        project = db.get_project(prj_id, option="full")
-        models = db.get_user_models(uid)
+        project = project_service.get_project(prj_id, option="full")
+        models = user_service.get_user_models(uid)
 
         return render(request, "market_project_page.html",
                       {"project": project, "models": models, "userdata": user})
 
     if request.method == 'POST':
-        project = db.get_project(prj_id)
+        project = project_service.get_project(prj_id)
 
         # TODO: check if user is a partisipant
         if not is_participant(user, project):
             return redirect('market_project_page', project["id"])
 
         mid = request.POST.get("mid")
-        model = db.get_model(mid)
+        model = model_service.get_model(mid)
 
         check_result = check_model(project, model)
 
@@ -269,21 +272,21 @@ def market_project_page(request, prj_id):
                 "result": check_result
             }
 
-            db.create_check_data(check_data, "market")
+            project_service.create_check_data(check_data, "market")
         return redirect('market_project_page', prj_id)
 
 
 def check_model(project, model):
     try:
-        model_file = db.get_file_string(model["data"][0])
+        model_file = file_service.get_file_string(model["data"][0])
         model = pickle.loads(model_file)
     except TypeError:
         return None
 
-    xpickle_file = db.get_file_string(project["pickle_x"][0])
+    xpickle_file = file_service.get_file_string(project["pickle_x"][0])
     X = pickle.loads(xpickle_file)
 
-    ypickle_file = db.get_file_string(project["pickle_y"][0])
+    ypickle_file = file_service.get_file_string(project["pickle_y"][0])
     y = pickle.loads(ypickle_file)
 
     try:
@@ -307,8 +310,8 @@ def join_market_project(request, prj_id):
     if request.method == 'POST':
         user = get_user(request)
         if user:
-            project = db.get_project(prj_id)
-            db.add_participant(project, user)
+            project = project_service.get_project(prj_id)
+            project_service.add_participant(project, user)
         return redirect('market_project_page', prj_id)
 
 
@@ -318,18 +321,18 @@ def custom_project_page(request, prj_id):
         return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
-        project = db.get_project(prj_id, option="full")
+        project = project_service.get_project(prj_id, option="full")
 
-        models = db.get_user_models(uid)
+        models = user_service.get_user_models(uid)
 
         return render(request, "custom_project_page.html",
                       {"project": project, "models": models, "userdata": user})
 
     if request.method == 'POST':
-        project = db.get_project(prj_id)
+        project = project_service.get_project(prj_id)
 
         mid = request.POST.get("mid")
-        model = db.get_model(mid)
+        model = model_service.get_model(mid)
 
         check_result = check_model(project, model)
         if check_result:
@@ -341,7 +344,7 @@ def custom_project_page(request, prj_id):
                 "result": check_result
             }
 
-            db.create_check_data(check_data, "custom")
+            project_service.create_check_data(check_data, "custom")
         return redirect('custom_project_page', prj_id)
 
 
@@ -351,7 +354,7 @@ def model_index(request):
         return redirect('signin')
     uid = user["id"]
     if request.method == 'GET':
-        models = db.get_user_models(uid)
+        models = user_service.get_user_models(uid)
         return render(request, "model_index.html", {"models": models, "userdata": user})
 
 
@@ -366,10 +369,10 @@ def invite_user(request):
     uid = user["id"]
     user_email = request.POST.get("email")
     prj_id = request.POST.get("prj_id")
-    collab_user = db.get_user_by_email(user_email)
+    collab_user = user_service.get_user_by_email(user_email)
     if collab_user:
-        project = db.get_project(prj_id)
-        db.add_participant(project, collab_user)
+        project = project_service.get_project(prj_id)
+        project_service.add_participant(project, collab_user)
     return redirect('custom_project_page', prj_id)
 
 
@@ -377,7 +380,7 @@ def get_user(request):
     try:
         if request.session.get("uid"):
             idtoken = request.session['uid']
-            user = db.get_user_info(idtoken)
+            user = user_service.get_user_info(idtoken)
             return user
         return None
     except HTTPError as e:
