@@ -95,8 +95,7 @@ class ProjectService:
         if res_keys:
             for key in res_keys:
                 res_info = self.db.firedb.child("projects").child(project["type"]).child(project["id"]).child(
-                    "results").child(
-                    key).get().val()
+                    "results").child(key).get().val()
                 # model = firedb.child("models").child(res_info["model"]).get().val()
                 # res_info["model"] = dict(model)
                 user = self.db.firedb.child("users").child(res_info["user"])
@@ -105,6 +104,7 @@ class ProjectService:
                 res_info["model"] = self.model_service.get_model(res_info["model"])
                 results.append(res_info)
 
+        results = self.sort_results(project, results)
         return results
 
     def get_project_participants(self, project):
@@ -161,3 +161,12 @@ class ProjectService:
         project = self.get_project(project["id"], "participants")
         return project["participants"]
 
+    def sort_results(self, project, results):
+        if (project.get("eval_rules")):
+            if ("Mean absolute deviation".lower() == project.get("eval_rules").lower()):
+                results.sort(key = self.sortResults)
+
+        return results
+
+    def sortResults(self, val):
+        return val["result"]
