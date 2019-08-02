@@ -18,7 +18,7 @@ class UserService:
         return self.__instance
 
     def signin(self, email, password):
-        user = self.fireauth.sign_in_with_email_and_password(email, password)
+        user = self.db.fireauth.sign_in_with_email_and_password(email, password)
         return user
 
     def create_account(self, info):
