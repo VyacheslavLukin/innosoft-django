@@ -21,6 +21,9 @@ project_service = ProjectService.getInstance()
 user_service = UserService.getInstance()
 model_service = ModelService.getInstance()
 
+def base(request):
+    return redirect('signin')
+
 def signin(request):
     if request.method == 'GET':
         user = get_user(request)
@@ -182,7 +185,7 @@ def create_custom_project(request):
         return redirect('user_project_index')
 
 
-def upload_model(request):
+def upload_model_kek(request):
     user = get_user(request)
 
     if user == None:
