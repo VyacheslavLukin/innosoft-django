@@ -119,3 +119,17 @@ class TestViews(AlgoritmaTestCase):
             response = self.client.post(reverse('upload_model'), model_info)
             SimpleTestCase().assertRedirects(response, reverse('upload_model'))
 
+    def test_market_project_page_get(self):
+        user_info = self.generate_cred_org()
+        email = user_info.get('email')
+        password = user_info.get('password')
+        user = self.user_service.create_account(user_info)
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        project_info = self.generate_project_cred()
+        with open('test_ds.json') as file:
+            project_info['file'] = file
+            response = self.client.post(reverse('create_market_project'), project_info)
+
