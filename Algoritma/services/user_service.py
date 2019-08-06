@@ -23,7 +23,7 @@ class UserService:
 
     def create_account(self, info):
         # check account
-        user = self.db.fireauth.create_user_with_email_and_password(info['email'], info['password'])
+        user = self.db.fireauth.create_user_with_email_and_password(info.get('email'), info.get('password'))
         uid = user.get('localId')
         data = {'name': info.get('name'), 'role': info.get('role'), 'email': info.get('email')}
         if info.get('image'):

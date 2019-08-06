@@ -1,9 +1,14 @@
 from datetime import datetime
 from unittest import TestCase
 
-from Algoritma.services.user_service import UserService
+from django.test import SimpleTestCase
+from django.urls import reverse
 
-class TestUserService(TestCase):
+from Algoritma.services.user_service import UserService
+from Algoritma.tests.test_base import AlgoritmaTestCase
+
+
+class TestUserService(AlgoritmaTestCase):
 
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
@@ -28,9 +33,7 @@ class TestUserService(TestCase):
         self.assertIsNotNone(user)
 
     def test_create_account_ds_no_image(self):
-        ts = datetime.now()
-        tstr = ts.strftime('%Y%m%d%H%M%S')
-        name = 'test%s' % tstr
+        name = 'test%s' % self.generate_name()
         email = '%s@email.com' % (name)
         password = '%spass' % (name)
         info = {'name': name, 'email': email, 'password': password, 'role': 'ds', 'image': None}
@@ -38,9 +41,7 @@ class TestUserService(TestCase):
         self.assertIsNotNone(user)
 
     def test_create_account_org_no_image(self):
-        ts = datetime.now()
-        tstr = ts.strftime('%Y%m%d%H%M%S')
-        name = 'test%s' % tstr
+        name = 'test%s' % self.generate_name()
         email = '%s@email.com' % (name)
         password = '%spass' % (name)
         info = {'name': name, 'email': email, 'password': password, 'role': 'org', 'image': None}
@@ -48,9 +49,7 @@ class TestUserService(TestCase):
         self.assertIsNotNone(user)
 
     def test_user_by_email_right_cred(self):
-        ts = datetime.now()
-        tstr = ts.strftime('%Y%m%d%H%M%S')
-        name = 'test%s' % tstr
+        name = 'test%s' % self.generate_name()
         email = '%s@email.com' % (name)
         password = '%spass' % (name)
         info = {'name': name, 'email': email, 'password': password, 'role': 'org', 'image': None}

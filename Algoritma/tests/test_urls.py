@@ -3,7 +3,10 @@ from unittest import TestCase
 import pytest
 from django.urls import reverse, resolve
 
-class TestUrls(TestCase):
+from Algoritma.tests.test_base import AlgoritmaTestCase
+
+
+class TestUrls(AlgoritmaTestCase):
     def test_signin_url(self):
         path = reverse('signin')
         assert resolve(path).view_name == 'signin'

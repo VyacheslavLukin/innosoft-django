@@ -3,9 +3,10 @@ from unittest import TestCase
 
 from Algoritma.services.model_service import ModelService
 from Algoritma.services.user_service import UserService
+from Algoritma.tests.test_base import AlgoritmaTestCase
 
 
-class TestUserService(TestCase):
+class TestModelService(AlgoritmaTestCase):
 
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)

@@ -1,37 +1,121 @@
-from unittest import TestCase
-from django.conf import settings
-from importlib import import_module
 from django.test import RequestFactory, SimpleTestCase, Client
 from django.urls import reverse, resolve
-from mixer.auto import mixer
+
+from Algoritma.tests.test_base import AlgoritmaTestCase
 from Algoritma.views import *
 
-class SessionTestCase(TestCase):
-    def setUp(self):
-        # http://code.djangoproject.com/ticket/10899
-        settings.SESSION_ENGINE = 'django.contrib.sessions.backends.file'
-        engine = import_module(settings.SESSION_ENGINE)
-        store = engine.SessionStore()
-        store.save()
-        self.session = store
-        self.client = Client()
-        self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
+class TestViews(AlgoritmaTestCase):
+    def __init__(self, methodName='runTest'):
+        super().__init__(methodName)
+        self.user_service = UserService.getInstance()
+        import django
+        django.setup()
 
-class TestViews(SessionTestCase):
-    # def test_signin_already_authenticated(self):
-    #     session = self.session
-    #     session['uid'] = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjcyODRlYTZiNGZlZDBmZDc1MzE4NTg2NDZmZDYzNjE1ZGQ3YTIyZjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaW5ub3NvZnQtZGphbmdvIiwiYXVkIjoiaW5ub3NvZnQtZGphbmdvIiwiYXV0aF90aW1lIjoxNTY1MDM4MjYwLCJ1c2VyX2lkIjoickxGckFHcXdyV01zb21HVEtwMWNhY0xJckNGMyIsInN1YiI6InJMRnJBR3F3cldNc29tR1RLcDFjYWNMSXJDRjMiLCJpYXQiOjE1NjUwMzgyNjAsImV4cCI6MTU2NTA0MTg2MCwiZW1haWwiOiJhc2thckBlbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYXNrYXJAZW1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.ZfbfZpxaYZfOyvj8326D11lZ0flSQ10-EDJ1hrJ6Lr_rMtwwyLgzhVa7SU8K56bW-1RKw_Y9_ay8aSBG6mY9N5e63DVlv84RtEtx1FoPnSvr7booNh7PbWMTLw2_13n0nr5hYaelwIfnfyyhzfNwbh0XKdlfq0fh7AyrHu5XssztURfO_lkmhtMnZiCtVwnXSVuqYiVAFxmwe4EY_dcgeYOgZO82YyKgKCWTWhP8kCY02yAYHCNOES8iqln3c7yrJ8R-QKGB58pi_cs8ZGX-WlGMhTG9UA1bfVS_jywTrEhsCqCfrEBW8CLZxQm8UW_6TUH-jMW1AJYH8IN9lseW8Q'
-    #     session.save()
-    #     response = self.client.get(reverse('signin'), follow=True)
-    #     SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+    def generate_project_cred(self):
+        name = self.generate_name()
+        #register new user
+        info = {}
+        info['title'] = 'title %s' % name
+        info['short_desc'] = 'short_desc %s' % name
+        info['description'] = 'description %s' % name
+        info['percentage'] = 80
+        info['start_date'] = '2019-08-01'
+        info['end_date'] = '2019-09-01'
+        info['eval_rules'] = 'Min absolute error'
+        info['rules'] = 'rules %s' % name
+        info['prizes'] = 'prizes %s' % name
+        info['req_cols'] = ['snow_intensity']
+        info['opt_cols'] = ['rain_intensity']
+        return info
+
+    def test_signin_not_authenticated(self):
+        response = self.client.get('/signin/')
+        SimpleTestCase().assertEqual(response.status_code, 200)
+
+    def test_signin_already_authenticated(self):
+        info = self.generate_cred_ds()
+        user = self.user_service.create_account(info)
+        email = info.get('email')
+        password = info.get('password')
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        response = self.client.get(reverse('signin'), follow=True)
+        SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
 
     def test_signin_right_cred(self):
         response = self.client.post(reverse('signin'), {'email': 'askar@email.com', 'password': 'dsadmin'}, follow=True)
         SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
 
-    # def test_signup_already_authenticated(self):
-    #     session = self.session
-    #     session['uid'] = 'eyJhbGciOiJSUzI1NiIsImtpZCI6IjcyODRlYTZiNGZlZDBmZDc1MzE4NTg2NDZmZDYzNjE1ZGQ3YTIyZjUiLCJ0eXAiOiJKV1QifQ.eyJpc3MiOiJodHRwczovL3NlY3VyZXRva2VuLmdvb2dsZS5jb20vaW5ub3NvZnQtZGphbmdvIiwiYXVkIjoiaW5ub3NvZnQtZGphbmdvIiwiYXV0aF90aW1lIjoxNTY1MDM4MjYwLCJ1c2VyX2lkIjoickxGckFHcXdyV01zb21HVEtwMWNhY0xJckNGMyIsInN1YiI6InJMRnJBR3F3cldNc29tR1RLcDFjYWNMSXJDRjMiLCJpYXQiOjE1NjUwMzgyNjAsImV4cCI6MTU2NTA0MTg2MCwiZW1haWwiOiJhc2thckBlbWFpbC5jb20iLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImZpcmViYXNlIjp7ImlkZW50aXRpZXMiOnsiZW1haWwiOlsiYXNrYXJAZW1haWwuY29tIl19LCJzaWduX2luX3Byb3ZpZGVyIjoicGFzc3dvcmQifX0.ZfbfZpxaYZfOyvj8326D11lZ0flSQ10-EDJ1hrJ6Lr_rMtwwyLgzhVa7SU8K56bW-1RKw_Y9_ay8aSBG6mY9N5e63DVlv84RtEtx1FoPnSvr7booNh7PbWMTLw2_13n0nr5hYaelwIfnfyyhzfNwbh0XKdlfq0fh7AyrHu5XssztURfO_lkmhtMnZiCtVwnXSVuqYiVAFxmwe4EY_dcgeYOgZO82YyKgKCWTWhP8kCY02yAYHCNOES8iqln3c7yrJ8R-QKGB58pi_cs8ZGX-WlGMhTG9UA1bfVS_jywTrEhsCqCfrEBW8CLZxQm8UW_6TUH-jMW1AJYH8IN9lseW8Q'
-    #     session.save()
-    #     response = self.client.get(reverse('signup'), follow=True)
-    #     SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+    def test_signin_wrong_cred(self):
+        response = self.client.post(reverse('signin'), {'email': 'askar@email.com', 'password': 'wrong'}, follow=True)
+        self.assertIsNotNone(response.context.get('message'))
+
+    def test_signup_already_authenticated(self):
+        info = self.generate_cred_ds()
+        user = self.user_service.create_account(info)
+        email = info.get('email')
+        password = info.get('password')
+        user = self.user_service.create_account(info)
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        response = self.client.get(reverse('signup'), follow=True)
+        SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+
+    def test_signout(self):
+        response = self.client.get(reverse('signout'))
+        SimpleTestCase().assertRedirects(response, reverse('signin'))
+
+    def test_signup_right_cred(self):
+        info = self.generate_cred_ds()
+        response = self.client.post(reverse('signup'), info, follow=True)
+        SimpleTestCase().assertRedirects(response, reverse('signin'))
+
+    def test_create_market_project(self):
+        user_info = self.generate_cred_org()
+        email = user_info.get('email')
+        password = user_info.get('password')
+        user = self.user_service.create_account(user_info)
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        project_info = self.generate_project_cred()
+        with open('test_ds.json') as file:
+            project_info['file'] = file
+            response = self.client.post(reverse('create_market_project'), project_info)
+            SimpleTestCase().assertRedirects(response, reverse('market_project_index'))
+
+    def test_create_custom_project(self):
+        user_info = self.generate_cred_ds()
+        email = user_info.get('email')
+        password = user_info.get('password')
+        user = self.user_service.create_account(user_info)
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        project_info = self.generate_project_cred()
+        with open('test_ds.json') as file:
+            project_info['file'] = file
+            response = self.client.post(reverse('create_custom_project'), project_info)
+            SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+
+    def test_upload_model(self):
+        user_info = self.generate_cred_ds()
+        email = user_info.get('email')
+        password = user_info.get('password')
+        user = self.user_service.create_account(user_info)
+        signin_user = self.user_service.signin(email, password)
+        session = self.client.session
+        session['uid'] = signin_user.get('idToken')
+        session.save()
+        model_info = {'name ': 'model %s' % self.generate_name()}
+        with open('test_model.pickle') as file:
+            model_info['file'] = file
+            response = self.client.post(reverse('upload_model'), model_info)
+            SimpleTestCase().assertRedirects(response, reverse('upload_model'))
+

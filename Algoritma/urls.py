@@ -31,5 +31,5 @@ urlpatterns = [
     path('projects/market/<prj_id>/join/', views.join_market_project, name="join_market_project"),
     path('projects/invite_user', views.invite_user, name="invite_user"),
     path('models/', views.model_index, name="model_index"),
-    path('models/upload/', views.upload_model_kek, name="upload_model")
+    path('models/upload/', views.upload_model, name="upload_model")
 ]

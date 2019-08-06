@@ -41,9 +41,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles'
 ]
 
-import django
-django.setup()
-
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.middleware.security.SecurityMiddleware',
