@@ -14,9 +14,9 @@ class ModelService:
         return self.__instance
 
     def create_model(self, info: dict):
-        user = info["user"]
+        user = info.get('user')
         firemodel = self.db.firedb.child('models').push(info)
-        self.db.firedb.child('users').child(user).child('models').push({"mid": firemodel["name"], "name": info["name"]})
+        self.db.firedb.child('users').child(user).child('models').push({'mid': firemodel.get('name'), 'name': info.get('name')})
 
         return firemodel
 
