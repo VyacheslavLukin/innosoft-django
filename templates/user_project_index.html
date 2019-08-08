@@ -1,29 +1,47 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <h1>Projects</h1>
+    <a> <b> Home </b> </a>>><a> <b>My Projects</b> </a>
+    <br><br>
     <div class="animated fadeIn ng-scope">
 
-
         <div class="card-group mb-4">
+            {% if projects|length == 0 %}
+                <center>
+                    <img src="{% static 'img/banner-2.png' %}" width="33%"/>
+                </center>
+            {% endif %}
             {% for project in projects %}
-                <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
-                    <div class="card">
-                        <div class="card-header ng-binding">
-                            {{ project.title }} {{ project.type }}
+                <div class="col-sm-6 col-md-4 ng-scope">
+                    <div class="card" style="border: 1px solid #b1b1b1;margin: 0px;box-shadow: 1px 1px 1px #bdbfc2;">
+                        {% if project.type == 'market' %}
 
-                        </div>
-                        <div class="card-body ng-binding">
-                            <span> {{ project.description }} </span>
-                            {% if project.type == 'market' %}
-                                <a href="{% url 'market_project_page' project.id %}">Link {{ project.id }}</a>
-                            {% elif project.type == 'custom' %}
-                                <a href="{% url 'custom_project_page' project.id %}">Link {{ project.id }}</a>
-                            {% endif %}
+                            <a href="{% url 'market_project_page' project.id %}"
+                               style="text-decoration:none;color:black">
+                        {% elif project.type == 'custom' %}
+                            <a href="{% url 'custom_project_page' project.id %}"
+                               style="text-decoration:none;color:black">
+                        {% endif %}
 
+                        <div class="card-body ng-binding row">
+                            <div class="col-3">
+                                <img src="{{ project.owner.image }}"
+                                     style="border-radius: 50%;border: 1px solid #e3e3e3; height: 100px; width: 100px;"/>
+                            </div>
+                            <div class="col-9">
+                                <h3>{{ project.owner.name }} </h3>
+                                <h1> {{ project.title }} </h1>
+                                <span style="padding: 5px;background: #29363d;color: #fff;font-size: 11px;border-radius: 10px;"> {{ project.type }}</span>
+                                <br> <span> {{ project.description }} </span>
+                            </div>
                         </div>
+                        </a>
+
                     </div>
+                    <br>
+
                 </div>
+
             {% endfor %}
         </div>
 

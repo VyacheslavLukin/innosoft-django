@@ -6,28 +6,40 @@
 
         <div class="card-group mb-4">
             <!-- ngRepeat: p in Projects -->
-            <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
+            <div class="col-sm-8 col-md-6 ng-scope">
                 <div class="card">
                     <div class="card-header ng-binding">
-                        {{ project.title }}
-                        <!-- <span class="badge badge-success float-right">Success</span> -->
+                        Project Title : {{ project.title }}
                     </div>
                     <div class="card-body ng-binding">
-                        {{ project.description }}<br>
-                        Fields to predict:<br>
-                        {% if project.req_cols %}
+                        <b> Description: </b>
+                        {{ project.description }}
 
+                    </div>
+                    <div class="card-header">
+                        Model Checking Details
+                    </div>
+                    <div class="card-body ng-binding">
+                        <b> Evaluation rules: </b>
+
+                        {{ project.eval_rules }}<br>
+                        {% if project.req_cols and project.req_cols|length > 0 %}
+                            <b>Fields to Predict : </b> <br>
                             <ul>
                                 {% for col in project.req_cols %}
                                     <li>{{ col }}</li>
                                 {% endfor %}
                             </ul>
                         {% endif %}
-
-                        <br>
                         <a target="" class="float-left ng-scope" href="{{ project.train_data.1 }}">
                             <span class="badge badge-success">DownLoad JSON</span> </a>
-                        <br>
+                    </div>
+
+                    <div class="card-header">
+                        Add Models
+                    </div>
+                    <div class="card-body ng-binding">
+
                         <form action="{% url 'custom_project_page' project.id %}" method="post">
                             {% csrf_token %}
 
@@ -35,86 +47,102 @@
                                 <label class="col-md-5 col-form-label" for="file-input">
                                     Model:
                                 </label>
-
-
                                 <div class="col-md-7">
-
-
                                     <select name="mid" class="form-control ng-pristine ng-valid ng-empty ng-touched">
                                         <option value="None">(select model)</option>
                                         {% for model in models %}
                                             <option value="{{ model.mid }}">{{ model.name }}</option>
                                         {% endfor %}
-
                                     </select>
-
                                 </div>
                             </div>
                             <button type="submit" style="padding: 10px;font-size: 15px;"
                                     class="badge badge-success float-right">
                                 Use model
                             </button>
-
-
+                        </form>
+                    </div>
+                    <div class="card-header">
+                        Invite Collaborator
+                    </div>
+                    <div class="card-body ng-binding">
+                        <form action="{% url 'invite_user' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="prj_id" value="{{ project.id }}">
+                            <div class="form-group row">
+                                <label class="col-md-5 col-form-label" for="file-input">
+                                    Data Scientist Email:
+                                </label>
+                                <div class="col-md-7">
+                                    <input type="text" class="form-control" placeholder="User email" name="email">
+                                </div>
+                            </div>
+                            <button type="submit" style="padding: 10px;font-size: 15px;"
+                                    class="badge badge-cyan float-right">
+                                Invite
+                            </button>
                         </form>
                     </div>
                 </div>
-            </div><!-- end ngRepeat: p in Projects -->
+            </div>
+        </div><!-- end ngRepeat: p in Projects -->
 
+    </div>
+
+
+
+
+
+
+    {% if project.results %}
+
+        <div class="animated fadeIn ng-scope">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
+                        <thead class="thead-light">
+                        <tr>
+                            <th class="text-center"><i class="icon-file"></i>
+                                Data Sceintist Name
+                            </th>
+                            <th class="text-center">PickleName URL</th>
+                            <th class="text-center ng-binding">Average mean absolute error</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        {% for resinfo in project.results %}
+                            <tr class="ng-scope">
+                                <td class="text-center">
+
+
+                                    <div class="ng-binding"> {{ resinfo.user.name }}</div>
+
+                                </td>
+                                <td class="text-center">
+                                    <div class="ng-binding"> {{ resinfo.model.name }}</div>
+
+
+                                </td>
+
+
+                                <td class="ng-binding">
+                                    <center>
+                                            <span class="badge badge-danger"
+                                                  style="color:#fff"> {{ resinfo.result }}</span>
+                                    </center>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                <!-- /.row -->
+            </div>
         </div>
 
 
-
-
-
-
-        {% if project.results %}
-
-            <div class="animated fadeIn ng-scope">
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <table class="table table-hover table-outline mb-0 hidden-sm-down" style="background: #fff;">
-                            <thead class="thead-light">
-                            <tr>
-                                <th class="text-center"><i class="icon-file"></i>
-                                    Data Sceintist Name
-                                </th>
-                                <th class="text-center">PickleName URL</th>
-                                <th class="text-center ng-binding">Average mean absolute error</th>
-
-                            </tr>
-                            </thead>
-                            <tbody>
-
-                            {% for resinfo in project.results %}
-                                <tr class="ng-scope">
-                                    <td class="text-center">
-
-
-                                        <div class="ng-binding"> {{ resinfo.user.name }}</div>
-
-                                    </td>
-                                    <td class="text-center">
-
-
-                                    </td>
-
-
-                                    <td class="ng-binding">
-                                        <a class="badge badge-danger" style="color:#fff">Result
-                                            =</a>{{ resinfo.result }}
-
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- /.row -->
-                </div>
-            </div>
-
-
-        {% endif %}
+    {% endif %}
 {% endblock %}

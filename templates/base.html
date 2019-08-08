@@ -33,7 +33,8 @@
     <link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
     <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
-
+<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Sans+Narrow&display=swap" rel="stylesheet">
     {#    <script type="text/javascript" src="https://rawgit.com/Foliotek/Croppie/master/croppie.js"></script>#}
 </head>
 
@@ -109,7 +110,7 @@
                 </div>
             </a>
             <div class="dropdown-menu dropdown-menu-right">
-                <div class="divider"></div>
+
                 <a class="dropdown-item" href="{% url 'signout' %}"><i class="fa fa-lock"></i>
                     Logout {{ userdata.name }}</a>
             </div>
@@ -179,18 +180,9 @@
         </nav>
     </div>
     <!-- Main content -->
-    <main class="main" style="min-height: 545px;">
+    <main class="main" style="min-height: 900px;">
         <!-- Breadcrumb -->
-        <ol class="breadcrumb">
-
-            <li class="breadcrumb-menu">
-                <div class="btn-group" role="group" aria-label="Button group with nested dropdown">
-                    {#                    <a class="btn"><i class="icon-graph"></i> &nbsp;Dashboard</a>#}
-
-                </div>
-            </li>
-
-        </ol>
+      <br>
 
         <div class="container-fluid">
             {% block content %}
@@ -210,6 +202,7 @@
     <span><a href="">ALgorithma</a> © 2019 </span>
     <span class="ml-auto">Powered by InnoSoft </span>
 </footer>
+
 
 
 </body>

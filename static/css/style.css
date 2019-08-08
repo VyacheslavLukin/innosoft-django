@@ -99,7 +99,9 @@ article, aside, dialog, figcaption, figure, footer, header, hgroup, main, nav, s
 
 body {
     margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    /*font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";*/
+      /*font-family: 'PT Sans Narrow', sans-serif;*/
+    font-family: 'Josefin Sans', sans-serif;
     font-size: 15px;
     font-weight: 400;
     line-height: 1.5;
@@ -247,6 +249,7 @@ figure {
 img {
     vertical-align: middle;
     border-style: none;
+
 }
 
 svg:not(:root) {
@@ -2346,9 +2349,9 @@ pre code {
     opacity: 1;
 }
 
-select.form-control:not([size]):not([multiple]) {
-    height: calc(2.0625rem + 2px);
-}
+/*select.form-control:not([size]):not([multiple]) {*/
+/*    height: calc(2.0625rem + 2px);*/
+/*}*/
 
 select.form-control:focus::-ms-value {
     color: #3e515b;
@@ -2810,7 +2813,11 @@ select.form-control-lg:not([size]):not([multiple]), .input-group-lg > select.for
 }
 
 .btn:not(:disabled):not(.disabled) {
-    cursor: pointer;
+    cursor: pointer;.card-header
+    padding: 10px;
+font-size: 15px;
+font-weight: bold;
+border-radius: 5px;
 }
 
 .btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active {
@@ -4747,18 +4754,18 @@ tbody.collapse.show {
     position: relative;
 }
 
-.dropdown-toggle::after {
-    display: inline-block;
-    width: 0;
-    height: 0;
-    margin-left: 0.255em;
-    vertical-align: 0.255em;
-    content: "";
-    border-top: 0.3em solid;
-    border-right: 0.3em solid transparent;
-    border-bottom: 0;
-    border-left: 0.3em solid transparent;
-}
+/*.dropdown-toggle::after {*/
+/*    display: inline-block;*/
+/*    width: 0;*/
+/*    height: 0;*/
+/*    margin-left: 0.255em;*/
+/*    vertical-align: 0.255em;*/
+/*    content: "";*/
+/*    border-top: 0.3em solid;*/
+/*    border-right: 0.3em solid transparent;*/
+/*    border-bottom: 0;*/
+/*    border-left: 0.3em solid transparent;*/
+/*}*/
 
 .dropdown-toggle:empty::after {
     margin-left: 0;
@@ -4886,6 +4893,7 @@ tbody.collapse.show {
     white-space: nowrap;
     background-color: transparent;
     border: 0;
+    font-size: 11px;
 }
 
 .dropdown-item:hover, .dropdown-item:focus {
@@ -5990,6 +5998,7 @@ tbody.collapse.show {
     margin-bottom: 0;
     background-color: #f0f3f5;
     border-bottom: 1px solid #c2cfd6;
+    border-top: 1px solid #c2cfd6;
 }
 
 .card-header + .list-group .list-group-item:first-child {
@@ -6261,6 +6270,8 @@ tbody.collapse.show {
 .badge-success {
     color: #fff;
     background-color: #4dbd74;
+    padding: 10px;
+    font-size: 15px;
 }
 
 .badge-success[href]:hover, .badge-success[href]:focus {
@@ -6294,6 +6305,8 @@ tbody.collapse.show {
 .badge-danger {
     color: #fff;
     background-color: #f86c6b;
+     padding: 10px;
+    font-size: 15px;
 }
 
 .badge-danger[href]:hover, .badge-danger[href]:focus {
@@ -12000,6 +12013,7 @@ body {
 
 .img-avatar {
     border-radius: 50em;
+    max-height: 100px;
 }
 
 .avatar {
@@ -14551,7 +14565,7 @@ base-chart.chart {
     padding: 0;
     margin: 0;
     background-color: #fff;
-    border-bottom: 1px solid #a4b7c1;
+    /*border-bottom: 1px solid #a4b7c1;*/
 }
 
 .app-header.navbar .navbar-brand {
@@ -17351,6 +17365,7 @@ app-root {
     /*position: fixed;*/
     z-index: 1020;
     width: 100%;
+    border-bottom: 1px solid #29363d45;
 }
 
 .header-fixed .app-body {
@@ -17363,14 +17378,14 @@ app-root {
 }
 
 .sidebar-fixed .sidebar {
-    position: fixed;
+    /*position: fixed;*/
     z-index: 1019;
     width: 200px;
-    height: calc(100vh - 55px);
+    /*height: calc(100vh - 55px);*/
 }
 
 .sidebar-fixed .main, .sidebar-fixed .app-footer {
-    margin-left: 200px;
+    /*margin-left: 200px;*/
 }
 
 .sidebar-fixed.sidebar-hidden .main, .sidebar-fixed.sidebar-hidden .app-footer {
@@ -17711,6 +17726,8 @@ hr.transparent {
 .navbar .dropdown-toggle .img-avatar {
     height: 35px;
     margin: 0 10px;
+    width: 35px;
+border: 2px solid #e4e5e6;
 }
 
 *[dir="rtl"] {
@@ -18060,4 +18077,39 @@ hr.transparent {
 
 .slider .slider-selection {
     background: #cbcbcb;
+}
+.form-control{
+    height: 40px; !important;
+}
+
+
+input[type="file"] {
+  position: absolute;
+  left: 0;
+  opacity: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
+
+.lll {
+  position: absolute;
+    font-size: 15px;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ccc;
+  border: 3px dotted #bebebe;
+  border-radius: 10px;
+}
+
+.label {
+  display: inline-block;
+  position: relative;
+  height: 100px;
+  width: 100%;
 }
