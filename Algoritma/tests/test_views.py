@@ -8,6 +8,7 @@ class TestViews(AlgoritmaTestCase):
     def __init__(self, methodName='runTest'):
         super().__init__(methodName)
         self.user_service = UserService.getInstance()
+        self.project_service = ProjectService.getInstance()
         import django
         django.setup()
 
@@ -43,6 +44,7 @@ class TestViews(AlgoritmaTestCase):
         session.save()
         response = self.client.get(reverse('signin'), follow=True)
         SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+        self.user_service.remove_account(email, password)
 
     def test_signin_right_cred(self):
         response = self.client.post(reverse('signin'), {'email': 'askar@email.com', 'password': 'dsadmin'}, follow=True)
@@ -64,6 +66,7 @@ class TestViews(AlgoritmaTestCase):
         session.save()
         response = self.client.get(reverse('signup'), follow=True)
         SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+        self.user_service.remove_account(email, password)
 
     def test_signout(self):
         response = self.client.get(reverse('signout'))
@@ -71,8 +74,12 @@ class TestViews(AlgoritmaTestCase):
 
     def test_signup_right_cred(self):
         info = self.generate_cred_ds()
+        email = info.get('email')
+        password = info.get('password')
         response = self.client.post(reverse('signup'), info, follow=True)
         SimpleTestCase().assertRedirects(response, reverse('signin'))
+        self.user_service.remove_account(email, password)
+
 
     def test_create_market_project(self):
         user_info = self.generate_cred_org()
@@ -88,6 +95,7 @@ class TestViews(AlgoritmaTestCase):
             project_info['file'] = file
             response = self.client.post(reverse('create_market_project'), project_info)
             SimpleTestCase().assertRedirects(response, reverse('market_project_index'))
+        self.user_service.remove_account(email, password)
 
     def test_create_custom_project(self):
         user_info = self.generate_cred_ds()
@@ -103,6 +111,9 @@ class TestViews(AlgoritmaTestCase):
             project_info['file'] = file
             response = self.client.post(reverse('create_custom_project'), project_info)
             SimpleTestCase().assertRedirects(response, reverse('user_project_index'))
+        self.user_service.remove_account(email, password)
+
+
 
     def test_upload_model(self):
         user_info = self.generate_cred_ds()
@@ -118,6 +129,8 @@ class TestViews(AlgoritmaTestCase):
             model_info['file'] = file
             response = self.client.post(reverse('upload_model'), model_info)
             SimpleTestCase().assertRedirects(response, reverse('upload_model'))
+        self.user_service.remove_account(email, password)
+
 
     def test_market_project_page_get(self):
         user_info = self.generate_cred_org()
@@ -132,4 +145,8 @@ class TestViews(AlgoritmaTestCase):
         with open('test_ds.json') as file:
             project_info['file'] = file
             response = self.client.post(reverse('create_market_project'), project_info)
+        self.user_service.remove_account(email, password)
+
+
+
 

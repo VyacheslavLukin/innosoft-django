@@ -39,6 +39,8 @@ class TestUserService(AlgoritmaTestCase):
         info = {'name': name, 'email': email, 'password': password, 'role': 'ds', 'image': None}
         user = self.user_service.create_account(info)
         self.assertIsNotNone(user)
+        print(name)
+        self.user_service.remove_account(email, password)
 
     def test_create_account_org_no_image(self):
         name = 'test%s' % self.generate_name()
@@ -47,6 +49,7 @@ class TestUserService(AlgoritmaTestCase):
         info = {'name': name, 'email': email, 'password': password, 'role': 'org', 'image': None}
         user = self.user_service.create_account(info)
         self.assertIsNotNone(user)
+        self.user_service.remove_account(email, password)
 
     def test_user_by_email_right_cred(self):
         name = 'test%s' % self.generate_name()
@@ -56,3 +59,22 @@ class TestUserService(AlgoritmaTestCase):
         check_user = self.user_service.create_account(info)
         user = self.user_service.get_user_by_email(email)
         self.assertTrue(user and user.get('email') == check_user.get('email'))
+        self.user_service.remove_account(email, password)
+
+    def test_remove_user(self):
+        name = 'test%s' % self.generate_name()
+        email = '%s@email.com' % (name)
+        password = '%spass' % (name)
+        info = {'name': name, 'email': email, 'password': password, 'role': 'org', 'image': None}
+        user = self.user_service.create_account(info)
+        self.user_service.remove_account(email, password)
+        self.assertTrue(True)
+
+    def test_remove_testing_users(self):
+        users = self.user_service.get_users_list('test')
+        for user in users:
+            name = user.get('name')
+            email = '%s@email.com' % name
+            password = '%spass' % name
+            print(name, email, password)
+            self.user_service.remove_account(email, password)

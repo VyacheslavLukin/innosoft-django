@@ -23,3 +23,6 @@ class ModelService:
     def get_model(self, mid):
         model = self.db.firedb.child('models').child(mid).get().val()
         return model
+
+    def remove_user_model(self, mid):
+        self.db.firedb.child('models').child(mid).remove()

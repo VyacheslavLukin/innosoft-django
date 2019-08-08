@@ -170,3 +170,8 @@ class ProjectService:
 
     def sortResults(self, val):
         return val['result']
+
+    def remove_project(self, project_id):
+        project_type = self.db.firedb.child('projects').child('links').child(project_id).get().val().get('type')
+        self.db.firedb.child('projects').child('links').child(project_id).remove()
+        self.db.firedb.child('projects').child(project_type).child(project_id).remove()
