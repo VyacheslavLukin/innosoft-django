@@ -37,7 +37,6 @@ class UserService:
         return user
 
 
-
     def save_user_info(self, uid, info: dict):
         data = {'name': info.get('name'), 'role': info.get('role'), 'image': info.get('image'), 'email': info.get('email')}
         self.db.firedb.child('users').child(uid).child('details').set(data)
@@ -87,14 +86,35 @@ class UserService:
         return user
 
     def remove_account(self, email, password):
+        # try:
         try:
             user = self.signin(email, password)
-            self.remove_user_projects(user.get('localId'))
-            self.remove_user_models(user.get('localId'))
-            self.db.fireauth.delete_user_account(user.get('idToken'))
-            self.db.firedb.child('users').child(user.get('localId')).remove()
+            try:
+                self.remove_user_projects(user.get('localId'))
+            except:
+                print("project error")
+
+            try:
+                self.remove_user_models(user.get('localId'))
+            except:
+                print("model error")
+
+            try:
+                self.db.fireauth.delete_user_account(user.get('idToken'))
+            except:
+                print("fireauth error")
+
+            try:
+                self.db.firedb.child('users').child(user.get('localId')).remove()
+            except:
+                print("user delete error")
         except:
-            print('error')
+            print("signin error")
+            pass
+
+
+        # except:
+        #     print('error')
 
 
     def remove_user_projects(self, user):
