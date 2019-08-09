@@ -46,7 +46,7 @@ y = df[rcols]
 x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.4)  # train-test split, ratio can be custom
 reg = LinearRegression().fit(x_train, y_train)  # training the model
 
-pickle.dump(reg, open("test_model.pickle", 'wb'))
+pickle.dump(reg, open("my_model.pickle", 'wb'))
 
 y_pred = reg.predict(x_test)
 
