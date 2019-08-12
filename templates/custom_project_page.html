@@ -12,7 +12,7 @@
                         Project Title : {{ project.title }}
                     </div>
                     <div class="card-body ng-binding">
-                        <b> Description: </b>
+                        <strong> Description: </strong>
                         {{ project.description }}
 
                     </div>
@@ -20,11 +20,11 @@
                         Model Checking Details
                     </div>
                     <div class="card-body ng-binding">
-                        <b> Evaluation rules: </b>
+                        <strong> Evaluation rules: </strong>
 
                         {{ project.eval_rules }}<br>
                         {% if project.req_cols and project.req_cols|length > 0 %}
-                            <b>Fields to Predict : </b> <br>
+                            <strong>Fields to Predict : </strong> <br>
                             <ul>
                                 {% for col in project.req_cols %}
                                     <li>{{ col }}</li>
@@ -129,10 +129,10 @@
 
 
                                 <td class="ng-binding">
-                                    <center>
+                                    <div style="text-align: center;">
                                             <span class="badge badge-danger"
                                                   style="color:#fff"> {{ resinfo.result }}</span>
-                                    </center>
+                                    </div>
                                 </td>
                             </tr>
                         {% endfor %}

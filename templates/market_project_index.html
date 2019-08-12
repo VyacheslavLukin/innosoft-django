@@ -1,14 +1,14 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <a> <b> Home </b> </a>>><a><b>Market Projects</b> </a>
+    <a> <strong> Home </strong> </a>>><a><b>Market Projects</b> </a>
     <br><br>
     <div class="animated fadeIn ng-scope">
         <div class="card-group mb-4">
             {% if projects|length == 0 %}
-                <center>
-                    <img src="{% static 'img/banner-2.png' %}" width="33%"/>
-                </center>
+                <div style="text-align: center;">
+                    <img src="{% static 'img/banner-2.png' %}" width="33%" alt="banner"/>
+                </div>
             {% endif %}
             {% for project in projects %}
                 <div class="col-sm-6 col-md-4 ng-scope" ng-repeat="p in Projects">
@@ -16,7 +16,7 @@
                         <a href="{% url 'market_project_page' project.id %}" style="text-decoration:none;color:black">
                             <div class="card-body ng-binding row">
                                 <div class="col-4">
-                                    <img src="{{ project.owner.image }}"
+                                    <img src="{{ project.owner.image }}" alt="{{ project.owner.name }}"
                                          style="border-radius: 50%;border: 1px solid #e3e3e3; height: 100px; width: 100px;"/>
                                 </div>
                                 <div class="col-8">

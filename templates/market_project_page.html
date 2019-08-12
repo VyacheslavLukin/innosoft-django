@@ -10,16 +10,16 @@
 
                 </div>
                 <div class="card-body  ">
-                    <b> Description: </b>
+                    <strong> Description: </strong>
                     {{ project.description }}
                     <br>
-                    <b> Rules: </b>
+                    <strong> Rules: </strong>
                     {{ project.rules }}<br>
-                    <b> Prizes: </b>
+                    <strong> Prizes: </strong>
                     {{ project.prizes }}<br>
-                    <b>Start date:</b>
+                    <strong>Start date:</strong>
                     {{ project.start_date }}<br>
-                    <b>End date:</b>
+                    <strong>End date:</strong>
                     {{ project.end_date }}<br>
                 </div>
                 <div class="card-header">
@@ -27,10 +27,10 @@
                     Model Checking Details
                 </div>
                 <div class="card-body ng-binding">
-                    <b> Evaluation rules: </b>
+                    <strong> Evaluation rules: </strong>
                     {{ project.eval_rules }}<br>
                     {% if project.req_cols and project.req_cols|length > 0 %}
-                        <b>Fields to Predict : </b> <br>
+                        <strong>Fields to Predict : </strong> <br>
                         <ul>
                             {% for col in project.req_cols %}
                                 <li>{{ col }}</li>
@@ -38,7 +38,7 @@
                         </ul>
                     {% endif %}
                     {% if project.opt_cols and project.opt_cols|length > 0 %}
-                        <b>Optional Fields to Predict : </b> <br>
+                        <strong>Optional Fields to Predict : </strong> <br>
                         <ul>
                             {% for col in project.opt_cols %}
                                 <li>{{ col }}</li>
@@ -54,7 +54,7 @@
 
                 {% if project.participants and project.participants|length > 0 %}
                     <div class="card-header">
-                        Current Participants <b>({{ project.participants|length }})</b>
+                        Current Participants <strong>({{ project.participants|length }})</strong>
                     </div>
                     <div class="card-body ng-binding">
                         <ul>
@@ -149,10 +149,10 @@
                                 </td>
 
                                 <td class="ng-binding">
-                                    <center>
+                                    <div style="text-align: center;">
                                             <span class="badge badge-danger"
                                                   style="color:#fff"> {{ resinfo.result }}</span>
-                                    </center>
+                                    </div>
 
                                 </td>
                             </tr>

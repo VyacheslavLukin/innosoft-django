@@ -47,22 +47,26 @@
                                         </select>
                                     </div>
 
-   <label  class="label" for="test">
-                        <div class="lll">Click or drop Image  here</div>
-                          <input type="file"  onchange="document.getElementById('filename').src = window.URL.createObjectURL(this.files[0])" accept="image/*"  id="file" name="image"  >
-                      </label>
-                                   <center> <img id="filename"  width="100px"  /></center>
+                                    <label class="label" for="test">
+                                        <div class="lll">Click or drop Image here</div>
+                                        <input type="file"
+                                               onchange="document.getElementById('filename').src = window.URL.createObjectURL(this.files[0])"
+                                               accept="image/*" id="file" name="image">
+                                    </label>
+                                    <div style="text-align: center;"><img id="filename" width="100px" /></div>
 
-<center>
-                                    <button type="submit" class="btn btn-success px-4">Create Account</button></center>
+                                    <div style="text-align: center;">
+                                        <button type="submit" class="btn btn-success px-4">Create Account</button>
+                                    </div>
                                 </form>
                             </div>
                         </div>
                         <div class="card text-white bg-primary py-5 d-md-down-none" style="width:44%">
                             <div class="card-body text-center">
                                 <div>
-                                    <center>
-                                        <img src="http://enghamzasalem.com/innosoft/img/signin-05.png" width="300px"/></center>
+                                    <div style="text-align: center;">
+                                        <img src="http://enghamzasalem.com/innosoft/img/signin-05.png" alt="accuracy" width="300px"/>
+                                    </div>
                                     <h2>Already have account?</h2>
                                     <p></p>
                                     <a href="{% url 'signin' %}">
@@ -77,14 +81,14 @@
         </div>
     </div>
     <script>
- {#(function () {#}
- {#  function onChange(event) {#}
- {#          var fileInput = document.querySelector('#file');#}
- {#      var filenameContainer = document.querySelector('#filename');#}
- {#      var reader = new FileReader();#}
- {#      filenameContainer.src = reader.readAsDataURL(this.files[0]);#}
- {#  }#}
- {#    document.getElementById('file').addEventListener('change', onChange);#}
- {#       }());#}
-</script>
+        {#(function () {#}
+        {#  function onChange(event) {#}
+        {#          var fileInput = document.querySelector('#file');#}
+        {#      var filenameContainer = document.querySelector('#filename');#}
+        {#      var reader = new FileReader();#}
+        {#      filenameContainer.src = reader.readAsDataURL(this.files[0]);#}
+        {#  }#}
+        {#    document.getElementById('file').addEventListener('change', onChange);#}
+        {#       }());#}
+    </script>
 {% endblock %}

@@ -1,15 +1,15 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
-    <a> <b> Home </b> </a>>><a> <b>My Projects</b> </a>
+    <a> <strong> Home </strong> </a>>><a> <b>My Projects</b> </a>
     <br><br>
     <div class="animated fadeIn ng-scope">
 
         <div class="card-group mb-4">
             {% if projects|length == 0 %}
-                <center>
+                <div style="text-align: center;">
                     <img src="{% static 'img/banner-2.png' %}" width="33%" alt="No projects yet"/>
-                </center>
+                </div>
             {% endif %}
             {% for project in projects %}
                 <div class="col-sm-6 col-md-4 ng-scope">
@@ -25,7 +25,7 @@
 
                         <div class="card-body ng-binding row">
                             <div class="col-4">
-                                <img src="{{ project.owner.image }}"
+                                <img src="{{ project.owner.image }}" alt="{{ project.title }}"
                                      style="border-radius: 50%;border: 1px solid #e3e3e3; height: 100px; width: 100px;"/>
                             </div>
                             <div class="col-8">
