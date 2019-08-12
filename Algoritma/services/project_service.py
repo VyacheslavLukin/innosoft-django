@@ -156,8 +156,7 @@ class ProjectService:
         return project['participants']
 
     def sort_results(self, project, results):
-        if (project.get('eval_rules')):
-            if ('Mean absolute deviation'.lower() == project.get('eval_rules').lower()):
+        if (project.get('eval_rules') and 'Mean absolute deviation'.lower() == project.get('eval_rules').lower()):
                 results.sort(key = self.sort_results_key)
 
         return results
