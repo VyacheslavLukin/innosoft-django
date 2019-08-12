@@ -65,7 +65,6 @@
 {% block signup %}
 {% endblock %}
 <!-- Navbar -->
-<!-- <div ng-include="'views/common/navbar.html'" include-replace></div> -->
 
 <header class="app-header navbar">
     <button class="navbar-toggler mobile-sidebar-toggler d-lg-none" type="button">
@@ -80,7 +79,7 @@
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false">
-                <div align="center">
+                <div style="text-align: center;">
                     <img src="{{ userdata.image }}" class="img-avatar" alt="{{ userdata.name }}"><br>
                     <strong> {{ userdata.name }} </strong>
                 </div>
@@ -101,7 +100,7 @@
     <div class="sidebar">
         <nav class="sidebar-nav">
             <ul class="nav">
-                <li class="nav-item" style=" ">
+                <li class="nav-item">
                     <br>
                     <div style="text-align: center;">
                         <img src="{{ userdata.image }}" alt="{{ userdata.name }}" class="img-avatar"

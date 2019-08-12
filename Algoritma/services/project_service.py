@@ -32,7 +32,6 @@ class ProjectService:
 
     def create_market_project(self, info: dict):
         user = info['user']
-        # prj_id = utils.generate_rand_name(ID_SIZE)
         info.pop('user')
         info['owner'] = user
         info['type'] = self.MARKET_PROJECT
@@ -47,7 +46,6 @@ class ProjectService:
 
     def create_custom_project(self, info: dict):
         user = info['user']
-        # prj_id = utils.generate_rand_name(ID_SIZE)
         info.pop('user')
         info['owner'] = user
         info['type'] = self.CUSTOM_PROJECT
@@ -160,11 +158,11 @@ class ProjectService:
     def sort_results(self, project, results):
         if (project.get('eval_rules')):
             if ('Mean absolute deviation'.lower() == project.get('eval_rules').lower()):
-                results.sort(key = self.sortResults)
+                results.sort(key = self.sort_results_key)
 
         return results
 
-    def sortResults(self, val):
+    def sort_results_key(self, val):
         return val['result']
 
     def remove_project(self, project_id):
