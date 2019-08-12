@@ -9,7 +9,7 @@
                         <div class="card p-4">
                             <div class="card-body">
                                 <h1>•SignIn</h1>
-                                <form style="" action="{% url 'signin' %}" method="post">
+                                <form action="{% url 'signin' %}" method="post">
                                     {% csrf_token %}
                                     <div class="input-group mb-3">
                                         <div class="input-group-prepend">
@@ -31,7 +31,6 @@
                                             <button type="submit" class="btn btn-primary px-4">Sign In</button>
                                         </div>
                                         <div class="col-6 text-right">
-                                            <!-- <button type="button" class="btn btn-link px-0"  >Forgot password?</button> -->
                                         </div>
                                     </div>
                                 </form>

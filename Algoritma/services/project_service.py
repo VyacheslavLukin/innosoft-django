@@ -6,15 +6,15 @@ class ProjectService:
     __instance = None
 
     @classmethod
-    def getInstance(self):
+    def get_instance(self):
         if not self.__instance:
             self.__instance = ProjectService()
         return self.__instance
 
     def __init__(self):
-        self.db = FirebaseService.getInstance()
-        self.file_service = FileService.getInstance()
-        self.model_service = ModelService.getInstance()
+        self.db = FirebaseService.get_instance()
+        self.file_service = FileService.get_instance()
+        self.model_service = ModelService.get_instance()
 
     def get_market_projects(self):
         prj_keys = self.db.firedb.child('projects').child('market').shallow().get().val()
@@ -38,7 +38,6 @@ class ProjectService:
         info['type'] = self.MARKET_PROJECT
         project = {}
         project['info'] = info
-        # firedb.child('projects').child(prj_id).child('info').set(info)
         fireproject = self.db.firedb.child('projects').child('market').push(project)
         prj_id = fireproject['name']
         self.db.firedb.child('users').child(user).child('projects').child('own').push(
@@ -54,7 +53,6 @@ class ProjectService:
         info['type'] = self.CUSTOM_PROJECT
         project = {}
         project['info'] = info
-        # firedb.child('projects').child(prj_id).child('info').set(info)
         fireproject = self.db.firedb.child('projects').child('custom').push(project)
         prj_id = fireproject['name']
         self.db.firedb.child('users').child(user).child('projects').child('own').push(
@@ -96,8 +94,6 @@ class ProjectService:
             for key in res_keys:
                 res_info = self.db.firedb.child('projects').child(project['type']).child(project['id']).child(
                     'results').child(key).get().val()
-                # model = firedb.child('models').child(res_info['model']).get().val()
-                # res_info['model'] = dict(model)
                 user = self.db.firedb.child('users').child(res_info['user'])
                 user = user.child('details').get().val()
                 res_info['user'] = dict(user)

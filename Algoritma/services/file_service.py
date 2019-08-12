@@ -7,10 +7,10 @@ class FileService:
     __instance = None
 
     def __init__(self):
-        self.db = FirebaseService.getInstance()
+        self.db = FirebaseService.get_instance()
 
     @classmethod
-    def getInstance(self):
+    def get_instance(self):
         if not self.__instance:
             self.__instance = FileService()
         return self.__instance

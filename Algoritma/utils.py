@@ -3,13 +3,6 @@ from random import randrange
 import pandas as pd
 import pickle
 
-# cred = credentials.Certificate('innosoft-django-firebase-adminsdk-kml31-03d2439b89.json')
-# firebase_admin.initialize_app(cred, {
-#     'storageBucket': 'innosoft-django.appspot.com'
-# })
-# db = firestore.client()
-# bucket = storage.bucket()
-
 def generate_rand_name(length) -> str:
     possible = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"
     result = ''

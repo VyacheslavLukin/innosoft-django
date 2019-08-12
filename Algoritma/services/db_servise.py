@@ -35,7 +35,7 @@ class FirebaseService:
         self.bucket = storage.bucket()
 
     @classmethod
-    def getInstance(self):
+    def get_instance(self):
         if not self.__instance:
             self.__instance = FirebaseService()
         return self.__instance

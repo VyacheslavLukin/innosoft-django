@@ -33,7 +33,7 @@
     <link rel="stylesheet" href="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.css">
     <script src="https://unpkg.com/ng-table@2.0.2/bundles/ng-table.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/3.6.0/firebase.js"></script>
-<link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=PT+Sans+Narrow&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Josefin+Sans|PT+Sans+Narrow&display=swap" rel="stylesheet">
     {#    <script type="text/javascript" src="https://rawgit.com/Foliotek/Croppie/master/croppie.js"></script>#}
 </head>
@@ -75,32 +75,8 @@
         <h2 style="font-size: 20px;font-weight: bold;">•accuracy</h2>
     </a>
     <ul class="nav navbar-nav d-md-down-none">
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link navbar-toggler sidebar-toggler" href="#"> -->
-        <!-- <span class="navbar-toggler-icon"></span> -->
-        <!-- </a> -->
-        <!-- </li> -->
-
-        <!-- <li class="nav-item px-3"> -->
-        <!-- <a class="nav-link" href="#">Dashboard</a> -->
-        <!-- </li> -->
-        <!-- <li class="nav-item px-3"> -->
-        <!-- <a class="nav-link" href="#">Users</a> -->
-        <!-- </li> -->
-        <!-- <li class="nav-item px-3"> -->
-        <!-- <a class="nav-link" href="#">Settings</a> -->
-        <!-- </li> -->
     </ul>
     <ul class="nav navbar-nav ml-auto d-md-down-none">
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link" href="#"><i class="icon-bell"></i><span class="badge badge-pill badge-danger">5</span></a> -->
-        <!-- </li> -->
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link" href="#"><i class="icon-list"></i></a> -->
-        <!-- </li> -->
-        <!-- <li class="nav-item"> -->
-        <!-- <a class="nav-link" href="#"><i class="icon-location-pin"></i></a> -->
-        <!-- </li> -->
         <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
                aria-expanded="false">
@@ -128,7 +104,8 @@
                 <li class="nav-item" style=" ">
                     <br>
                     <div style="text-align: center;">
-                        <img src="{{ userdata.image }}" alt="{{ userdata.name }}" class="img-avatar" style="width:100px"><br>
+                        <img src="{{ userdata.image }}" alt="{{ userdata.name }}" class="img-avatar"
+                             style="width:100px"><br>
 
                         <h2><strong> {{ userdata.name }} </strong></h2></div>
                 </li>
@@ -146,14 +123,16 @@
                 </li>
                 {% if userdata.role == 'org' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_market_project' %}"><i class="icon-layers"></i>Add Market
+                        <a class="nav-link" href="{% url 'create_market_project' %}"><i class="icon-layers"></i>Add
+                            Market
                             Project
                         </a>
                     </li>
                 {% endif %}
                 {% if userdata.role == 'ds' %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'create_custom_project' %}"><i class="icon-layers"></i>Add Custom
+                        <a class="nav-link" href="{% url 'create_custom_project' %}"><i class="icon-layers"></i>Add
+                            Custom
                             Project
                         </a>
                     </li>
@@ -169,8 +148,6 @@
 
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'signout' %}"><i class="fa fa-lock"></i>Sign Out
-
-                        <!-- <span class="badge badge-info">NEW</span> -->
                     </a>
                 </li>
             </ul>
@@ -182,7 +159,7 @@
     <!-- Main content -->
     <main class="main" style="min-height: 900px;">
         <!-- Breadcrumb -->
-      <br>
+        <br>
 
         <div class="container-fluid">
             {% block content %}
@@ -190,11 +167,7 @@
             {% endblock %}
         </div>
 
-        <!-- /.conainer-fluid -->
     </main>
-
-    <!-- Aside Menu -->
-    {#    <div ng-include="'views/common/aside.html'" include-replace></div>#}
 
 </div>
 
@@ -202,7 +175,6 @@
     <span><a href="">accuracy</a> © 2019 </span>
     <span class="ml-auto">Powered by InnoSoft </span>
 </footer>
-
 
 
 </body>

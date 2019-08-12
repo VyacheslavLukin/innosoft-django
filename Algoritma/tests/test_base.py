@@ -5,9 +5,10 @@ from importlib import import_module
 from django.test import RequestFactory, SimpleTestCase, Client
 import os
 
+
 class AlgoritmaTestCase(TestCase):
-    def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
+    def __init__(self, method_name='runTest'):
+        super().__init__(method_name)
         os.environ['DJANGO_SETTINGS_MODULE'] = 'Algoritma.settings'
         settings.SESSION_ENGINE = 'django.contrib.sessions.backends.file'
         engine = import_module(settings.SESSION_ENGINE)
@@ -15,8 +16,6 @@ class AlgoritmaTestCase(TestCase):
         store.save()
         self.session = store
         self.client = Client()
-        # self.client.cookies[settings.SESSION_COOKIE_NAME] = store.session_key
-
 
     def generate_name(self):
         ts = datetime.now()

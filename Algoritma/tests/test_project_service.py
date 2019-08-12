@@ -6,10 +6,10 @@ from Algoritma.tests.test_base import AlgoritmaTestCase
 
 
 class TestProjectService(AlgoritmaTestCase):
-    def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
-        self.project_service = ProjectService.getInstance()
-        self.user_service = UserService.getInstance()
+    def __init__(self, method_name='runTest'):
+        super().__init__(method_name)
+        self.project_service = ProjectService.get_instance()
+        self.user_service = UserService.get_instance()
 
     def test_get_market_projects(self):
         projects = self.project_service.get_market_projects()
