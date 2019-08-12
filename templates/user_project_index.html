@@ -8,7 +8,7 @@
         <div class="card-group mb-4">
             {% if projects|length == 0 %}
                 <center>
-                    <img src="{% static 'img/banner-2.png' %}" width="33%"/>
+                    <img src="{% static 'img/banner-2.png' %}" width="33%" alt="No projects yet"/>
                 </center>
             {% endif %}
             {% for project in projects %}
