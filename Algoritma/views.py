@@ -16,10 +16,10 @@ FILENAME_SIZE = 13
 ID_SIZE = 9
 PICKLE_EXTENSION = 'pickle'
 
-file_service = FileService.getInstance()
-project_service = ProjectService.getInstance()
-user_service = UserService.getInstance()
-model_service = ModelService.getInstance()
+file_service = FileService.get_instance()
+project_service = ProjectService.get_instance()
+user_service = UserService.get_instance()
+model_service = ModelService.get_instance()
 
 def base(request):
     return redirect('signin')
@@ -64,7 +64,7 @@ def signup(request):
         }
 
         # try except
-        user = user_service.create_account(data)
+        user_service.create_account(data)
 
         return redirect('signin')
 
@@ -97,17 +97,12 @@ def create_market_project(request):
             'opt_cols': request.POST.getlist('opt_cols'),
         }
 
-        # prj_id = generate_rand_name(9)
-
-        # description = request.POST.get('description')
-
         json_blob, train_blob, test_blob = autils.split_json(file, info.get('percentage'))
 
         test_json = json.loads(test_blob)
 
         # add optional cols
         testpic_x, testpic_y = autils.split_xy(test_json, info['req_cols'])
-        # ['dew_point_temperature', 'underground_temperature', 'underground_temperature']
 
         train_path = file_service.upload_file_string(train_blob, extension='json', content_type='text/json')
         test_path = file_service.upload_file_string(test_blob, extension='json', content_type='text/json')
@@ -121,10 +116,7 @@ def create_market_project(request):
         info['pickle_x'] = testpic_x_path
         info['pickle_y'] = testpic_y_path
 
-        prj_id = project_service.create_market_project(info)
-
-        # firedb.child('projects').child(prj_id).child('info').set(data)
-        # firedb.child('users').child(uid).child('projects').push({'prj_id': prj_id})
+        project_service.create_market_project(info)
 
         return redirect('market_project_index')
 
@@ -154,10 +146,6 @@ def create_custom_project(request):
             'opt_cols': request.POST.getlist('opt_cols'),
         }
 
-        # prj_id = generate_rand_name(9)
-
-        # description = request.POST.get('description')
-
         json_blob, train_blob, test_blob = autils.split_json(file, info['percentage'])
 
         test_json = json.loads(test_blob)
@@ -177,10 +165,7 @@ def create_custom_project(request):
         info['pickle_x'] = testpic_x_path
         info['pickle_y'] = testpic_y_path
 
-        prj_id = project_service.create_custom_project(info)
-
-        # firedb.child('projects').child(prj_id).child('info').set(data)
-        # firedb.child('users').child(uid).child('projects').push({'prj_id': prj_id})
+        project_service.create_custom_project(info)
 
         return redirect('user_project_index')
 
@@ -209,7 +194,7 @@ def upload_model(request):
             'data': sav_path,
         }
 
-        firemodel = model_service.create_model(info)
+        model_service.create_model(info)
 
         return redirect('upload_model')
 
@@ -369,7 +354,6 @@ def invite_user(request):
     user = get_user(request)
     if user == None:
         return redirect('signing')
-    uid = user['id']
     user_email = request.POST.get('email')
     prj_id = request.POST.get('prj_id')
     collab_user = user_service.get_user_by_email(user_email)

@@ -8,10 +8,10 @@ from Algoritma.tests.test_base import AlgoritmaTestCase
 
 class TestModelService(AlgoritmaTestCase):
 
-    def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
-        self.user_service = ModelService.getInstance()
-        self.user_service = UserService.getInstance()
+    def __init__(self, method_name='runTest'):
+        super().__init__(method_name)
+        self.user_service = ModelService.get_instance()
+        self.user_service = UserService.get_instance()
 
     def test_create_model(self):
         pass

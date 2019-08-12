@@ -10,13 +10,13 @@ class UserService:
     __instance = None
 
     def __init__(self):
-        self.db = FirebaseService.getInstance()
-        self.file_service = FileService.getInstance()
-        self.project_service = ProjectService.getInstance()
-        self.model_service = ModelService.getInstance()
+        self.db = FirebaseService.get_instance()
+        self.file_service = FileService.get_instance()
+        self.project_service = ProjectService.get_instance()
+        self.model_service = ModelService.get_instance()
 
     @classmethod
-    def getInstance(self):
+    def get_instance(self):
         if not self.__instance:
             self.__instance = UserService()
         return self.__instance
@@ -110,12 +110,6 @@ class UserService:
                 print("user delete error")
         except:
             print("signin error")
-            pass
-
-
-        # except:
-        #     print('error')
-
 
     def remove_user_projects(self, user):
         projects = self.get_user_projects(user)
@@ -136,7 +130,7 @@ class UserService:
             for key in user_keys:
                 temp_user = self.db.firedb.child('users').child(key).child('details').get().val()
                 name = temp_user.get('name')
-                if (re.match('%s*' % substring, temp_user.get('name'))):
+                if (re.match('%s*' % substring, name)):
                     user = temp_user
                     user['id'] = key
                     users.append(user)

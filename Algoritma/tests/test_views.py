@@ -5,10 +5,10 @@ from Algoritma.tests.test_base import AlgoritmaTestCase
 from Algoritma.views import *
 
 class TestViews(AlgoritmaTestCase):
-    def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
-        self.user_service = UserService.getInstance()
-        self.project_service = ProjectService.getInstance()
+    def __init__(self, method_name='runTest'):
+        super().__init__(method_name)
+        self.user_service = UserService.get_instance()
+        self.project_service = ProjectService.get_instance()
         import django
         django.setup()
 
@@ -35,7 +35,7 @@ class TestViews(AlgoritmaTestCase):
 
     def test_signin_already_authenticated(self):
         info = self.generate_cred_ds()
-        user = self.user_service.create_account(info)
+        self.user_service.create_account(info)
         email = info.get('email')
         password = info.get('password')
         signin_user = self.user_service.signin(email, password)
@@ -56,10 +56,10 @@ class TestViews(AlgoritmaTestCase):
 
     def test_signup_already_authenticated(self):
         info = self.generate_cred_ds()
-        user = self.user_service.create_account(info)
+        self.user_service.create_account(info)
         email = info.get('email')
         password = info.get('password')
-        user = self.user_service.create_account(info)
+        self.user_service.create_account(info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -85,7 +85,7 @@ class TestViews(AlgoritmaTestCase):
         user_info = self.generate_cred_org()
         email = user_info.get('email')
         password = user_info.get('password')
-        user = self.user_service.create_account(user_info)
+        self.user_service.create_account(user_info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -101,7 +101,7 @@ class TestViews(AlgoritmaTestCase):
         user_info = self.generate_cred_ds()
         email = user_info.get('email')
         password = user_info.get('password')
-        user = self.user_service.create_account(user_info)
+        self.user_service.create_account(user_info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -119,7 +119,7 @@ class TestViews(AlgoritmaTestCase):
         user_info = self.generate_cred_ds()
         email = user_info.get('email')
         password = user_info.get('password')
-        user = self.user_service.create_account(user_info)
+        self.user_service.create_account(user_info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -136,7 +136,7 @@ class TestViews(AlgoritmaTestCase):
         user_info = self.generate_cred_org()
         email = user_info.get('email')
         password = user_info.get('password')
-        user = self.user_service.create_account(user_info)
+        self.user_service.create_account(user_info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -144,7 +144,7 @@ class TestViews(AlgoritmaTestCase):
         project_info = self.generate_project_cred()
         with open('test_ds.json') as file:
             project_info['file'] = file
-            response = self.client.post(reverse('create_market_project'), project_info)
+            self.client.post(reverse('create_market_project'), project_info)
             project = self.user_service.get_user_projects(signin_user.get('localId'))[0]
             path = reverse('create_market_project', kwargs={'prj_id': project.get('id')})
             response = self.client.get(path, project)
@@ -154,7 +154,7 @@ class TestViews(AlgoritmaTestCase):
     def test_join_market_project(self):
         # create org user
         user_org = self.generate_cred_org()
-        user = self.user_service.create_account(user_org)
+        self.user_service.create_account(user_org)
         signin_user = self.user_service.signin(user_org.get('email'), user_org.get('password'))
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -163,7 +163,7 @@ class TestViews(AlgoritmaTestCase):
         project_info = self.generate_project_cred()
         with open('test_ds.json') as file:
             project_info['file'] = file
-            response = self.client.post(reverse('create_market_project'), project_info)
+            self.client.post(reverse('create_market_project'), project_info)
             #get crated project
             project = self.user_service.get_user_projects(signin_user.get('localId'))[0]
         #create ds user
@@ -174,7 +174,7 @@ class TestViews(AlgoritmaTestCase):
         session['uid'] = signin_user.get('idToken')
         session.save()
         path = reverse('join_market_project', kwargs={'prj_id': project.get('id')})
-        response = self.client.post(path)
+        self.client.post(path)
         user['id'] = user.get('localId')
         flag = is_participant(user, project)
         SimpleTestCase().assertTrue(flag)
@@ -186,7 +186,7 @@ class TestViews(AlgoritmaTestCase):
     def test_market_projet_page_post(self):
         # create org user
         user_org = self.generate_cred_org()
-        user = self.user_service.create_account(user_org)
+        self.user_service.create_account(user_org)
         signin_user = self.user_service.signin(user_org.get('email'), user_org.get('password'))
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -195,28 +195,28 @@ class TestViews(AlgoritmaTestCase):
         project_info = self.generate_project_cred()
         with open('test_ds.json') as file:
             project_info['file'] = file
-            response = self.client.post(reverse('create_market_project'), project_info)
+            self.client.post(reverse('create_market_project'), project_info)
             #get crated project
             project = self.user_service.get_user_projects(signin_user.get('localId'))[0]
         #create ds user
         user_ds = self.generate_cred_ds()
-        user = self.user_service.create_account(user_ds)
+        self.user_service.create_account(user_ds)
         signin_user = self.user_service.signin(user_ds.get('email'), user_ds.get('password'))
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
         session.save()
         path = reverse('join_market_project', kwargs={'prj_id': project.get('id')})
-        response = self.client.post(path, project)
+        self.client.post(path, project)
 
         #create_model
         model_info = {'name ': 'model %s' % self.generate_name()}
         with open('test_model.pickle', 'rb') as file:
             model_info['file'] = file
-            response = self.client.post(reverse('upload_model'), model_info)
+            self.client.post(reverse('upload_model'), model_info)
 
         model = self.user_service.get_user_models(signin_user.get('localId'))[0]
         path = reverse('market_project_page', kwargs={'prj_id': project.get('id')})
-        response = self.client.post(path, {'mid': model.get('mid')})
+        self.client.post(path, {'mid': model.get('mid')})
 
         results = self.project_service.get_project_results(project)
         flag = len(results) > 0
@@ -229,7 +229,7 @@ class TestViews(AlgoritmaTestCase):
         user_info = self.generate_cred_ds()
         email = user_info.get('email')
         password = user_info.get('password')
-        user = self.user_service.create_account(user_info)
+        self.user_service.create_account(user_info)
         signin_user = self.user_service.signin(email, password)
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -237,7 +237,7 @@ class TestViews(AlgoritmaTestCase):
         project_info = self.generate_project_cred()
         with open('test_ds.json') as file:
             project_info['file'] = file
-            response = self.client.post(reverse('create_custom_project'), project_info)
+            self.client.post(reverse('create_custom_project'), project_info)
             project = self.user_service.get_user_projects(signin_user.get('localId'))[0]
             path = reverse('custom_project_page', kwargs={'prj_id': project.get('id')})
             response = self.client.get(path, project)
@@ -247,7 +247,7 @@ class TestViews(AlgoritmaTestCase):
     def test_custom_projet_page_post(self):
         # create ds user
         user_ds = self.generate_cred_ds()
-        user = self.user_service.create_account(user_ds)
+        self.user_service.create_account(user_ds)
         signin_user = self.user_service.signin(user_ds.get('email'), user_ds.get('password'))
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -256,12 +256,12 @@ class TestViews(AlgoritmaTestCase):
         project_info = self.generate_project_cred()
         with open('test_ds.json') as file:
             project_info['file'] = file
-            response = self.client.post(reverse('create_custom_project'), project_info)
+            self.client.post(reverse('create_custom_project'), project_info)
             #get crated project
             project = self.user_service.get_user_projects(signin_user.get('localId'))[0]
         #create ds user
         user_ds_2 = self.generate_cred_ds()
-        user = self.user_service.create_account(user_ds_2)
+        self.user_service.create_account(user_ds_2)
         signin_user = self.user_service.signin(user_ds_2.get('email'), user_ds_2.get('password'))
         session = self.client.session
         session['uid'] = signin_user.get('idToken')
@@ -271,11 +271,11 @@ class TestViews(AlgoritmaTestCase):
         model_info = {'name ': 'model %s' % self.generate_name()}
         with open('test_model.pickle', 'rb') as file:
             model_info['file'] = file
-            response = self.client.post(reverse('upload_model'), model_info)
+            self.client.post(reverse('upload_model'), model_info)
 
         model = self.user_service.get_user_models(signin_user.get('localId'))[0]
         path = reverse('custom_project_page', kwargs={'prj_id': project.get('id')})
-        response = self.client.post(path, {'mid': model.get('mid')})
+        self.client.post(path, {'mid': model.get('mid')})
 
         results = self.project_service.get_project_results(project)
         flag = len(results) > 0

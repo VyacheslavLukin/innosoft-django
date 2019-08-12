@@ -10,9 +10,9 @@ from Algoritma.tests.test_base import AlgoritmaTestCase
 
 class TestUserService(AlgoritmaTestCase):
 
-    def __init__(self, methodName='runTest'):
-        super().__init__(methodName)
-        self.user_service = UserService.getInstance()
+    def __init__(self, method_name='runTest'):
+        super().__init__(method_name)
+        self.user_service = UserService.get_instance()
 
     def test_signin_right_cred(self):
         email = 'askar@email.com'
@@ -66,7 +66,7 @@ class TestUserService(AlgoritmaTestCase):
         email = '%s@email.com' % (name)
         password = '%spass' % (name)
         info = {'name': name, 'email': email, 'password': password, 'role': 'org', 'image': None}
-        user = self.user_service.create_account(info)
+        self.user_service.create_account(info)
         self.user_service.remove_account(email, password)
         self.assertTrue(True)
 
