@@ -7,9 +7,7 @@
 }
 
 // app-dashboard and app-root are Angular2+ selectors. You can add here your own selectors if you need.
-.app,
-app-dashboard,
-app-root {
+.app {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
