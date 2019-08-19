@@ -8,7 +8,7 @@
         <div class="card-group mb-4">
             {% if projects|length == 0 %}
                 <div style="text-align: center;">
-                    <img src="{% static 'img/banner-2.png' %}" width="33%" alt="No projects yet"/>
+                    <img src="{% static 'img/banner-2.png' %}" width="50%" alt="No projects yet"/>
                 </div>
             {% endif %}
             {% for project in projects %}
@@ -32,7 +32,11 @@
                                 <h3>{{ project.owner.name }} </h3>
                                 <h1> {{ project.title }} </h1>
                                 <span style="padding: 5px;background: #29363d;color: #fff;font-size: 11px;border-radius: 10px;"> {{ project.type }}</span>
-                                <br> <span> {{ project.description }} </span>
+                                {% if project.type == 'market' %}
+                                    <br> <span> {{ project.short_desc }} </span>
+                                {% elif project.type == 'custom' %}
+                                    <br> <span> {{ project.description }} </span>
+                                {% endif %}
                             </div>
                         </div>
                         </a>
