@@ -7,7 +7,7 @@
         <div class="card-group mb-4">
             {% if projects|length == 0 %}
                 <div style="text-align: center;">
-                    <img src="{% static 'img/banner-2.png' %}" width="33%" alt="banner"/>
+                    <img src="{% static 'img/banner-2.png' %}" width="50%" alt="banner"/>
                 </div>
             {% endif %}
             {% for project in projects %}
@@ -15,15 +15,15 @@
                     <div class="card" style="border: 1px solid #b1b1b1;margin: 0px;box-shadow: 1px 1px 1px #bdbfc2;">
                         <a href="{% url 'market_project_page' project.id %}" style="text-decoration:none;color:black">
                             <div class="card-body ng-binding row">
-                                <div class="col-4">
+                                <div class="col-3">
                                     <img src="{{ project.owner.image }}" alt="{{ project.owner.name }}"
                                          style="border-radius: 50%;border: 1px solid #e3e3e3; height: 100px; width: 100px;"/>
                                 </div>
-                                <div class="col-8">
+                                <div class="col-9">
                                     <h3>{{ project.owner.name }} </h3>
                                     <h1> {{ project.title }} </h1>
-                                    <span style="padding: 5px;background: #29363d;color: #fff;font-size: 11px;border-radius: 10px;"> {{ project.type }}</span>
-                                    <br> <span> {{ project.short_desc }} </span>
+                                    <p><span style="padding: 5px;background: #29363d;color: #fff;font-size: 11px;border-radius: 10px;"> {{ project.type }}</span></p>
+                                    <p><span> {{ project.short_desc }} </span></p>
                                 </div>
                             </div>
                         </a>

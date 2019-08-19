@@ -116,22 +116,21 @@
                         {% for resinfo in project.results %}
                             <tr class="ng-scope">
                                 <td class="text-center">
-
-
                                     <div class="ng-binding"> {{ resinfo.user.name }}</div>
-
                                 </td>
                                 <td class="text-center">
                                     <div class="ng-binding"> {{ resinfo.model.name }}</div>
-
-
                                 </td>
-
 
                                 <td class="ng-binding">
                                     <div style="text-align: center;">
+                                        {% if forloop.first %}
+                                            <span class="badge badge-success"
+                                                  style="color:#fff"> {{ resinfo.result }}</span>
+                                        {% else %}
                                             <span class="badge badge-danger"
                                                   style="color:#fff"> {{ resinfo.result }}</span>
+                                        {% endif %}
                                     </div>
                                 </td>
                             </tr>

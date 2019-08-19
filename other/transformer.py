@@ -15,5 +15,5 @@ for item in data:
         row = list(batch[key].values())
         result_json[key] = value
 
-with open("51527a.json", "w") as outfile:
+with open("weather_info.json", "w") as outfile:
     json.dump(result_json, outfile)

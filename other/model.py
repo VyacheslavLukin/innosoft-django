@@ -26,11 +26,11 @@ def diff(list1: list, list2: list) -> list:
     return [item for item in list1 if item not in set(list2)]
 
 
-with open("Train_JSON.json") as json_file:
+with open("weather_info.json") as json_file:
     data = json.load(json_file)
 
 records, columns = extract_data(data)
-rcols = ['snow_intensity']
+rcols = ['snow_intensity', 'rain_intensity']
 # rcols = ['air_temperature']
 predictors = diff(columns, rcols)
 
@@ -43,10 +43,10 @@ df = pd.DataFrame(records, columns=columns)
 X = df[predictors]
 y = df[rcols]
 
-x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.4)  # train-test split, ratio can be custom
+x_train, x_test, y_train, y_test = train_test_split(X, y, test_size=0.2)  # train-test split, ratio can be custom
 reg = LinearRegression().fit(x_train, y_train)  # training the model
 
-pickle.dump(reg, open("my_model.pickle", 'wb'))
+pickle.dump(reg, open("ilnur_weather.pickle", 'wb'))
 
 y_pred = reg.predict(x_test)
 
